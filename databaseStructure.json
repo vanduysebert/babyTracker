@@ -1,0 +1,65 @@
+"users": {
+  "uid": {
+    "firstName": "",
+    "lastName": "",
+    "gender": "",
+    "email": "",
+    "follows": "",
+    "children": {
+      "childID" : {
+        "role": ""
+      }
+    },
+    "posts": {
+      "postID": true
+    }
+  }
+}
+
+"children": {
+  "childID": {
+    "firstName": "",
+    "lastName": "",
+    "birthDate": "",
+    "birthPlace": "",
+    "birthLength": "",
+    "birthWeight": "",
+    "address": "",
+    "postalCode": "",
+    "gender": "",
+    "city",
+    "followers" : {
+      "uid" : true
+    },
+    "posts": {
+      "postID": true
+    }
+  }
+}
+
+"posts": {
+  "postID": {
+    "uid": "",
+    "childID": "",
+    "message": "",
+    "picture": "",
+    "timestamp": "",
+    "categoryID": true
+  }
+}
+
+"postCategories": {
+  "categoryID": {
+    "name": "",
+    "color": "",
+    "nl": "",
+    "icon": ""
+  }
+}
+
+"roles": {
+  "role": {
+    "relationship": "",
+    "nl": ""
+  }
+}

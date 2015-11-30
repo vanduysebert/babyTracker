@@ -1,0 +1,90 @@
+<ion-view view-title="{{profile.fullName}}">
+  <ion-content>
+    <div class="button-bar">
+      <a class="button button-calm button-small" on-touch="profile.editForm(userForm)">
+        <i class="fa fa-edit"></i>
+        Aanpassen</a>
+      <a class="button button-calm button-small" on-touch="profile.choosePhotoInput(userForm)">
+        <i class="fa fa-camera"></i>
+        Foto</a>
+      <a class="button button-calm button-small">
+        <i class="fa fa-child"></i>
+        Kinderen</a>
+    </div>
+
+    <div class="list card">
+
+      <div class="item">
+        <h2 class="center">{{profile.fullName}}</h2>
+        <p class="center" ng-if="profile.user.birthDateString">°{{profile.user.birthDateString}}</p>
+      </div>
+
+      <div class="item item-body">
+        <img class="full-image" ng-if="!profile.user.photoInDatabase" ng-src="{{profile.user.profileImage}}">
+        <img class="full-image" ng-if="profile.user.photoInDatabase" ng-src="data:image/jpeg;base64,{{profile.user.profileImage}}">
+        <button class="button button-balanced button-block icon-left ion-ios-download" ng-click="profile.updatePhotoUser()" ng-if="profile.writePhoto">Opslaan</button>
+
+        <form class="editForm" id="userForm" name="userForm" novalidate>
+          <div class="list">
+            <label class="item item-input animated" ng-class="{'shake errorForm': (userForm.firstName.$invalid && userForm.firstName.$touched), 'successForm': (userForm.firstName.$valid && userForm.firstName.$dirty)}">
+              <span class="input-label">Voornaam</span>
+              <input name="firstName" ng-disabled="!profile.write" ng-model="profile.user.firstName" required type="text">
+              <div class="animated zoomIn error-block" ng-if="userForm.firstName.$touched" ng-messages="userForm.firstName.$error" role="alert">
+                <div ng-messages-include="templates/partials/errorMessages.html"></div>
+              </div>
+            </label>
+            <label class="item item-input animated" ng-class="{'shake errorForm': (userForm.lastName.$invalid && userForm.lastName.$touched), 'successForm': (userForm.lastName.$valid && userForm.lastName.$dirty)}">
+              <span class="input-label">Achternaam</span>
+              <input name="lastName" ng-disabled="!profile.write" ng-model="profile.user.lastName" required type="text">
+              <div class="animated zoomIn error-block" ng-if="userForm.lastName.$touched" ng-messages="userForm.lastName.$error" role="alert">
+                <div ng-messages-include="templates/partials/errorMessages.html"></div>
+              </div>
+            </label>
+            <label class="item">
+              <span>Geslacht</span>
+              <ion-radio ng-disabled="!profile.write" ng-model="profile.user.gender" ng-value="'male'">Man</ion-radio>
+              <ion-radio ng-disabled="!profile.write" ng-model="profile.user.gender" ng-value="'female'">Vrouw</ion-radio>
+            </label>
+
+            <label class="item item-input" ng-if="!profile.authPassword.isPassword">
+              <span class="input-label">Email</span>
+              <input name="email" ng-disabled="!profile.write" ng-model="profile.user.email" type="email">
+            </label>
+            <label class="item item-input">
+              <span class="input-label">Telefoonnummer</span>
+              <input name="phone" ng-disabled="!profile.write" ng-model="profile.user.phone" type="tel">
+            </label>
+            <label class="item item-input">
+              <span class="input-label">Geboortedatum</span>
+              <input name="birthDate" ng-disabled="!profile.write" ng-model="profile.birthDate" type="date">
+            </label>
+            <label class="item item-input">
+              <span class="input-label">Adres</span>
+              <input name="address" ng-disabled="!profile.write" ng-model="profile.user.address" type="text">
+            </label>
+            <label class="item item-input">
+              <span class="input-label">Postcode</span>
+              <input name="postalCode" ng-disabled="!profile.write" ng-model="profile.user.postalCode" type="number">
+            </label>
+            <label class="item item-input">
+              <span class="input-label">Woonplaats</span>
+              <input name="city" ng-disabled="!profile.write" ng-model="profile.user.city" type="text">
+            </label>
+            <button class="button button-balanced button-block icon-left ion-ios-download" ng-click="profile.updateUser(userForm)" ng-disabled="userForm.$invalid" ng-if="profile.write">Opslaan</button>
+          </div>
+        </form>
+        <div ng-if="profile.authPassword.isPassword">
+          <div class="button-bar">
+            <a class="button button-calm button-small" on-touch="profile.showNewMail()">
+              <i class="ion-email-unread icon-left"></i>
+              Mail wijzigen</a>
+            <a class="button button-calm button-small" on-touch="profile.showNewPassword()">
+              <i class="ion-lock-combination icon-left"></i>
+              Paswoord wijzigen</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- TODO: Add alle kinderen die de gebruiker volgt + anchorlink met 'kinderen'-button bovenaan -->
+  </ion-content>
+</ion-view>

@@ -1,0 +1,23 @@
+<ion-view view-title="Zoek gebruiker">
+  <ion-content>
+    <div class="bar bar-header item-input-inset">
+      <label class="item-input-wrapper">
+        <i class="icon ion-ios-search placeholder-icon"></i>
+        <input ng-change="search.findUser()" ng-model="search.searchField" placeholder="Zoek gebruikers" type="search">
+      </label>
+      <button class="icon-left ion-ios-close button button-clear" ng-click="search.goBack()">
+      </button>
+    </div>
+    <div class="list">
+      <!--TODO: ngRepeat van gevonden kinderen -->
+    <a class="item item-avatar" href="#">
+      <img src="venkman.jpg">
+      <h2>Venkman</h2>
+      <p>Back off, man. I'm a scientist.</p>
+      <button class="button button-icon icon ion-link" ng-click="register.linkUser()"></button>
+      
+    </a>
+
+</div>
+  </ion-content>
+</ion-view>

@@ -1,0 +1,34 @@
+<ion-view view-title="Start">
+  <ion-content>
+    <div class="bar bar-header item-input-inset">
+      <label class="item-input-wrapper">
+        <i class="icon ion-ios-search placeholder-icon"></i>
+        <input ng-model="start.search" on-touch="start.goSearch()" placeholder="Zoek kinderen" type="search">
+      </label>
+      <button class="button button-clear" ng-click="start.clearSearch()">
+        Cancel
+      </button>
+    </div>
+    <div class="card">
+      <div ng-if="!start.followsChildren" class="item item-divider item-positive">
+        <span class="ion-information-circled"></span>
+        U volgt nog geen kinderen!
+      </div>
+      <div class="item item-text-wrap">
+        <div class="list">
+          <a class="item item-thumbnail-left" ui-sref="app.registerchild">
+            <img src="img/babyRegister.png">
+            <h2>Baby registeren</h2>
+            <p>Indien je één van de ouders van het kind bent, kan je een nieuw kind registeren. Hierdoor kan je de evolutie van het kind gemakkelijk en overzichtelijk opvolgen. Indien je andere gebruikers koppelt aan je kind, kunnen zij zelfs de evolutie van het kind opvolgen en aanvullen!</p>
+          </a>
+          <a class="item item-thumbnail-left" ui-sref="app.search">
+            <img src="img/babySearch.png">
+            <h2>Baby zoeken</h2>
+            <p>Wanneer u een kind wil volgen kan u het opzoeken en een volgverzoek aanvragen. Indien de ouders van het kind het verzoek aanvaarden, kan jij het kind volledig opvolgen.</p>
+          </a>
+
+        </div>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>

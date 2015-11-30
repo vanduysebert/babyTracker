@@ -1,0 +1,30 @@
+<ion-view view-title="Noodnummers">
+  <ion-nav-buttons side="left">
+    <button class="button button-icon icon ion-navicon" menu-toggle="left"></button>
+  </ion-nav-buttons>
+
+  <ion-content has-header="true">
+    <div class="list card">
+
+  <a href="#" class="item item-icon-left">
+    <i ng-repeat="number in emergency.phoneNumbers" class="icon ion-home" ng-href="tel:{{number}}"></i>
+    Enter home address
+  </a>
+
+</div>
+  </ion-content>
+  <div class="tabs tabs-icon-only">
+    <a class="tab-item disable-child-behavior active" nav-clear nav-clear title="Home" ui-sref="snd.home">
+      <i class="fa fa-child fa-3x"></i>
+      <span class="tab-title ng-binding" ng-bind-html="title"></span>
+    </a>
+    <a class="tab-item disable-child-behavior" icon-off="ion-ios7-filing-outline" icon-on="ion-ios7-filing" nav-clear title="Chat" ui-sref="snd.chat">
+      <i class="icon ion-chatbubbles"></i>
+      <span class="tab-title ng-binding" ng-bind-html="title"></span>
+    </a>
+    <a class="tab-item disable-child-behavior" icon-off="ion-ios7-filing-outline" icon-on="ion-ios7-filing" nav-clear title="Drink" ui-sref="snd.drink">
+      <i class="icon ion-wineglass"></i>
+      <span class="tab-title ng-binding" ng-bind-html="title"></span>
+    </a>
+  </div>
+</ion-view>

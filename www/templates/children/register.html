@@ -1,0 +1,72 @@
+<ion-view view-title="Registratie kind">
+  <ion-content >
+    <form name="registerForm" novalidate>
+      <div class="list-inset">
+        <label class="item item-input animated" ng-class="{'shake errorForm': (registerForm.nameChild.$invalid && registerForm.nameChild.$touched), 'successForm': (registerForm.nameChild.$valid && registerForm.nameChild.$dirty)}">
+          <input name="nameChild" ng-model="register.child.lastName" placeholder="Naam kind" required type="text">
+          <div class="animated zoomIn error-block" ng-if="registerForm.nameChild.$touched" ng-messages="registerForm.nameChild.$error" role="alert">
+            <div ng-messages-include="templates/partials/errorMessages.html"></div>
+          </div>
+        </label>
+
+        <label class="item item-input animated" ng-class="{'shake errorForm': (registerForm.firstNameChild.$invalid && registerForm.firstNameChild.$touched), 'successForm': (registerForm.firstNameChild.$valid && registerForm.firstNameChild.$dirty)}">
+          <input name="firstNameChild" ng-model="register.child.firstName" placeholder="Voornaam kind" required type="text">
+          <div class="animated zoomIn error-block" ng-if="registerForm.firstNameChild.$dirty && registerForm.firstNameChild.$error" ng-messages="registerForm.firstNameChild.$error" role="alert">
+            <div ng-messages-include="templates/partials/errorMessages.html"></div>
+          </div>
+        </label>
+        <label class="item item-input animated" ng-class="{'shake errorForm': (registerForm.birthDateChild.$invalid && registerForm.birthDateChild.$touched), 'successForm': (registerForm.birthDateChild.$valid && registerForm.birthDateChild.$dirty)}">
+          <span class="input-label greyLabel">Geboortedatum</span>
+          <input name="birthDateChild" ng-model="register.birthDate" placeholder="" required type="date">
+          <div class="animated zoomIn error-block" ng-if="registerForm.birthDateChild.$touched && registerForm.birthDateChild.$error" ng-messages="registerForm.birthDateChild.$error" role="alert">
+            <div ng-messages-include="templates/partials/errorMessages.html"></div>
+          </div>
+        </label>
+        <label class="item item-input animated" ng-class="{'successForm': registerForm.birthPlaceChild.$dirty}">
+          <input name="birthPlaceChild" ng-model="register.child.birthPlace" placeholder="Geboorteplaats" type="text">
+        </label>
+        <label class="item item-input animated" ng-class="{'successForm': registerForm.birthWeightChild.$dirty}">
+          <input name="birthWeightChild" ng-model="register.child.birthWeight" placeholder="Geboortegewicht (in gram)" type="number">
+        </label>
+        <label class="item item-input animated" ng-class="{'successForm': registerForm.birthLengthChild.$dirty}">
+          <input name="birthLengthChild" ng-model="register.child.birthLength" placeholder="Lengte geboorte (in cm)" type="number">
+        </label>
+        <label class="item item-input item-select animated" ng-class="{'shake errorForm': (registerForm.linkRelationship.$invalid && registerForm.linkRelationship.$touched), 'successForm': (registerForm.linkRelationship.$valid && registerForm.linkRelationship.$dirty)}">
+          <div class="input-label greyLabel">
+            Relatie tot kind
+          </div>
+
+          <select name="linkRelationship" ng-model="register.linkRelationship">
+            <option ng-repeat="role in register.allRoles" value="{{role.$id}}">
+              {{role.nl}}
+            </option>
+          </select>
+        </label>
+        <div class="item item-divider">Geslacht</div>
+        <ion-radio ng-model="register.child.gender" ng-value="'male'">Jongen</ion-radio>
+        <ion-radio ng-model="register.child.gender" ng-value="'female'">Meisje</ion-radio>
+
+        <div class="item item-divider">
+          Woonplaats
+        </div>
+
+        <label class="item item-input animated" ng-class="{'successForm': registerForm.addressChild.$dirty}">
+          <input name="addressChild" ng-model="register.child.address" placeholder="Adres" type="text">
+        </label>
+        <label class="item item-input animated" ng-class="{'successForm': registerForm.postalCodeChild.$dirty}">
+          <input name="postalCodeChild" ng-model="register.child.postalCode" placeholder="Postcode" type="number">
+        </label>
+        <!--TODO: mss nog automatisch steden toevoegen via google maps geocoding api -->
+        <label class="item item-input animated" ng-class="{'successForm': registerForm.cityChild.$dirty}">
+          <input name="cityChild" ng-model="register.child.city" placeholder="Stad" type="text">
+        </label>
+      </div>
+      <button class="button button-balanced button-block icon-left ion-log-in" ng-click="register.registerChild(registerForm)" ng-disabled="registerForm.$invalid">Registreren</button>
+      <div class="error">
+        {{vm.errorMessage}}
+      </div>
+    </form>
+
+
+  </ion-content>
+</ion-view>

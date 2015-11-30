@@ -1,0 +1,89 @@
+
+
+// The path for our ionicons font files, relative to the built CSS in www/css
+$ionicons-font-path: "../lib/ionic/fonts" !default;
+
+
+// Include all of Ionic
+@import "www/lib/ionic/scss/ionic";
+
+.error-message {
+  border: 1px solid $error;
+  padding: 3px 10px;
+  margin: 3px;
+  border-radius: 20px;
+}
+
+.error-icon {
+  color: $error;
+  font-weight: bold;
+}
+
+.errorForm {
+  border-left: 3px solid $error;
+}
+
+.successForm {
+  border-left: 3px solid $success;
+}
+
+.errorForm .input-label {
+  color: $error;
+}
+
+.successForm .input-label {
+  color: $success;
+}
+
+.error-container {
+  background-color: lighten($error, 10%);
+  color: white;
+  padding: 10px;
+}
+
+.error-container a {
+  color: white;
+  text-decoration: none;
+}
+
+.error-container a:hover {
+  color: darken($error, 30%);
+}
+
+.greyLabel {
+  padding: 7px 10px 7px 0px;
+  max-width: 200px;
+  width: 35%;
+  color: lighten($dark, 40%);
+  font-size: 14px;
+}
+
+.verticalAlign {
+  vertical-align: bottom;
+}
+.image-list-thumb {
+    padding: 2px 2px 2px 2px;
+    height: 100px;
+}
+
+.editForm input[disabled],
+.editForm select[disabled],
+.editForm textarea[disabled],
+.editForm input[readonly]:not(.cloned-text-input),
+.editForm textarea[readonly]:not(.cloned-text-input),
+.editForm select[readonly] {
+  background-color: #ffffff;
+  padding: 3px;
+  text-decoration: none;
+  color: lighten($dark, 40%);
+  cursor: not-allowed;
+}
+
+.editForm input,
+.editForm select,
+.editForm textarea {
+  text-decoration: underline;
+  text-decoration-style: dashed;
+  color: $calm;
+  cursor:text;
+}

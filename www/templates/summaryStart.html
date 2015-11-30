@@ -1,0 +1,15 @@
+<ion-view view-title="Overzicht kinderen">
+  <ion-content padding="true">
+    <div class="list">
+
+      <a ng-repeat="child in sum.children" class="item item-thumbnail-left" ui-sref="child.profile({childId: child.$id})">
+        <img ng-if="!child.photoInDatabase" ng-src="{{child.profileImage}}">
+        <img ng-if="child.photoInDatabase" ng-src="data:image/jpeg;base64,{{child.profileImage}}">
+        <h2>{{child.firstName}} {{child.lastName}}</h2>
+        <h3>Relatie: {{child.role.nl}}</h5>
+        <p ng-if="child.administrator == sum.user.uid">Beheerder</p>
+      </a>
+
+    </div>
+  </ion-content>
+</ion-view>

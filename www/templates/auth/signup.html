@@ -1,0 +1,67 @@
+<ion-view>
+  <ion-header-bar align-title="center" class="bar-stable">
+    <h1 class="title"><img class="title-image" src="img/BTLogoFull.png"/></h1>
+  </ion-header-bar>
+  <ion-header-bar class="bar-subheader bar-positive">
+    <h2 class="title">Registratie</h2>
+  </ion-header-bar>
+  <ion-content padding=true>
+    <div class="background"></div>
+    <a ui-sref="login" class="button button-block icon-left ion-chevron-left button-dark">Login</a>
+    <form name="registerForm" novalidate>
+      <div class="list">
+        <label class="item item-input item-floating-label animated" ng-class="{'shake errorForm': (registerForm.nameUser.$invalid && registerForm.nameUser.$touched), 'successForm': (registerForm.nameUser.$valid && registerForm.nameUser.$dirty)}">
+          <span class="input-label">Naam</span>
+          <input placeholder="Naam" required ng-model="signup.user.lastName" name="nameUser" type="text">
+          <div role="alert" class="animated zoomIn error-block" ng-messages="registerForm.nameUser.$error" ng-if="registerForm.nameUser.$touched">
+            <div ng-messages-include= "templates/partials/errorMessages.html"></div>
+          </div>
+        </label>
+
+        <label class="item item-input item-floating-label animated" ng-class="{'shake errorForm': (registerForm.firstNameUser.$invalid && registerForm.firstNameUser.$touched), 'successForm': (registerForm.firstNameUser.$valid && registerForm.firstNameUser.$dirty)}">
+          <span class="input-label">Voornaam</span>
+          <input placeholder="Voornaam" required ng-model="signup.user.firstName" name="firstNameUser" type="text">
+          <div role="alert" class="animated zoomIn error-block" ng-messages="registerForm.firstNameUser.$error" ng-if="registerForm.firstNameUser.$dirty && registerForm.firstNameUser.$error">
+            <div ng-messages-include= "templates/partials/errorMessages.html"></div>
+          </div>
+        </label>
+        <label class="item item-input item-floating-label animated" ng-class="{'shake errorForm': (registerForm.emailUser.$invalid && registerForm.emailUser.$touched), 'successForm': (registerForm.emailUser.$valid && registerForm.emailUser.$dirty)}">
+          <span class="input-label">Email</span>
+          <input required placeholder="Email" ng-model="signup.user.email" name="emailUser" type="email">
+          <div role="alert" class="animated zoomIn error-block" ng-messages="registerForm.emailUser.$error" ng-if="registerForm.emailUser.$touched && registerForm.emailUser.$error">
+            <div ng-messages-include= "templates/partials/errorMessages.html"></div>
+          </div>
+        </label>
+        <label class="item">
+          <span class="greyLabel">Geslacht</span>
+          <ion-radio ng-model="signup.user.gender" ng-value="'male'">Man</ion-radio>
+          <ion-radio ng-model="signup.user.gender" ng-value="'female'">Vrouw</ion-radio>
+        </label>
+
+        <label class="item item-input item-floating-label animated" ng-class="{'shake errorForm': (registerForm.passwordUser.$invalid && registerForm.passwordUser.$touched), 'successForm': (registerForm.passwordUser.$valid && registerForm.passwordUser.$dirty)}">
+          <span class="input-label">Paswoord</span>
+          <input required ng-minlength="5" placeholder="Paswoord" ng-model="signup.user.password" name="passwordUser" type="password">
+          <div role="alert" class="animated zoomIn error-block" ng-messages="registerForm.passwordUser.$error" ng-if="registerForm.passwordUser.$touched">
+            <div ng-messages-include= "templates/partials/errorMessages.html"></div>
+          </div>
+        </label>
+        <label class="item item-input item-floating-label animated" ng-class="{'shake errorForm': (registerForm.passwordRepeat.$invalid && registerForm.passwordRepeat.$touched), 'successForm': (registerForm.passwordRepeat.$valid && registerForm.passwordRepeat.$dirty)}">
+          <span class="input-label">Herhaal paswoord</span>
+          <input required ng-disabled="registerForm.passwordUser.$pristine" bt-compare-to="signup.user.password" placeholder="Herhaal paswoord" name="passwordRepeat" ng-model="signup.user.passwordConfirm" type="password">
+          <div role="alert" class="animated zoomIn error-block" ng-messages="registerForm.passwordRepeat.$error" ng-if="registerForm.passwordRepeat.$dirty">
+            <div ng-messages-include= "templates/partials/errorMessages.html"></div>
+          </div>
+        </label>
+      </div>
+      <button ng-disabled="registerForm.$invalid" class="button button-balanced button-block icon-left ion-log-in" ng-click="signup.createUser(registerForm)">Registreren</button>
+    </form>
+    
+    <div class="error-container card" ng-if="signup.signupFail">
+      <p><i class="ion-information-circled"> </i>{{signup.failMessage}}</p>
+      <p class="center">
+        <a class="button button-icon icon ion-ios-help" href="mailto:vanduysebert@gmail.com"></a>
+      </p>
+    </div>
+
+  </ion-content>
+</ion-view>

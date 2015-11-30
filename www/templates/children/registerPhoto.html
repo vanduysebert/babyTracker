@@ -1,0 +1,60 @@
+<ion-view view-title="Profielfoto">
+  <ion-content>
+
+    <div class="card card-energized">
+      <div class="item item-text-wrap item-calm item-icon-left">
+        <i class="icon ion-ios-information"></i>
+        {{photo.child.firstName}}
+        is succesvol geregistreerd. U kan
+        {{photo.genderChild}}
+        profiel verder aanvullen met een foto.
+      </div>
+    </div>
+
+    <div class="list card">
+      <div class="item item-avatar item-text-wrap">
+        <img src="img/babyAvatarDefault.png">
+        <h2>{{photo.child.firstName}}
+          {{photo.child.lastName}}</h2>
+        <p >Geboren op
+          {{photo.child.birthDateTime | amDateFormat: 'dddd D MMMM YYYY'}}
+        </p>
+        <p ng-if="photo.child.birthPlace">te
+          {{photo.child.birthPlace}}</p>
+        <p ng-if="photo.child.birthWeight">
+          {{photo.child.birthWeight}}
+          gram
+        </p>
+        <p ng-if="photo.child.birthLength">
+          {{photo.child.birthLength}}
+          cm
+        </p>
+      </div>
+
+      <div class="item item-body">
+        <img class="full-image" ng-if="!photo.child.photoInDatabase" ng-src="{{photo.child.profileImage}}">
+        <img class="full-image" ng-if="photo.child.photoInDatabase" ng-src="data:image/jpeg;base64,{{photo.child.profileImage}}">
+        <p ng-if='!photo.newPhoto'>
+          Dit zijn de geboortegegevens van
+          {{photo.child.firstName}}. Je kan het verder personaliseren door een foto van
+          {{photo.child.firstName}}
+          toe te voegen.
+        </p>
+      </div>
+
+      <div class="item tabs tabs-secondary tabs-icon-left">
+        <a class="tab-item" ng-click="photo.choosePhotoInput()">
+          <i class="icon ion-camera"></i>
+          Foto toevoegen
+        </a>
+        <a class="tab-item" ui-sref="app.linkUser({childId: photo.child.$id})">
+          <i class="icon ion-forward"></i>
+          Ga verder
+        </a>
+      </div>
+    </div>
+    <a class="button button-block button-balanced" ui-sref="child.profile({childId: photo.child.$id})">Profiel
+      {{photo.child.firstName}}</a>
+
+  </ion-content>
+</ion-view>

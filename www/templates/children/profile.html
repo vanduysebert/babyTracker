@@ -1,0 +1,126 @@
+<ion-view view-title="Profiel">
+  <ion-nav-buttons side="left">
+    <button class="button button-icon icon ion-navicon" menu-toggle="left"></button>
+  </ion-nav-buttons>
+
+  <ion-content has-header="true">
+    <div class="button-bar" ng-if="child.hasFollower">
+    <a class="button button-positive button-small" on-touch="child.goToSlide(0)" ng-class="{'active': child.getSlideIndex() == 0}">Algemeen</a>
+    <a class="button button-positive button-small" on-touch="child.goToSlide(1)" ng-class="{'active': child.getSlideIndex() == 1}">Goed om weten</a>
+  </div>
+    <ion-slide-box  does-continue="true" auto-play="false" slide-interval="0" >
+      <ion-slide>
+        <div class="list card">
+          <div class="item item-text-wrap item-button-right" ng-if="!child.write">
+            <h2>{{child.child.firstName}}
+              {{child.child.lastName}}</h2>
+            <p >Geboren op
+              {{child.child.birthDateTime | amDateFormat: 'dddd D MMMM YYYY'}}
+            </p>
+            <p ng-if="child.child.birthPlace">
+              <i class="fa fa-globe"></i>
+              {{child.child.birthPlace}}</p>
+            <p ng-if="child.child.birthWeight">
+              <i class="fa fa-balance-scale"></i>
+              {{child.child.birthWeight}}
+              gram
+            </p>
+            <p ng-if="child.child.birthLength">
+              <i class="fa fa-arrows-v"></i>
+              {{child.child.birthLength}}
+              cm
+            </p>
+            <button class="button icon ion-edit button-calm" ng-if="child.checkAdmin() && !child.write" on-touch="child.write = true"></button>
+          </div>
+          <div class="item item-body" ng-if="child.write">
+            <form name="childForm" novalidate="true">
+              <div class="list">
+                <label class="item item-input animated item-stacked-label" ng-class="{'shake errorForm': (childForm.firstName.$invalid && childForm.firstName.$touched), 'successForm': (childForm.firstName.$valid && childForm.firstName.$dirty)}">
+                  <span class="input-label">Voornaam</span>
+                  <input name="firstName" ng-model="child.child.firstName" required type="text">
+                  <div class="animated zoomIn error-block" ng-if="childForm.firstName.$touched" ng-messages="childForm.firstName.$error" role="alert">
+                    <div ng-messages-include="templates/partials/errorMessages.html"></div>
+                  </div>
+                </label>
+                <label class="item item-input animated item-stacked-label" ng-class="{'shake errorForm': (childForm.lastName.$invalid && childForm.lastName.$touched), 'successForm': (childForm.lastName.$valid && childForm.lastName.$dirty)}">
+                  <span class="input-label">Familienaam</span>
+                  <input name="lastName" ng-model="child.child.lastName" required type="text">
+                  <div class="animated zoomIn error-block" ng-if="childForm.lastName.$touched" ng-messages="childForm.lastName.$error" role="alert">
+                    <div ng-messages-include="templates/partials/errorMessages.html"></div>
+                  </div>
+                </label>
+                <label class="item item-input animated item-stacked-label" ng-class="{'shake errorForm': (childForm.birthDateChild.$invalid && childForm.birthDateChild.$touched), 'successForm': (childForm.birthDateChild.$valid && childForm.birthDateChild.$dirty)}">
+                  <span class="input-label">Geboortedatum</span>
+                  <input name="birthDateChild" ng-model="child.birthDate" required type="date">
+                  <div class="animated zoomIn error-block" ng-if="childForm.birthDateChild.$touched && childForm.birthDateChild.$error" ng-messages="childForm.birthDateChild.$error" role="alert">
+                    <div ng-messages-include="templates/partials/errorMessages.html"></div>
+                  </div>
+                </label>
+                <label class="item item-input animated item-stacked-label" ng-class="{'successForm': childForm.birthPlaceChild.$dirty}">
+                  <span class="input-label">Geboorteplaats</span>
+                  <input name="birthPlaceChild" ng-model="child.child.birthPlace" type="text">
+                </label>
+                <label class="item item-input animated item-stacked-label" ng-class="{'successForm': childForm.birthWeightChild.$dirty}">
+                  <span class="input-label">Geboortegewicht (in gram)</span>
+                  <input name="birthWeightChild" ng-model="child.child.birthWeight" type="number">
+                </label>
+                <label class="item item-input animated item-stacked-label" ng-class="{'successForm': childForm.birthLengthChild.$dirty}">
+                  <span class="input-label">Lengte geboorte (in cm)</span>
+                  <input name="birthLengthChild" ng-model="child.child.birthLength" type="number">
+                </label>
+                <div class="item item-divider">Geslacht</div>
+                <ion-radio ng-model="child.child.gender" ng-value="'male'">Jongen</ion-radio>
+                <ion-radio ng-model="child.child.gender" ng-value="'female'">Meisje</ion-radio>
+              </div>
+              <button class="button button-balanced button-block icon-left ion-ios-download" ng-click="child.updateChild(childForm)" ng-disabled="childForm.$invalid">Opslaan</button>
+
+            </form>
+          </div>
+          <div class="item item-body item-button-right">
+            <img class="full-image" ng-if="!child.child.photoInDatabase" ng-src="{{child.child.profileImage}}">
+            <img class="full-image" ng-if="child.child.photoInDatabase" ng-src="data:image/jpeg;base64,{{child.child.profileImage}}">
+          </div>
+
+          <div class="item tabs tabs-secondary tabs-icon-left" ng-if="child.hasFollower">
+            <a class="tab-item" ng-click="photo.choosePhotoInput()" ng-if="child.checkAdmin()">
+              <i class="icon ion-camera"></i>
+              Profielfoto wijzigen
+            </a>
+            <a class="tab-item" ui-sref="app.linkchild({childId: photo.child.$id})">
+              <i class="icon ion-images"></i>
+              Alle foto's van
+              {{child.child.firstName}}
+            </a>
+          </div>
+          <div class="item item-divider">
+            Meer
+          </div>
+          <div class="list">
+              <a class="item item-icon-left assertive" href on-touch="child.goToEmergency()">
+                <i class="icon ion-ios-telephone"></i>
+              Noodnummers</a>
+              <a class="item item-icon-left">
+              Test</a>
+          </div>
+        </div>
+      </ion-slide>
+      <ion-slide>
+
+      </ion-slide>
+    </ion-slide-box>
+  </ion-content>
+  <div class="tabs tabs-icon-only">
+    <a class="tab-item disable-child-behavior active" nav-clear nav-clear title="Home" ui-sref="snd.home">
+      <i class="fa fa-child fa-3x"></i>
+      <span class="tab-title ng-binding" ng-bind-html="title"></span>
+    </a>
+    <a class="tab-item disable-child-behavior" icon-off="ion-ios7-filing-outline" icon-on="ion-ios7-filing" nav-clear title="Chat" ui-sref="snd.chat">
+      <i class="icon ion-chatbubbles"></i>
+      <span class="tab-title ng-binding" ng-bind-html="title"></span>
+    </a>
+    <a class="tab-item disable-child-behavior" icon-off="ion-ios7-filing-outline" icon-on="ion-ios7-filing" nav-clear title="Drink" ui-sref="snd.drink">
+      <i class="icon ion-wineglass"></i>
+      <span class="tab-title ng-binding" ng-bind-html="title"></span>
+    </a>
+  </div>
+</ion-view>
