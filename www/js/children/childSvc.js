@@ -14,7 +14,11 @@
       all: children,
       getChild: getChild,
       addChild: addChild,
-      updateChild: updateChild
+      updateChild: updateChild,
+      addEmergencyNumber: addEmergencyNumber,
+      getEmergencyNumbers: getEmergencyNumbers,
+      bindEmergencyNumbers: bindEmergencyNumbers,
+      removeEmergency: removeEmergency
     };
 
     return factory;
@@ -33,6 +37,33 @@
 
     function updateChild(childID, child) {
       return child.$save();
+    }
+
+    function addEmergencyNumber(childId, contact) {
+      var list = $firebaseArray(ref.child(childId).child("emergencyNumbers"));
+      return list.$add(contact);
+    }
+
+    function getEmergencyNumbers(childId) {
+      return $firebaseArray(ref.child(childId).child("emergencyNumbers")).$loaded();
+    }
+
+    function bindEmergencyNumbers(childId) {
+      return $firebaseArray(ref.child(childId).child("emergencyNumbers"));
+
+    }
+
+    function removeEmergency(childId, index) {
+      var deferred = $q.defer()
+      var list = $firebaseArray(ref.child(childId).child("emergencyNumbers"));
+      list.$loaded().then(function(li) {
+        var item = li[index];
+        deferred.resolve(li.$remove(item));
+      }, function(err) {
+        deferred.reject(err);
+      });
+      return deferred.promise;
+
     }
 
   }

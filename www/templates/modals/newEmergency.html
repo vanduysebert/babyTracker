@@ -1,0 +1,69 @@
+<div class="modal">
+
+  <ion-header-bar class="bar-energized">
+    <h1 class="title">Noodnummer toevoegen</h1>
+  </ion-header-bar>
+  <ion-content>
+    <form name="addEmergencyForm" novalidate="true">
+      <div class="list">
+        <div class="button-bar">
+          <a class="button button-small button-stable" ng-class="{'active': fromFollower}" ng-click="fromFollower = true">Volger</a>
+          <a class="button button-small button-stable" ng-class="{'active': !fromFollower}" ng-click="fromFollower = false">Ander persoon</a>
+        </div>
+        <div ng-if="fromFollower">
+
+          <label class="item item-input item-select animated" ng-class="{'shake errorForm': (addEmergencyForm.linkRelationship.$invalid && addEmergencyForm.linkRelationship.$touched), 'successForm': (addEmergencyForm.linkRelationship.$valid && addEmergencyForm.linkRelationship.$dirty)}">
+            <div class="input-label greyLabel">
+              Volger
+            </div>
+
+            <select name="follower" ng-model="contact.userId" ng-required="fromFollower">
+              <option ng-repeat="user in allFollowers" value="{{user.$id}}">
+                {{getUserName(user.$id)}}
+              </option>
+            </select>
+          </label>
+        </div>
+        <div ng-if="!fromFollower">
+
+          <label class="item item-input item-floating-label animated" ng-class="{'shake errorForm': (addEmergencyForm.nameContact.$invalid && addEmergencyForm.nameContact.$touched), 'successForm': (addEmergencyForm.nameContact.$valid && addEmergencyForm.nameContact.$dirty)}" ng-show="!fromFollower">
+            <span class="input-label">Naam</span>
+            <input name="nameContact" ng-model="contact.name" ng-required="!fromFollower" placeholder="Naam" type="text">
+            <div class="animated zoomIn error-block" ng-if="addEmergencyForm.nameContact.$touched && addEmergencyForm.nameContact.$error" ng-messages="addEmergencyForm.nameContact.$error" role="alert">
+              <div ng-messages-include="templates/partials/errorMessages.html"></div>
+            </div>
+          </label>
+        </div>
+        <label class="item item-input item-floating-label animated" ng-class="{'shake errorForm': (addEmergencyForm.phoneContact.$invalid && addEmergencyForm.phoneContact.$touched), 'successForm': (addEmergencyForm.phoneContact.$valid && addEmergencyForm.phoneContact.$dirty)}">
+          <span class="input-label">Telefoonnummer</span>
+          <input name="phoneContact" ng-model="contact.phone" placeholder="Telefoonnummer" required type="tel">
+          <div class="animated zoomIn error-block" ng-if="addEmergencyForm.phoneContact.$touched" ng-messages="addEmergencyForm.phoneContact.$error" role="alert">
+            <div ng-messages-include="templates/partials/errorMessages.html"></div>
+          </div>
+        </label>
+
+        <label class="item item-input item-select animated" ng-class="{'shake errorForm': (addEmergencyForm.linkRelationship.$invalid && addEmergencyForm.linkRelationship.$touched), 'successForm': (addEmergencyForm.linkRelationship.$valid && addEmergencyForm.linkRelationship.$dirty)}">
+          <div class="input-label greyLabel">
+            Relatie tot kind
+          </div>
+
+          <select name="linkRelationship" ng-model="contact.role">
+            <option ng-repeat="role in allRoles" value="{{role.$id}}">
+              {{role.nl}}
+            </option>
+          </select>
+        </label>
+        <p class="errorMessage">
+          {{errMess}}
+        </p>
+        <div class="button-bar">
+          <a class="button button-assertive ion-ios-close icon-left" on-touch="closeModal()">
+            Annuleer</a>
+          <a class="button button-balanced ion-ios-download icon-left" ng-disabled="addEmergencyForm.$invalid" on-touch="addEmergencyNumber()">
+            Nummer toevoegen</a>
+        </div>
+
+      </div>
+    </form>
+  </ion-content>
+</div>

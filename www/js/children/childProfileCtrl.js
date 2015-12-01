@@ -5,9 +5,9 @@
     .module('babyTracker')
     .controller('childProfileCtrl', childProfileCtrl);
 
-  childProfileCtrl.$inject = ['$state', '$scope', 'Child', 'userDataSvc', 'childSvc', 'childFollowerSvc', '$ionicSlideBoxDelegate'];
+  childProfileCtrl.$inject = ['$state', '$scope', 'Child', 'userDataSvc', 'childSvc', 'childFollowerSvc', '$ionicSlideBoxDelegate', '$ionicModal', 'roleSvc', 'loggingService', 'userSvc'];
 
-  function childProfileCtrl($state, $scope, Child, userDataSvc, childSvc, childFollowerSvc, $ionicSlideBoxDelegate) {
+  function childProfileCtrl($state, $scope, Child, userDataSvc, childSvc, childFollowerSvc, $ionicSlideBoxDelegate, $ionicModal, roleSvc, loggingService, userSvc) {
     var vm = this;
     vm.child = Child;
     vm.checkAdmin = checkAdmin;
@@ -19,18 +19,18 @@
     vm.goToEmergency = goToEmergency;
     vm.hasFollower = false;
     vm.choosePhotoInput = choosePhotoInput;
+    vm.allRoles = [];
     activate();
 
     function activate() {
       childFollowerSvc.hasFollower(userDataSvc.uid, vm.child).then(function(check) {
         vm.hasFollower = check;
-      }, function(err){
+      }, function(err) {
         loggingService.showError("Checking follower failed", err, "childProfile", false);
       });
       if (vm.child.birthDateTime) {
         vm.birthDate = new Date(vm.child.birthDateTime);
       }
-      console.log(Child);
     }
 
     function checkAdmin() {
@@ -40,6 +40,7 @@
         return false;
       }
     }
+
     function checkFollower() {
       return vm.hasFollower;
     }
@@ -52,6 +53,7 @@
         }
         childSvc.updateChild(vm.child.$id, vm.child).then(function(ref) {
           vm.write = false;
+          form.$setPristine();
         }, function(err) {
           vm.write = false;
           loggingService.showError("Aanpassing mislukt.", "Edit child failed" + err, "updateUserProfile", true);
@@ -73,8 +75,11 @@
     function getSlideIndex() {
       return $ionicSlideBoxDelegate.currentIndex();
     }
+
     function goToEmergency() {
       $state.go('child.emergencyNumbers');
     }
+
+
   }
 })();

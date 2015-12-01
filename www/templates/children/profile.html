@@ -5,10 +5,10 @@
 
   <ion-content has-header="true">
     <div class="button-bar" ng-if="child.hasFollower">
-    <a class="button button-positive button-small" on-touch="child.goToSlide(0)" ng-class="{'active': child.getSlideIndex() == 0}">Algemeen</a>
-    <a class="button button-positive button-small" on-touch="child.goToSlide(1)" ng-class="{'active': child.getSlideIndex() == 1}">Goed om weten</a>
-  </div>
-    <ion-slide-box  does-continue="true" auto-play="false" slide-interval="0" >
+      <a class="button button-positive button-small" ng-class="{'active': child.getSlideIndex() == 0}" on-touch="child.goToSlide(0)">Algemeen</a>
+      <a class="button button-positive button-small" ng-class="{'active': child.getSlideIndex() == 1}" on-touch="child.goToSlide(1)">Goed om weten</a>
+    </div>
+    <ion-slide-box auto-play="false" does-continue="false" slide-interval="0" show-pager="false">
       <ion-slide>
         <div class="list card">
           <div class="item item-text-wrap item-button-right" ng-if="!child.write">
@@ -92,20 +92,53 @@
               {{child.child.firstName}}
             </a>
           </div>
-          <div class="item item-divider">
+          <div class="item item-divider" ng-if="child.hasFollower">
             Meer
           </div>
-          <div class="list">
-              <a class="item item-icon-left assertive" href on-touch="child.goToEmergency()">
-                <i class="icon ion-ios-telephone"></i>
+          <div class="list" ng-if="child.hasFollower">
+            <a class="item item-icon-left" href ui-sref="child.followers">
+              <i class="icon ion-ios-people"></i>
+              Volgers</a>
+            <a class="item item-icon-left" href ui-sref="child.followers">
+              <i class="icon ion-ribbon-b"></i>
+              Mijlpalen</a>
+
+            <a class="item item-icon-left assertive" href on-touch="child.goToEmergency()">
+              <i class="icon ion-ios-telephone"></i>
               Noodnummers</a>
-              <a class="item item-icon-left">
-              Test</a>
+          </div>
+          <div class="item center" ng-if="!child.hasFollower && !child.checkAdmin()">
+            <button class="button ion-ios-personadd icon-left button-energized">Verzoek om te volgen</button>
           </div>
         </div>
+
       </ion-slide>
       <ion-slide>
-
+        <div ng-if="child.hasFollower">
+          <form class="editForm" name="childInfoForm" novalidate="true">
+            <div class="list card">
+              <div class="item item-divider item-stable" ng-if="child.checkAdmin() || child.child.address || child.child.postalCode || child.child.city">
+                Woonplaats
+              </div>
+              <label class="item item-input item-stacked-label" ng-class="{'successForm': childInfoForm.address.$dirty}" ng-if="child.checkAdmin() || child.child.address">
+                <span class="input-label">Adres</span>
+                <input ng-disabled="!child.checkAdmin()" ng-model="child.child.address" name="address" placeholder="{{child.child.address}}" type="text">
+              </label>
+              <label class="item item-input item-stacked-label animated" ng-class="{'shake errorForm': (childInfoForm.postalcode.$invalid && childInfoForm.postalcode.$touched), 'successForm': (childInfoForm.postalcode.$valid && childInfoForm.postalcode.$dirty)}" ng-if="child.checkAdmin() || child.child.postalCode">
+                <span class="input-label">Postcode</span>
+                <input ng-disabled="!child.checkAdmin()" ng-model="child.child.postalCode" name="postalcode" placeholder="{{child.child.postalCode}}" type="number">
+                <div class="animated zoomIn error-block" ng-if="childInfoForm.postalcode.$touched" ng-messages="childInfoForm.postalcode.$error" role="alert">
+                  <div ng-messages-include="templates/partials/errorMessages.html"></div>
+                </div>
+              </label>
+              <label class="item item-input item-stacked-label" ng-class="{'successForm': childInfoForm.city.$dirty}" ng-if="child.checkAdmin() || child.child.city">
+                <span class="input-label">Woonplaats</span>
+                <input ng-disabled="!child.checkAdmin()" name="city" ng-model="child.child.city" placeholder="{{child.child.city}}" type="text">
+              </label>
+            </div>
+            <button class="button button-balanced button-block icon-left ion-ios-download" ng-click="child.updateChild(childInfoForm)" ng-disabled="childInfoForm.$invalid" ng-if="child.checkAdmin() && childInfoForm.$dirty">Opslaan</button>
+          </form>
+        </div>
       </ion-slide>
     </ion-slide-box>
   </ion-content>

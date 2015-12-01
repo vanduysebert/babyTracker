@@ -12,7 +12,8 @@
         var roles = $firebaseArray(roleRef);
         var service = {
             getAllRoles: getAllRoles,
-            getRole: getRole
+            getRole: getRole,
+            bindRole: bindRole
         };
 
         return service;
@@ -21,8 +22,12 @@
             return roles.$loaded();
         }
 
-        function getRole(key) {
-            return $firebaseObject(roleRef.child(key)).$loaded();
+        function getRole(role) {
+            return $firebaseObject(roleRef.child(role)).$loaded();
+        }
+
+        function bindRole(role) {
+            return $firebaseObject(roleRef.child(role));
         }
     }
 })();

@@ -14,7 +14,8 @@
       getFollowers: getFollowers,
       addFollower: addFollower,
       deleteFollower: deleteFollower,
-      hasFollower: hasFollower
+      hasFollower: hasFollower,
+      bindFollowers: bindFollowers
     };
 
     return service;
@@ -97,6 +98,10 @@
       });
 
       return deferred.promise;
+    }
+
+    function bindFollowers(childId) {
+      return $firebaseArray(childRef.child(childId).child("followers"));
     }
   }
 })();

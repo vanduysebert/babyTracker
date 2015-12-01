@@ -202,7 +202,10 @@ angular.module('babyTracker', ['ionic', 'firebase', 'ngMessages', 'ngCordova', '
       'childSection': {
         templateUrl: 'templates/children/emergency.html',
         controller: 'emergencyCtrl',
-        controllerAs: 'emergency'
+        controllerAs: 'emergency',
+        resolve: {
+          Child: Child
+        }
 
       }
     }

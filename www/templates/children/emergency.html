@@ -4,14 +4,28 @@
   </ion-nav-buttons>
 
   <ion-content has-header="true">
-    <div class="list card">
+<div class="card list">
+      <ion-list can-swipe="emergency.checkAdmin()" show-delete="false" show-reorder="false">
+        <div class="item" ng-if="emergency.emergencyNumbers.length == 0">
+          Geen noodnummers
+        </div>
+        <ion-item ng-class="{'item-thumbnail-left': num.userId}" ng-if="emergency.emergencyNumbers" ng-repeat="num in emergency.emergencyNumbers">
+          <img ng-if="!num.user.photoInDatabase && num.userId" ng-src="data:image/jpeg;base64,{{num.user.profileImage}}">
+          <img ng-if="num.user.photoInDatabase" ng-src="data:image/jpeg;base64,{{num.user.profileImage}}">
+          <h2>{{num.name}}</h2>
+          <h3>{{num.roleName}}</h3>
+          <a class="button button-icon-left button-clear button-calm ion-ios-telephone" ng-href="tel:{{num.phone}}"> {{num.phone}}</a>
+          <ion-option-button class="button-assertive icon-left ion-minus-circled" ng-click="emergency.removeEmergency($index)">
+            Verwijder
+          </ion-option-button>
+        </ion-item>
 
-  <a href="#" class="item item-icon-left">
-    <i ng-repeat="number in emergency.phoneNumbers" class="icon ion-home" ng-href="tel:{{number}}"></i>
-    Enter home address
-  </a>
-
+      </ion-list>
+      <a class="item item-icon-left item-balanced" ng-if="emergency.checkAdmin()" href on-touch="emergency.addEmergency()">
+        <i class="icon ion-ios-plus"></i>
+        Noodnummer toevoegen</a>
 </div>
+
   </ion-content>
   <div class="tabs tabs-icon-only">
     <a class="tab-item disable-child-behavior active" nav-clear nav-clear title="Home" ui-sref="snd.home">
