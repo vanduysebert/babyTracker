@@ -8,9 +8,9 @@
       <a class="button button-positive button-small" ng-class="{'active': child.getSlideIndex() == 0}" on-touch="child.goToSlide(0)">Algemeen</a>
       <a class="button button-positive button-small" ng-class="{'active': child.getSlideIndex() == 1}" on-touch="child.goToSlide(1)">Goed om weten</a>
     </div>
-    <ion-slide-box auto-play="false" does-continue="false" slide-interval="0" show-pager="false">
+    <ion-slide-box auto-play="false" does-continue="false" show-pager="false" slide-interval="0">
       <ion-slide>
-        <div class="list card">
+        <div class="list card animated rotateInDownLeft" ng-show="child.showGeneral">
           <div class="item item-text-wrap item-button-right" ng-if="!child.write">
             <h2>{{child.child.firstName}}
               {{child.child.lastName}}</h2>
@@ -82,11 +82,11 @@
           </div>
 
           <div class="item tabs tabs-secondary tabs-icon-left" ng-if="child.hasFollower">
-            <a class="tab-item" ng-click="photo.choosePhotoInput()" ng-if="child.checkAdmin()">
+            <a class="tab-item" ng-click="child.choosePhotoInput()" ng-if="child.checkAdmin()">
               <i class="icon ion-camera"></i>
               Profielfoto wijzigen
             </a>
-            <a class="tab-item" ui-sref="app.linkchild({childId: photo.child.$id})">
+            <a class="tab-item" ui-sref="child.photos({childId: child.child.$id})">
               <i class="icon ion-images"></i>
               Alle foto's van
               {{child.child.firstName}}
@@ -115,45 +115,242 @@
       </ion-slide>
       <ion-slide>
         <div ng-if="child.hasFollower">
+          <ion-toggle ng-model="child.showAll" ng-change="child.setShowAll()" toggle-class="toggle-calm">Alles weergeven</ion-toggle>
           <form class="editForm" name="childInfoForm" novalidate="true">
             <div class="list card">
-              <div class="item item-divider item-stable" ng-if="child.checkAdmin() || child.child.address || child.child.postalCode || child.child.city">
-                Woonplaats
+              <div class="item item-divider item-stable" ng-if="child.checkAdmin() || child.child.address || child.child.postalCode || child.child.city" on-double-tap="child.showAddress = !child.showAddress">
+                Mijn woonplaats
               </div>
-              <label class="item item-input item-stacked-label" ng-class="{'successForm': childInfoForm.address.$dirty}" ng-if="child.checkAdmin() || child.child.address">
+              <label class="item item-input item-stacked-label animated" ng-class="{'successForm': childInfoForm.address.$dirty, 'flipInX': child.showAddress, 'flipOutX': !child.showAddress}" ng-if="child.checkAdmin() || child.child.address" ng-show="child.showAddress">
                 <span class="input-label">Adres</span>
-                <input ng-disabled="!child.checkAdmin()" ng-model="child.child.address" name="address" placeholder="{{child.child.address}}" type="text">
+                <input name="address" ng-disabled="!child.checkAdmin()" ng-model="child.child.address" placeholder="{{child.child.address}}" type="text">
               </label>
-              <label class="item item-input item-stacked-label animated" ng-class="{'shake errorForm': (childInfoForm.postalcode.$invalid && childInfoForm.postalcode.$touched), 'successForm': (childInfoForm.postalcode.$valid && childInfoForm.postalcode.$dirty)}" ng-if="child.checkAdmin() || child.child.postalCode">
+              <label class="item item-input item-stacked-label animated" ng-class="{'shake errorForm': (childInfoForm.postalcode.$invalid && childInfoForm.postalcode.$touched), 'successForm': (childInfoForm.postalcode.$valid && childInfoForm.postalcode.$dirty), 'flipInX': child.showAddress, 'flipOutX': !child.showAddress}" ng-if="child.checkAdmin() || child.child.postalCode" ng-show="child.showAddress">
                 <span class="input-label">Postcode</span>
-                <input ng-disabled="!child.checkAdmin()" ng-model="child.child.postalCode" name="postalcode" placeholder="{{child.child.postalCode}}" type="number">
+                <input name="postalcode" ng-disabled="!child.checkAdmin()" ng-model="child.child.postalCode" placeholder="{{child.child.postalCode}}" type="number">
                 <div class="animated zoomIn error-block" ng-if="childInfoForm.postalcode.$touched" ng-messages="childInfoForm.postalcode.$error" role="alert">
                   <div ng-messages-include="templates/partials/errorMessages.html"></div>
                 </div>
               </label>
-              <label class="item item-input item-stacked-label" ng-class="{'successForm': childInfoForm.city.$dirty}" ng-if="child.checkAdmin() || child.child.city">
+              <label class="item item-input item-stacked-label animated" ng-class="{'successForm': childInfoForm.city.$dirty, 'flipInX': child.showAddress, 'flipOutX': !child.showAddress}" ng-if="child.checkAdmin() || child.child.city" ng-show="child.showAddress">
                 <span class="input-label">Woonplaats</span>
-                <input ng-disabled="!child.checkAdmin()" name="city" ng-model="child.child.city" placeholder="{{child.child.city}}" type="text">
+                <input name="city" ng-disabled="!child.checkAdmin()" ng-model="child.child.city" placeholder="{{child.child.city}}" type="text">
               </label>
             </div>
             <button class="button button-balanced button-block icon-left ion-ios-download" ng-click="child.updateChild(childInfoForm)" ng-disabled="childInfoForm.$invalid" ng-if="child.checkAdmin() && childInfoForm.$dirty">Opslaan</button>
           </form>
         </div>
-      </ion-slide>
-    </ion-slide-box>
-  </ion-content>
-  <div class="tabs tabs-icon-only">
-    <a class="tab-item disable-child-behavior active" nav-clear nav-clear title="Home" ui-sref="snd.home">
-      <i class="fa fa-child fa-3x"></i>
-      <span class="tab-title ng-binding" ng-bind-html="title"></span>
-    </a>
-    <a class="tab-item disable-child-behavior" icon-off="ion-ios7-filing-outline" icon-on="ion-ios7-filing" nav-clear title="Chat" ui-sref="snd.chat">
-      <i class="icon ion-chatbubbles"></i>
-      <span class="tab-title ng-binding" ng-bind-html="title"></span>
-    </a>
-    <a class="tab-item disable-child-behavior" icon-off="ion-ios7-filing-outline" icon-on="ion-ios7-filing" nav-clear title="Drink" ui-sref="snd.drink">
-      <i class="icon ion-wineglass"></i>
-      <span class="tab-title ng-binding" ng-bind-html="title"></span>
-    </a>
-  </div>
-</ion-view>
+
+        <div ng-if="child.hasFollower">
+          <div class="list card">
+            <div class="item item-divider item-stable" ng-if="child.checkAdmin() || child.child.address || child.child.postalCode || child.child.city">
+              Mijn familie
+            </div>
+            <div class="item item-divider item-black" ng-if="child.checkAdmin() || child.child.address || child.child.postalCode || child.child.city" on-double-tap="child.showFamily = !child.showFamily">
+              Gezinsleden
+            </div>
+            <ion-list can-swipe="child.checkAdmin()" show-delete="false" show-reorder="false">
+              <ion-item class="item-thumbnail-left animated" ng-class="{flipInX: child.showFamily, flipOutX: !child.showFamily}" ng-repeat="fam in child.userFamilyMembers" ng-show="child.showFamily">
+                <img ng-if="!fam.photoInDatabase" ng-src="{{fam.profileImage}}">
+                <img ng-if="fam.photoInDatabase" ng-src="data:image/jpeg;base64,{{fam.profileImage}}">
+                <h2>{{fam.roleName | capitalize:true}}</h2>
+                <h3>{{fam.name}}</h3>
+                <p>
+                  {{fam.work}}
+                </p>
+                <p ng-if="fam.phoneWork">
+                  <a class="button button-icon-left button-clear button-calm ion-ios-telephone" ng-href="tel:{{fam.phoneWork}}">
+                    {{fam.phoneWork}}</a>
+                </p>
+                <h4>{{fam.extraInfo}}</h4>
+                <ion-option-button class="button-assertive icon-left ion-minus-circled" ng-click="child.removeUserFamilyMember($index)">
+                  Verwijder
+                </ion-option-button>
+              </ion-item>
+
+              <ion-item class="item-thumbnail-left animated" ng-class="{flipInX: child.showFamily, flipOutX: !child.showFamily}" ng-repeat="fam in child.staticFamilyMembers" ng-show="child.showFamily">
+                <h2>{{fam.roleName | capitalize:true}}</h2>
+                <h3>{{fam.name}}</h3>
+                <p>
+                  {{fam.work}}
+                </p>
+                <p ng-if="fam.phoneWork">
+                  <a class="button button-icon-left button-clear button-calm ion-ios-telephone" ng-href="tel:{{fam.phoneWork}}">
+                    {{fam.phoneWork}}</a>
+                </p>
+                <h4>{{fam.extraInfo}}</h4>
+                <ion-option-button class="button-assertive icon-left ion-minus-circled" ng-click="child.removeStaticFamilyMember($index)">
+                  Verwijder
+                </ion-option-button>
+              </ion-item>
+
+            </ion-list>
+            <div class="item tabs tabs-secondary tabs-icon-left animated" ng-class="{flipInX: child.showFamily, flipOutX: !child.showFamily}" ng-if="child.checkAdmin()" ng-show="child.showFamily">
+              <a class="tab-item balanced" ui-sref="child.family">
+                <i class="icon ion-ios-plus balanced"></i>
+                Gezinslid toevoegen
+              </a>
+            </div>
+            <div class="item item-divider item-black" ng-if="child.checkAdmin() || child.child.address || child.child.postalCode || child.child.city" on-double-tap="child.showPets = !child.showPets">
+              Huisdieren
+            </div>
+            <ion-list can-swipe="child.checkAdmin()" show-delete="false" show-reorder="false">
+              <ion-item class="animated" ng-class="{flipInX: child.showPets, flipOutX: !child.showPets}" ng-repeat="pet in child.pets" ng-show="child.showPets">
+                <h2>{{pet.type}}</h2>
+                <h3>{{pet.name}}</h3>
+                <ion-option-button class="button-assertive icon-left ion-minus-circled" ng-click="child.removePet(pet)">
+                  Verwijder
+                </ion-option-button>
+              </ion-item>
+              <div class="item tabs tabs-secondary tabs-icon-left animated" ng-class="{flipInX: child.showPets, flipOutX: !child.showPets}" ng-if="child.checkAdmin()" ng-show="child.showPets">
+                <a class="tab-item balanced" on-touch="child.newPet = true">
+                  <i class="icon ion-ios-plus balanced"></i>
+                  Huisdier toevoegen
+                </a>
+              </div>
+              <form class="animated" name="addPetForm" ng-class="{slideInDown: child.newPet, slideOutUp: !child.newPet}" ng-if="child.checkAdmin()" ng-show="child.newPet" novalidate="true">
+                <label class="item item-input item-stacked-label" ng-class="{'successForm': addPetForm.type.$dirty}">
+                  <span class="input-label">Type</span>
+                  <input name="type" ng-model="child.pet.type" placeholder="Hond, kat, kanarie, ..." type="text">
+                </label>
+                <label class="item item-input item-stacked-label" ng-class="{'successForm': addPetForm.name.$dirty}">
+                  <span class="input-label">Naam</span>
+                  <input name="name" ng-model="child.pet.name" placeholder="{{child.pet.name}}" type="text">
+                </label>
+                <div class="row">
+                  <div class="col center">
+                    <button class="button button-assertive icon-left ion-ios-close" ng-click="child.newPet = false">Annuleer</button>
+                  </div>
+                  <div class="col center">
+                    <button class="button button-balanced icon-left ion-ios-plus" ng-click="child.addPet(addPetForm)" ng-disabled="addPetForm.$invalid">Opslaan</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+
+            <div class="list card">
+              <div class="item item-divider item-stable" ng-if="child.checkAdmin() || child.child.address || child.child.postalCode || child.child.city">
+                Mijn gezondheid
+              </div>
+              <div class="item item-divider" ng-if="child.checkAdmin()" on-double-tap="child.showDrug = !child.showDrug">
+                Medicijnen
+              </div>
+              <ion-list can-swipe="child.checkAdmin()" show-delete="false" show-reorder="false">
+                <ion-item class="animated item-text-wrap" ng-class="{flipInX: child.showDrug, flipOutX: !child.showDrug}" ng-repeat="drug in child.drugs" ng-show="child.showDrug">
+                  <h2>{{drug.name}}</h2>
+                  <h3>{{drug.desc}}</h3>
+                  <ion-option-button class="button-assertive icon-left ion-minus-circled" ng-click="child.removeDrug(drug.$id)">
+                    Verwijder
+                  </ion-option-button>
+                </ion-item>
+                <div class="item tabs tabs-secondary tabs-icon-left animated" ng-class="{flipInX: child.showDrug, flipOutX: !child.showDrug}" ng-if="child.checkAdmin()" ng-show="child.showDrug">
+                  <a class="tab-item balanced" ng-click="child.newDrug = true">
+                    <i class="icon ion-ios-plus balanced"></i>
+                    Medicijn toevoegen
+                  </a>
+                </div>
+                <form class="animated" name="addDrugForm" ng-class="{slideInDown: child.newDrug, slideOutUp: !child.newDrug}" ng-if="child.checkAdmin()" ng-show="child.newDrug" novalidate="true">
+                  <label class="item item-input item-stacked-label" ng-class="{'successForm': addDrugForm.name.$dirty}">
+                    <span class="input-label">Naam</span>
+                    <input name="name" ng-model="child.drug.name" placeholder="{{child.drug.name}}" type="text">
+                  </label>
+                  <label class="item item-input item-floating-label animated" ng-class="{'successForm': (addDrugForm.desc.$valid && addDrugForm.desc.$dirty)}">
+                    <span class="input-label">Gebruik</span>
+                    <textarea name="desc" ng-model="child.drug.desc" placeholder="Gebruik"></textarea>
+                  </label>
+                  <div class="row">
+                    <div class="col center">
+                      <button class="button button-assertive icon-left ion-ios-close" ng-click="child.newDrug = false">Annuleer</button>
+                    </div>
+                    <div class="col center">
+                      <button class="button button-balanced icon-left ion-ios-plus" ng-click="child.addDrug(addDrugForm)" ng-disabled="addDrugForm.$invalid">Opslaan</button>
+                    </div>
+                  </div>
+                </form>
+              <div class="item item-divider" ng-if="child.checkAdmin()" on-double-tap="child.showAllergic = !child.showAllergic">
+                Allergieën
+              </div>
+              <ion-list can-swipe="child.checkAdmin()" show-delete="false" show-reorder="false">
+                <ion-item class="animated" ng-class="{flipInX: child.showAllergic, flipOutX: !child.showAllergic}" ng-repeat="all in child.allergics" ng-show="child.showAllergic">
+                  <h2>{{all.name}}</h2>
+                  <ion-option-button class="button-assertive icon-left ion-minus-circled" ng-click="child.removeAllergic(all.$id)">
+                    Verwijder
+                  </ion-option-button>
+                </ion-item>
+                <div class="animated item tabs tabs-secondary tabs-icon-left" ng-class="{flipInX: child.showAllergic, flipOutX: !child.showAllergic}" ng-if="child.checkAdmin()" ng-show="child.showAllergic">
+                  <a class="tab-item balanced" ng-click="child.newAllergic = true">
+                    <i class="icon ion-ios-plus balanced"></i>
+                    Allergie toevoegen
+                  </a>
+                </div>
+                <form class="animated" name="addAllergicForm" ng-class="{slideInDown: child.newAllergic, slideOutUp: !child.newAllergic}" ng-if="child.checkAdmin()" ng-show="child.newAllergic" novalidate="true">
+                  <label class="item item-input item-stacked-label" ng-class="{'successForm': addAllergicForm.name.$dirty}">
+                    <span class="input-label">Naam</span>
+                    <input name="name" ng-model="child.allergic.name" placeholder="{{child.allergic.name}}" type="text">
+                  </label>
+                  <div class="row">
+                    <div class="col center">
+                      <button class="button button-assertive icon-left ion-ios-close" ng-click="child.newAllergic = false">Annuleer</button>
+                    </div>
+                    <div class="col center">
+                      <button class="button button-balanced icon-left ion-ios-plus" ng-click="child.addAllergic(addAllergicForm)" ng-disabled="addAllergicForm.$invalid">Opslaan</button>
+                    </div>
+                  </div>
+                </form>
+
+                  <div class="item item-divider" ng-if="child.checkAdmin()" on-double-tap="child.showHealthIssue = !child.showHealthIssue">
+                    Andere gezondheidsproblemen
+                  </div>
+                  <ion-list can-swipe="child.checkAdmin()" show-delete="false" show-reorder="false">
+                    <ion-item class="animated item-text-wrap" ng-class="{flipInX: child.showHealthIssue, flipOutX: !child.showHealthIssue}" ng-repeat="issue in child.healthIssues" ng-show="child.showHealthIssue">
+                      <h2>{{issue.name}}</h2>
+                      <h3>{{issue.desc}}</h3>
+                      <ion-option-button class="button-assertive icon-left ion-minus-circled" ng-click="child.removeHealthIssue(issue.$id)">
+                        Verwijder
+                      </ion-option-button>
+                    </ion-item>
+                    <div class="animated item tabs tabs-secondary tabs-icon-left" ng-class="{flipInX: child.showHealthIssue, flipOutX: !child.showHealthIssue}" ng-if="child.checkAdmin()" ng-show="child.showHealthIssue">
+                      <a class="tab-item balanced" ng-click="child.newHealthIssue = true">
+                        <i class="icon ion-ios-plus balanced"></i>
+                        Probleem toevoegen
+                      </a>
+                    </div>
+                    <form class="animated" name="addHealthIssueForm" ng-class="{slideInDown: child.newHealthIssue, slideOutUp: !child.newHealthIssue}" ng-if="child.checkAdmin()" ng-show="child.newHealthIssue" novalidate="true">
+                      <label class="item item-input item-stacked-label" ng-class="{'successForm': addHealthIssueForm.name.$dirty}">
+                        <span class="input-label">Naam</span>
+                        <input name="name" ng-model="child.drug.name" placeholder="{{child.drug.name}}" type="text">
+                      </label>
+                      <label class="item item-input item-floating-label animated" ng-class="{'successForm': (addHealthIssueForm.desc.$valid && addHealthIssueForm.desc.$dirty)}">
+                        <span class="input-label">Beschrijving</span>
+                        <textarea name="desc" ng-model="child.drug.desc" placeholder="Beschrijving"></textarea>
+                      </label>
+                      <div class="row">
+                        <div class="col center">
+                          <button class="button button-assertive icon-left ion-ios-close" ng-click="child.newHealthIssue = false">Annuleer</button>
+                        </div>
+                        <div class="col center">
+                          <button class="button button-balanced icon-left ion-ios-plus" ng-click="child.addHealthIssue(addHealthIssueForm)" ng-disabled="addHealthIssueForm.$invalid">Opslaan</button>
+                        </div>
+                      </div>
+                    </form>
+                    <!-- TODO: 'dingen die ik graag doe' & 'dingen die ik niet graag heb' binnen de categorie 'voorkeuren' -->
+                  </div>
+                </div>
+              </ion-slide>
+            </ion-slide-box>
+          </ion-content>
+          <div class="tabs tabs-icon-only">
+            <a class="tab-item disable-child-behavior active" nav-clear nav-clear title="Home" ui-sref="snd.home">
+              <i class="fa fa-child fa-3x"></i>
+              <span class="tab-title ng-binding" ng-bind-html="title"></span>
+            </a>
+            <a class="tab-item disable-child-behavior" icon-off="ion-ios7-filing-outline" icon-on="ion-ios7-filing" nav-clear title="Chat" ui-sref="snd.chat">
+              <i class="icon ion-chatbubbles"></i>
+              <span class="tab-title ng-binding" ng-bind-html="title"></span>
+            </a>
+            <a class="tab-item disable-child-behavior" icon-off="ion-ios7-filing-outline" icon-on="ion-ios7-filing" nav-clear title="Drink" ui-sref="snd.drink">
+              <i class="icon ion-wineglass"></i>
+              <span class="tab-title ng-binding" ng-bind-html="title"></span>
+            </a>
+          </div>
+        </ion-view>

@@ -5,9 +5,9 @@
     .module('babyTracker')
     .controller('userProfileCtrl', userProfileCtrl);
 
-  userProfileCtrl.$inject = ['$scope', 'userDataSvc', '$ionicScrollDelegate', '$firebaseObject', 'userSvc', 'loggingService', '$cordovaCamera', '$ionicModal', 'fullName', 'userProfile', 'Auth'];
+  userProfileCtrl.$inject = ['$scope', 'userDataSvc', '$ionicScrollDelegate', '$firebaseObject', 'userSvc', 'loggingService', '$cordovaCamera', '$ionicModal', 'fullName', 'userProfile', 'Auth', '$ionicLoading'];
 
-  function userProfileCtrl($scope, userDataSvc, $ionicScrollDelegate, $firebaseObject, userSvc, loggingService, $cordovaCamera, $ionicModal, fullName, userProfile, Auth) {
+  function userProfileCtrl($scope, userDataSvc, $ionicScrollDelegate, $firebaseObject, userSvc, loggingService, $cordovaCamera, $ionicModal, fullName, userProfile, Auth, $ionicLoading) {
     var vm = this;
     vm.user = userProfile;
     vm.fullName = fullName;
@@ -40,7 +40,7 @@
       }, function(err) {
         loggingService.showError("Retrieving authData failed", err, "profileCtrl", false);
       });
-      if(!vm.user.profileImage) {
+      if (!vm.user.profileImage) {
         vm.user.profileImage = getDefaultProfileImage();
       }
     }
@@ -59,8 +59,11 @@
     }
 
     function updateUser(form) {
+      $ionicLoading.show({
+        template: '<ion-spinner icon="ripple"></ion-spinner>'
+      });
       if (form.$valid) {
-        if(vm.birthDate) {
+        if (vm.birthDate) {
           vm.user.birthDateTime = vm.birthDate.getTime();
           vm.user.birthDateString = moment(vm.birthDate).format("DD-MM-YYYY");
         }
@@ -68,12 +71,17 @@
           userSvc.getUserProfile(ref.key()).then(function(user) {
             vm.user = user;
             vm.write = false;
+            $ionicLoading.hide();
           }, function(err) {
             loggingService.showError("Update user failed", err, "userProfile", false);
+            $ionicLoading.hide();
           });
         }, function(err) {
           loggingService.showError("Update user failed", err, "userProfile", false);
+          $ionicLoading.hide();
         });
+      } else {
+        $ionicLoading.hide();
       }
     }
 

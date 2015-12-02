@@ -5,9 +5,9 @@
     .module('babyTracker')
     .controller('emergencyCtrl', emergencyCtrl);
 
-  emergencyCtrl.$inject = ['$scope', 'Child', 'userDataSvc', 'childSvc', 'roleSvc', 'childFollowerSvc', '$ionicModal', 'userSvc', 'loggingService'];
+  emergencyCtrl.$inject = ['$scope', 'Child', 'userDataSvc', 'childSvc', 'roleSvc', 'childFollowerSvc', '$ionicModal', 'userSvc', 'loggingService', 'config'];
 
-  function emergencyCtrl($scope, Child, userDataSvc, childSvc, roleSvc, childFollowerSvc, $ionicModal, userSvc, loggingService) {
+  function emergencyCtrl($scope, Child, userDataSvc, childSvc, roleSvc, childFollowerSvc, $ionicModal, userSvc, loggingService, config) {
     var vm = this;
     vm.child = Child;
     vm.checkAdmin = checkAdmin;
@@ -16,6 +16,7 @@
     vm.removeEmergency = removeEmergency;
     vm.allFollowers = childFollowerSvc.bindFollowers(Child.$id);
     vm.allRoles = [];
+    vm.emergencyNumbersHard = config.emergencyNumbers;
     vm.getRole = getRole;
     activate();
 
@@ -77,7 +78,8 @@
           if ($scope.contact.userId) {
             $scope.contact.name = userSvc.getFullName($scope.contact.userId);
             userSvc.getUserProfile($scope.contact.userId).then(function(user) {
-              $scope.contact.user = user;
+              $scope.contact.profileImage = user.profileImage;
+              $scope.contact.photoInDatabase = user.photoInDatabase;
               childSvc.addEmergencyNumber($scope.child.$id, $scope.contact).then(function(ref) {
                 loggingService.showSuccess("Noodnummer toegevoegd", "phonenumber added", "emergencyNumbers", false);
                 $scope.modal.hide();

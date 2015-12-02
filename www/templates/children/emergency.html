@@ -6,14 +6,18 @@
   <ion-content has-header="true">
 <div class="card list">
       <ion-list can-swipe="emergency.checkAdmin()" show-delete="false" show-reorder="false">
-        <div class="item" ng-if="emergency.emergencyNumbers.length == 0">
-          Geen noodnummers
-        </div>
+        <ion-item ng-if="emergency.emergencyNumbersHard" class="item-thumbnail-left" ng-repeat="num in emergency.emergencyNumbersHard">
+          <img ng-src="{{num.thumbnail}}">
+          <h2>{{num.name}}</h2>
+          <h3><a href="{{num.website}}">{{num.website}}</a></h3>
+          <a class="button button-icon-left button-clear button-calm ion-ios-telephone" ng-href="tel:{{num.phone}}"> {{num.phone}}</a>
+        </ion-item>
         <ion-item ng-class="{'item-thumbnail-left': num.userId}" ng-if="emergency.emergencyNumbers" ng-repeat="num in emergency.emergencyNumbers">
-          <img ng-if="!num.user.photoInDatabase && num.userId" ng-src="data:image/jpeg;base64,{{num.user.profileImage}}">
-          <img ng-if="num.user.photoInDatabase" ng-src="data:image/jpeg;base64,{{num.user.profileImage}}">
+          <img ng-if="!num.photoInDatabase && num.userId" ng-src="{{num.profileImage}}">
+          <img ng-if="num.photoInDatabase" ng-src="data:image/jpeg;base64,{{num.profileImage}}">
           <h2>{{num.name}}</h2>
           <h3>{{num.roleName}}</h3>
+          <h3>{{num.email}}</h3>
           <a class="button button-icon-left button-clear button-calm ion-ios-telephone" ng-href="tel:{{num.phone}}"> {{num.phone}}</a>
           <ion-option-button class="button-assertive icon-left ion-minus-circled" ng-click="emergency.removeEmergency($index)">
             Verwijder

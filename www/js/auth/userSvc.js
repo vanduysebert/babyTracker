@@ -21,7 +21,9 @@
       hasChildren: hasChildren,
       getChildren: getChildren,
       getAuth: getAuth,
-      getConnectedUsers: getConnectedUsers
+      getConnectedUsers: getConnectedUsers,
+      addFamily: addFamily,
+      removeFamily: removeFamily
     }
 
     return factory;
@@ -127,6 +129,22 @@
 
     function getConnectedUsers(uid) {
       //TODO: get all connected users to send messages to
+    }
+
+    function addFamily(uid, childId, r) {
+      var deferred = $q.defer();
+      usersRef.child(uid).child("family").child(childId).set({role: r}, function(err) {
+        if(err) {
+          deferred.reject(err);
+        } else {
+          deferred.resolve(true);
+        }
+      });
+      return deferred.promise;
+    }
+
+    function removeFamily(uid, childId) {
+      usersRef.child(uid).child("family").child(childId).remove();
     }
   }
 })();

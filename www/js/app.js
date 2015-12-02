@@ -212,6 +212,18 @@ angular.module('babyTracker', ['ionic', 'firebase', 'ngMessages', 'ngCordova', '
   })
 
   //Main page of child
+  .state('child.family', {
+    url: '/family',
+    views: {
+      'childSection': {
+        templateUrl: 'templates/children/family.html',
+        controller: 'familyCtrl',
+        controllerAs: 'family'
+      }
+    }
+  })
+
+  //Main page of child
   .state('child.posts', {
     url: '/posts',
     views: {

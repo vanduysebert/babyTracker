@@ -9,6 +9,21 @@
   };
   var debug = true;
   var version = "0.0.1";
+
+  var emergencyNumbersBelgium = [
+    {
+      name: "Kind & Gezin",
+      phone: "078150100",
+      website: "www.kindengezin.be",
+      thumbnail: "img/kindGezinThumb.png"
+    },
+    {
+      name: "Antigifcentrum",
+      phone: "070245245",
+      website: "www.poisoncentre.be",
+      thumbnail: "img/AntigifcentrumThumb.jpg"
+    }
+  ]
   /*var childFollowerRoles = {
     "mother": {
       "relationship": "parent",
@@ -63,6 +78,7 @@
   var childFollowerRolesLang = ["moeder", "vader", "oom", "tante", "peter", "meter", "broer", "zus", "grootvader", "grootmoeder", "familie(ver)", "vriend"];
   */
   var config = {
+    emergencyNumbers: emergencyNumbersBelgium,
     dbUrls: dbUrls,
     debug: debug,
     version: version

@@ -1,0 +1,87 @@
+<ion-view view-title="Gezinslid toevoegen">
+  <ion-nav-buttons side="left">
+    <button class="button button-icon icon ion-navicon" menu-toggle="left"></button>
+  </ion-nav-buttons>
+
+  <ion-content has-header="true">
+    <form name="addMemberForm" novalidate="true">
+      <div class="list">
+        <ion-toggle ng-model="family.fromFollower" toggle-class="toggle-calm">Volger van {{family.child.firstName}}</ion-toggle>
+        <label class="item item-input item-select animated" ng-class="{'shake errorForm': (addMemberForm.linkRelationship.$invalid && addMemberForm.linkRelationship.$touched), 'successForm': (addMemberForm.linkRelationship.$valid && addMemberForm.linkRelationship.$dirty)}">
+          <div class="input-label greyLabel">
+            Plaats binnen gezin
+          </div>
+          <select required name="linkRelationship" ng-model="family.member.role">
+            <option ng-repeat="role in family.allRoles" value="{{role.id}}">
+              {{role.nl}}
+            </option>
+          </select>
+        </label>
+        <div ng-if="family.fromFollower">
+          <label class="item item-input item-select animated" ng-class="{'shake errorForm': (addMemberForm.follower.$invalid && addMemberForm.follower.$touched), 'successForm': (addMemberForm.follower.$valid && addMemberForm.follower.$dirty)}">
+            <div class="input-label greyLabel">
+              Naam
+            </div>
+            <select name="follower" ng-model="family.member.userId" ng-required="family.fromFollower">
+              <option ng-repeat="user in family.allFollowers" value="{{user.$id}}">
+                {{family.getUserName(user.$id)}}
+              </option>
+            </select>
+          </label>
+        </div>
+        <div ng-if="!family.fromFollower">
+
+          <label class="item item-input item-floating-label animated" ng-class="{'shake errorForm': (addMemberForm.nameMember.$invalid && addMemberForm.nameMember.$touched), 'successForm': (addMemberForm.nameMember.$valid && addMemberForm.nameMember.$dirty)}" ng-show="!fromFollower">
+            <span class="input-label">Naam</span>
+            <input name="nameMember" ng-model="family.member.name" ng-required="!fromFollower" placeholder="Naam" type="text">
+            <div class="animated zoomIn error-block" ng-if="addMemberForm.nameMember.$touched && addMemberForm.nameMember.$error" ng-messages="addMemberForm.nameMember.$error" role="alert">
+              <div ng-messages-include="templates/partials/errorMessages.html"></div>
+            </div>
+          </label>
+        </div>
+        <label ng-if="family.member.role === 'mother' || family.member.role === 'father'" class="item item-input item-floating-label animated" ng-class="{'shake errorForm': (addMemberForm.work.$invalid && addMemberForm.work.$touched), 'successForm': (addMemberForm.work.$valid && addMemberForm.work.$dirty)}">
+          <span class="input-label">Werk</span>
+          <input name="work" ng-model="family.member.work" placeholder="Werk" ng-required="family.member.role === 'mother' || family.member.role === 'father'" type="text">
+          <div class="animated zoomIn error-block" ng-if="addMemberForm.work.$touched" ng-messages="addMemberForm.work.$error" role="alert">
+            <div ng-messages-include="templates/partials/errorMessages.html"></div>
+          </div>
+        </label>
+        <label ng-if="family.member.role === 'mother' || family.member.role === 'father'" class="item item-input item-floating-label animated" ng-class="{'successForm': (addMemberForm.phoneMember.$valid && addMemberForm.phoneMember.$dirty)}">
+          <span class="input-label">Telefoonnummer werk</span>
+          <input name="phoneMember" ng-model="family.member.phoneWork" placeholder="Telefoonnummer werk" type="tel">
+        </label>
+        <label  class="item item-input item-floating-label animated" ng-class="{'successForm': (addMemberForm.extraInfo.$valid && addMemberForm.extraInfo.$dirty)}">
+          <span class="input-label">Extra info</span>
+          <textarea name="extraInfo"  ng-model="family.member.extraInfo" placeholder="Extra info"></textarea>
+        </label>
+
+
+        <p class="errorMessage">
+          {{family.errMess}}
+        </p>
+        <div class="button-bar">
+          <a class="button button-assertive ion-ios-close icon-left" on-touch="family.goBack()">
+            Annuleer</a>
+          <a class="button button-balanced ion-ios-download icon-left" ng-disabled="addMemberForm.$invalid" on-touch="family.addFamilyMember(addMemberForm)">
+            Gebruiker toevoegen</a>
+        </div>
+
+      </div>
+    </form>
+
+  </ion-content>
+  <div class="tabs tabs-icon-only">
+    <a class="tab-item disable-child-behavior active" nav-clear nav-clear title="Home" ui-sref="snd.home">
+      <i class="fa fa-child fa-3x"></i>
+      <span class="tab-title ng-binding" ng-bind-html="title"></span>
+    </a>
+    <a class="tab-item disable-child-behavior" icon-off="ion-ios7-filing-outline" icon-on="ion-ios7-filing" nav-clear title="Chat" ui-sref="snd.chat">
+      <i class="icon ion-chatbubbles"></i>
+      <span class="tab-title ng-binding" ng-bind-html="title"></span>
+    </a>
+    <a class="tab-item disable-child-behavior" icon-off="ion-ios7-filing-outline" icon-on="ion-ios7-filing" nav-clear title="Drink" ui-sref="snd.drink">
+      <i class="icon ion-wineglass"></i>
+      <span class="tab-title ng-binding" ng-bind-html="title"></span>
+    </a>
+  </div>
+</ion-view>
