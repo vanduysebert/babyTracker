@@ -25,7 +25,8 @@
       gender: 'male',
       address: '',
       postalCode: '',
-      city: ''
+      city: '',
+      unseenRequests: 0
     };
 
     vm.birthDate = "";
@@ -39,27 +40,6 @@
     vm.registerChild = registerChild;
     vm.childId = "";
 
-    /**
-     * Step 2
-     */
-    /*vm.newPhoto = false;
-    vm.savePicture64 = null;
-    vm.uploadProfilePicture = uploadProfilePicture;
-    vm.choosePhotoInput = choosePhotoInput;
-    vm.saveToDatabase = saveToDatabase;*/
-
-    /**
-     * Step 3
-     */
-    /*vm.searchInput = '';
-    vm.usersFound = [];
-    vm.usersLinked = childFollowerSvc.getFollowers(vm.childId);
-    vm.isSearching = false;
-    vm.findUser = findUser;
-    vm.searchUserLinks = searchUserLinks;
-    vm.isLinking = false;
-    vm.linkUser = linkUser;*/
-
     activate();
 
     function activate() {
@@ -71,17 +51,11 @@
       roleSvc.getAllRoles().then(function(roles) {
         vm.allRoles = roles;
       });
-      /*childFollowerSvc.getFollowers(vm.childId).then(function(arr) {
-        vm.usersLinked = arr;
-        console.log(vm.usersLinked);
-        vm.registered = true;
-      });*/
     }
 
     function registerChild(form) {
       if (form.$valid) {
         vm.child.administrator = userDataSvc.uid;
-        console.log(vm.birthDate);
         if (vm.birthDate) {
           vm.child.birthDateTime = vm.birthDate.getTime();
           vm.child.birthDateString = moment(vm.birthDate).format("DD-MM-YYYY");
@@ -94,7 +68,7 @@
         childSvc.addChild(vm.child).then(function(ref) {
           loggingService.showSuccess("Nieuw kind geregistreerd.", ref.key(), "registerChild", false);
           vm.childId = ref.key();
-          childFollowerSvc.addFollower(vm.childId, userDataSvc.uid, vm.linkRelationship).then(function(childId) {
+          childFollowerSvc.addFollower(vm.childId, userDataSvc.uid, vm.linkRelationship, true).then(function(childId) {
             loggingService.showSuccess("User linked with child", childId, vm.mod, false);
             $state.go("app.registerPhoto", {
               childId: vm.childId

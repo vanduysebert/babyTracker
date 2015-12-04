@@ -1,0 +1,59 @@
+<ion-view view-title="Gebruikers linken">
+  <ion-nav-buttons side="left">
+    <button class="button button-icon icon ion-navicon" menu-toggle="left"></button>
+  </ion-nav-buttons>
+  <ion-content>
+
+    <div class="list list-inset">
+      <label class="item item-input">
+        <i class="icon ion-search placeholder-icon"></i>
+        <input ng-change="link.searchUsers()" ng-model="link.search" placeholder="Zoek gebruikers" type="search">
+      </label>
+    </div>
+
+    <ion-list>
+    <li class="item" ng-if="link.search && link.usersFound.length == 0">
+      Geen gebruiker gevonden
+    </li>
+    <ion-item class="item-avatar item-button-right fade-in" ng-repeat="usr in link.usersFound">
+      <img ng-if="!usr.photoInDatabase" ng-src="{{usr.profileImage}}">
+      <img ng-if="usr.photoInDatabase" ng-src="data:image/jpeg;base64,{{usr.profileImage}}">
+      <h2>{{usr.name}}</h2>
+
+      <button class="button button-calm" ng-if="!usr.isInvited" on-tap="link.inviteUser(usr)">Uitnodigen</button>
+      <button class="button button-calm button-outline" ng-if="usr.isInvited" on-tap="link.unInviteUser(usr)">Uitgenodigd</button>
+    </ion-item>
+  </ion-list>
+
+  <div class="card">
+
+    <ion-list >
+      <div class="item item-divider item-calm">
+        Gerelateerde gebruikers
+      </div>
+      <div class="item" ng-if="link.relatedUsers.length == 0">
+        Geen gerelateerde gebruikers gevonden
+      </div>
+      <ion-item class="item-avatar item-button-right fade-in" ng-repeat="usr in link.famRelatedUsers">
+        <img ng-if="!usr.photoInDatabase" ng-src="{{usr.profileImage}}">
+        <img ng-if="usr.photoInDatabase" ng-src="data:image/jpeg;base64,{{usr.profileImage}}">
+        <h2>{{usr.name}}</h2>
+        <button class="button button-calm" on-tap="link.inviteUser(usr.id)">Uitnodigen</button>
+      </ion-item>
+      <ion-item class="item-avatar item-button-right fade-in" ng-repeat="usr in link.relatedUsers">
+        <img ng-if="!usr.photoInDatabase" ng-src="{{usr.profileImage}}">
+        <img ng-if="usr.photoInDatabase" ng-src="data:image/jpeg;base64,{{usr.profileImage}}">
+        <h2>{{usr.name}}</h2>
+        <button class="button button-calm" on-tap="link.inviteUser(usr.id)">Uitnodigen</button>
+      </ion-item>
+    </ion-list>
+  </div>
+</ion-content>
+<ion-tabs class="tabs-positive tabs-icon-top">
+  <ion-tab icon-off="ion-ios-list-outline" icon-on="ion-ios-list" title="Tijdlijn" ui-sref="child.posts"></ion-tab>
+  <ion-tab icon-off="ion-ios-body-outline" icon-on="ion-ios-body" title="Profiel" ui-sref="child.profile"></ion-tab>
+  <!-- TODO: add badge voor volgverzoeken (via ChirldCtrl) -->
+  <ion-tab icon-off="ion-ios-people-outline" icon-on="ion-ios-people" title="Volgers" ui-sref="child.followers"></ion-tab>
+  <ion-tab icon-off="ion-ios-keypad-outline" icon-on="ion-ios-keypad" title="Acties" ui-sref="child.actions"></ion-tab>
+</ion-tabs>
+</ion-view>

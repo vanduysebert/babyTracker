@@ -11,6 +11,7 @@
     var roleRef = new Firebase(config.dbUrls.base + "roles");
     var roles = $firebaseArray(roleRef);
     var service = {
+      bindAllRoles: roles,
       getAllRoles: getAllRoles,
       getRole: getRole,
       bindRole: bindRole,

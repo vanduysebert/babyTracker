@@ -1,0 +1,10 @@
+<label class="item item-input item-select">
+  <div class="input-label greyLabel">
+    Relatie
+  </div>
+  <select name="linkRelationship" ng-model="role.id">
+    <option ng-repeat="role in allRoles" value="{{role.$id}}">
+      {{role.nl}}
+    </option>
+  </select>
+</label>

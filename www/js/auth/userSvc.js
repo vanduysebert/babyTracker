@@ -16,8 +16,11 @@
       getLoggedInUser: getLoggedInUser,
       getUserProfile: getUserProfile,
       getFullName: getFullName,
+      getFullNamePromise: getFullNamePromise,
       updateUser: updateUser,
       all: users,
+      getAllUsersFullName: getAllUsersFullName,
+      getFollowerRelatedUsersFullName: getFollowerRelatedUsersFullName,
       hasChildren: hasChildren,
       getChildren: getChildren,
       getAuth: getAuth,
@@ -70,7 +73,6 @@
             loggedInUser.follows = p.follows;
             deferred.resolve(loggedInUser);
           } else {
-            console.log("reject");
             deferred.reject("AUTH_REQUIRED");
           }
 
@@ -84,8 +86,47 @@
       return deferred.promise;
     }
 
+    function getAllUsersFullName() {
+      var fnArr = [];
+      users.$loaded().then(function(usr) {
+        console.log(usr);
+        angular.forEach(usr, function(u) {
+          var user = {
+            name: "",
+            id: "",
+            profileImage: "",
+            photoInDatabase: ""
+          };
+          user.name = getFullName(u.$id);
+          user.id = u.$id;
+          user.profileImage = u.profileImage;
+          user.photoInDatabase = u.photoInDatabase;
+          fnArr.push(user);
+        });
+      })
+      return fnArr;
+    }
+
+
+
     function hasChildren(uid) {
-      return $firebaseArray(usersRef.child(uid).child("children")).$loaded();
+      var chilArr = []
+      var deferred = $q.defer();
+      var children = $firebaseArray(usersRef.child(uid).child("children")).$loaded();
+      children.then(function(childArr) {
+        if (childArr) {
+          angular.forEach(childArr, function(child) {
+            if (child.$id != "requests") {
+              chilArr.push(child.$id);
+              deferred.resolve(chilArr);
+            }
+          });
+        }
+        deferred.resolve(chilArr);
+      }, function(err) {
+        deferred.reject(err);
+      })
+      return deferred.promise;
     }
 
     function getChildren(uid) {
@@ -94,15 +135,18 @@
       var arr = $firebaseArray(usersRef.child(uid).child("children"));
       arr.$loaded().then(function(x) {
         angular.forEach(x, function(child) {
-          var ch = $firebaseObject(childrenRef.child(child.$id));
-          ch.$loaded().then(function(c) {
-            c.owner = child.owner;
-            roleSvc.getRole(child.role).then(function(r){
+          if (child.$id != "requests") {
+            console.log("child", child);
+            var ch = $firebaseObject(childrenRef.child(child.$id));
+            ch.$loaded().then(function(c) {
+              c.owner = child.owner;
+              roleSvc.getRole(child.role).then(function(r) {
                 c.role = r;
                 childArr.push(c);
                 deferred.resolve(childArr);
-            });
-          })
+              });
+            })
+          }
         });
       });
 
@@ -121,6 +165,12 @@
       return users.$getRecord(uid).firstName + ' ' + users.$getRecord(uid).lastName;
     }
 
+    function getFullNamePromise(uid) {
+      var deferred = $q.defer();
+      deferred.resolve(users.$getRecord(uid).firstName + ' ' + users.$getRecord(uid).lastName);
+      return deferred.promise;
+    }
+
     function getAuth() {
       var deferred = $q.defer();
       deferred.resolve(Auth.$getAuth());
@@ -133,8 +183,10 @@
 
     function addFamily(uid, childId, r) {
       var deferred = $q.defer();
-      usersRef.child(uid).child("family").child(childId).set({role: r}, function(err) {
-        if(err) {
+      usersRef.child(uid).child("family").child(childId).set({
+        role: r
+      }, function(err) {
+        if (err) {
           deferred.reject(err);
         } else {
           deferred.resolve(true);
@@ -145,6 +197,48 @@
 
     function removeFamily(uid, childId) {
       usersRef.child(uid).child("family").child(childId).remove();
+    }
+
+    function getFollowerRelatedUsersFullName(childId) {
+      var deferred = $q.defer();
+      var folArr = [];
+      var followers = $firebaseArray(childrenRef.child(childId).child("followers"));
+      followers.$loaded().then(function(fol) {
+        //console.log(followers);
+        angular.forEach(fol, function(f) {
+          var children = $firebaseArray(usersRef.child(f.$id).child("children"));
+          children.$loaded().then(function(children) {
+            //console.log(children);
+            angular.forEach(children, function(child) {
+              if (child.$id != childId) {
+                var folChild = $firebaseArray(childrenRef.child(child.$id).child("followers"));
+                folChild.$loaded().then(function(folChildArr) {
+                  //console.log(folChildArr);
+                  angular.forEach(folChildArr, function(u) {
+                    if (u.$id != f.$id) {
+                      var v = {};
+                      v.fullName = getFullName(u.$id);
+                      v.id = u.$id;
+                      v.profileImage = u.profileImage;
+                      v.photoInDatabase = u.photoInDatabase;
+                      folArr.push(v);
+                      deferred.resolve(folArr);
+                    }
+                    deferred.resolve(folArr);
+                  })
+                }, function(err) {
+                  deferred.reject(err);
+                });
+              }
+            });
+          }, function(err) {
+            deferred.reject(err);
+          });
+        });
+      }, function(err) {
+        deferred.reject(err);
+      });
+      return deferred.promise;
     }
   }
 })();

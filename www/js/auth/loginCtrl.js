@@ -38,6 +38,7 @@
             }
 
             userSvc.hasChildren(authData.uid).then(function(childrenArr) {
+                console.log("test");
                 console.log(childrenArr);
               if(childrenArr.length < 1) {
                   $state.go('app.start');
@@ -45,7 +46,7 @@
               else if (childrenArr.length > 1) {
                 $state.go('app.summaryStart');
               } else {
-                $state.go('child.profile', {childId: childrenArr[0].$id})
+                $state.go('child.profile', {childId: childrenArr[0]})
               }
             }, function(err) {
               loggingService.showError("Could net get children of user", err, vm.mod, false);
@@ -63,7 +64,7 @@
       ref.once("value", function(data) {
 
         if (!data.exists()) {
-          var user = vm.userDb.child(authData.uid);
+          var user = userSvc.usersRef.child(authData.uid);
           user.set({
             firstName: authData.facebook.cachedUserProfile.first_name,
             lastName: authData.facebook.cachedUserProfile.last_name,
@@ -87,7 +88,7 @@
       ref.once("value", function(data) {
 
         if (!data.exists()) {
-          var user = vm.userDb.child(authData.uid);
+          var user = userSvc.usersRef.child(authData.uid);
           user.set({
             firstName: authData.google.cachedUserProfile.given_name,
             lastName: authData.google.cachedUserProfile.family_name,

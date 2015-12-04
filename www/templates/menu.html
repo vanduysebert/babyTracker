@@ -4,7 +4,10 @@
       <ion-nav-back-button></ion-nav-back-button>
 
       <ion-nav-buttons side="left">
-        <button class="button button-icon button-clear ion-navicon" menu-toggle="left"></button>
+        <button class="button button-clear" menu-toggle="left">
+          <i class="ion-navicon icon"><span ng-if="userBadges.messages || userBadges.requests" class="badge badge-assertive">{{userBadges.messages + userBadges.requests}}</span></i>
+        </button>
+
       </ion-nav-buttons>
       <ion-nav-buttons side="right">
         <img src="img/logoSmallBT.png">
@@ -17,7 +20,7 @@
     <ion-header-bar class="bar-calm">
       <h1 class="title">Menu</h1>
     </ion-header-bar>
-    <ion-content>
+    <ion-content has-header="true">
       <ion-list>
         <ion-item menu-close ng-click="app.userProfile()">
           Profiel
@@ -27,6 +30,14 @@
         </ion-item>
         <ion-item menu-close ui-sref="app.summaryStart">
           Overzicht kinderen
+        </ion-item>
+        <ion-item menu-close ui-sref="app.requests">
+          Volgverzoeken
+          <span class="badge badge-assertive" ng-if="userBadges.requests != 0">{{userBadges.requests}}</span>
+        </ion-item>
+        <ion-item menu-close ui-sref="app.messages">
+          Berichten
+          <span class="badge badge-assertive" ng-if="userBadges.requests != 0">{{userBadges.messages}}</span>
         </ion-item>
         <ion-item menu-close ui-sref="app.about">
           Over babytracker

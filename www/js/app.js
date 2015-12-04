@@ -65,7 +65,7 @@ angular.module('babyTracker', ['ionic', 'firebase', 'ngMessages', 'ngCordova', '
 
   //userProfile
   .state('app.userProfile', {
-    url: '/start',
+    url: '/profile',
     views: {
       'menuContent': {
         templateUrl: 'templates/auth/userProfile.html',
@@ -140,21 +140,6 @@ angular.module('babyTracker', ['ionic', 'firebase', 'ngMessages', 'ngCordova', '
     }
   })
 
-  //Go to search view
-  .state('app.linkUser', {
-    url: '/linkUsers/:childId',
-    views: {
-      'menuContent': {
-        templateUrl: 'templates/children/linkUser.html',
-        controller: 'linkUserCtrl',
-        controllerAs: 'link',
-        resolve: {
-          Child: Child
-        }
-      }
-    }
-  })
-
   .state('app.summaryStart', {
     url: '/startSummary',
     views: {
@@ -165,6 +150,50 @@ angular.module('babyTracker', ['ionic', 'firebase', 'ngMessages', 'ngCordova', '
         resolve: {
           Children: Children
         }
+      }
+    }
+  })
+
+  .state('app.requests', {
+    url: '/requests',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/users/requests.html',
+        controller: 'requestCtrl',
+        controllerAs: 'req',
+      }
+    }
+  })
+
+  .state('app.messages', {
+    url: '/messages',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/messages/messages.html',
+        controller: 'messageCtrl',
+        controllerAs: 'mes',
+      }
+    }
+  })
+
+  .state('app.messageDetail', {
+    url: '/messages/:messageId',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/messages/messageDetail.html',
+        controller: 'messageDetailCtrl',
+        controllerAs: 'mesDet',
+      }
+    }
+  })
+
+  .state('app.messageNew', {
+    url: '/messages/new',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/messages/messageNew.html',
+        controller: 'messageNewCtrl',
+        controllerAs: 'mesNew',
       }
     }
   })
@@ -206,7 +235,6 @@ angular.module('babyTracker', ['ionic', 'firebase', 'ngMessages', 'ngCordova', '
         resolve: {
           Child: Child
         }
-
       }
     }
   })
@@ -223,22 +251,46 @@ angular.module('babyTracker', ['ionic', 'firebase', 'ngMessages', 'ngCordova', '
     }
   })
 
-  //Main page of child
-  .state('child.posts', {
-    url: '/posts',
+  //Go to search view
+  .state('child.followers', {
+    url: '/followers',
     views: {
       'childSection': {
-        templateUrl: 'templates/children/posts.html'
+        templateUrl: 'templates/followers/followers.html',
+        controller: 'followerCtrl',
+        controllerAs: 'follow',
+      }
+    }
+  })
+
+  //Go to search view
+  .state('child.linkUser', {
+    url: '/linkUser',
+    views: {
+      'childSection': {
+        templateUrl: 'templates/followers/linkUser.html',
+        controller: 'linkUserCtrl',
+        controllerAs: 'link',
       }
     }
   })
 
   //Main page of child
-  .state('child.action', {
+  .state('child.posts', {
+    url: '/posts',
+    views: {
+      'childSection': {
+        templateUrl: 'templates/posts/posts.html'
+      }
+    }
+  })
+
+  //Main page of child
+  .state('child.actions', {
       url: '/action',
       views: {
-        'menuContent': {
-          templateUrl: 'templates/children/action.html'
+        'childSection': {
+          templateUrl: 'templates/actions/action.html'
         }
       }
     })

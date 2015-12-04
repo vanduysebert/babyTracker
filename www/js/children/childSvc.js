@@ -15,8 +15,14 @@
       userFamilyMembersRef: userFamilyMembersRef,
       all: children,
       getChild: getChild,
+      getFullName: getFullName,
       addChild: addChild,
       updateChild: updateChild,
+      increaseUnseenRequests: increaseUnseenRequests,
+      decreaseUnseenRequests: decreaseUnseenRequests,
+      resetUnseenRequests: resetUnseenRequests,
+      getUnseenRequests: getUnseenRequests,
+      saveUnseenRequests: saveUnseenRequests,
       addEmergencyNumber: addEmergencyNumber,
       getEmergencyNumbers: getEmergencyNumbers,
       bindEmergencyNumbers: bindEmergencyNumbers,
@@ -58,6 +64,10 @@
 
     function updateChild(childID, child) {
       return child.$save();
+    }
+
+    function getFullName(cid) {
+      return children.$getRecord(cid).firstName + ' ' + children.$getRecord(cid).lastName;
     }
 
     function addEmergencyNumber(childId, contact) {
@@ -190,7 +200,44 @@
 
     function removeDrug(childId, allId) {
       ref.child(childId).child("health").child("drugs").child(allId).remove();
+    }
 
+    function increaseUnseenRequests(childId) {
+      var count = $firebaseObject(ref.child(childId).unseenRequests);
+      count.$loaded().then(function(c) {
+        if(c) {
+          c++;
+
+        } else {
+
+        }
+      })
+    }
+
+    function decreaseUnseenRequests(childId) {
+
+    }
+
+    function resetUnseenRequests(childId) {
+
+    }
+
+    function getUnseenRequests(childId) {
+      var deferred = $q.defer();
+      return $firebaseObject(ref.child(childId).child("unseenRequests")).$loaded();
+      /*child.then(function(c) {
+        if(c.unseenRequests) {
+          deferred.resolve(c.unseenRequests);
+        } else {
+          deferred.resolve(0);
+        }
+
+      })
+      return deferred.promise;*/
+    }
+
+    function saveUnseenRequests(obj) {
+      return obj.$save();
     }
   }
 })();
