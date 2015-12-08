@@ -136,7 +136,7 @@
       arr.$loaded().then(function(x) {
         angular.forEach(x, function(child) {
           if (child.$id != "requests") {
-            console.log("child", child);
+            
             var ch = $firebaseObject(childrenRef.child(child.$id));
             ch.$loaded().then(function(c) {
               c.owner = child.owner;

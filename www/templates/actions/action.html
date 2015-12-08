@@ -4,14 +4,45 @@
   </ion-nav-buttons>
 
   <ion-content has-header="true">
-    <h1>Test</h1>
+    <div class="list">
+      <a class="item item-icon-right item-avatar-left item-action item-food" href="#">
+        <img src="img/iconFood.png">
+        Eten & drinken
+        <i class="icon ion-chevron-right stable"></i>
+      </a>
+      <a class="item item-icon-right item-avatar-left item-action item-sleep" href="#">
+        <img class="center-image" src="img/iconSleep.png">
+        Slapen
+        <i class="icon ion-chevron-right stable"></i>
+      </a>
+      <a class="item item-icon-right item-avatar-left item-action item-entertainment" href="#">
+        <img class="center-image" src="img/iconEntertainment.png">
+        Ontspanning
+        <i class="icon ion-chevron-right stable"></i>
+      </a>
+      <a class="item item-icon-right item-avatar-left item-action item-diaper" href="#">
+        <img class="center-image" src="img/iconDiaper.png">
+        Luiers
+        <i class="icon ion-chevron-right stable"></i>
+      </a>
+      <a class="item item-icon-right item-avatar-left item-action item-milestone" ui-sref="child.milestones">
+        <img class="center-image" src="img/iconMilestone.png">
+        Mijlpalen
+        <i class="icon ion-chevron-right stable"></i>
+      </a>
+      <a class="item item-icon-right item-avatar-left item-action item-photo" href="#">
+        <img class="center-image" src="img/iconPhoto.png">
+        Foto's
+        <i class="icon ion-chevron-right stable"></i>
+      </a>
+
+    </div>
   </ion-content>
   <ion-tabs class="tabs-positive tabs-icon-top">
     <ion-tab icon-off="ion-ios-list-outline" icon-on="ion-ios-list" title="Tijdlijn" ui-sref="child.posts"></ion-tab>
     <ion-tab icon-off="ion-ios-body-outline" icon-on="ion-ios-body" title="Profiel" ui-sref="child.profile"></ion-tab>
     <!-- TODO: add badge voor volgverzoeken (via ChirldCtrl) -->
-    <ion-tab ng-if="checkAdmin()" icon-off="ion-ios-people-outline" icon-on="ion-ios-people" title="Volgers" badge="badges.followRequests" badge-style="badge-assertive" ui-sref="child.followers"></ion-tab>
-    <ion-tab icon-off="ion-ios-people-outline" icon-on="ion-ios-people" title="Volgers" ui-sref="child.followers"></ion-tab>
+    <ion-tab badge-style="badge-assertive" badge="badges.followRequests" icon-off="ion-ios-people-outline" icon-on="ion-ios-people" title="Volgers" ui-sref="child.followers"></ion-tab>
     <ion-tab icon-off="ion-ios-keypad-outline" icon-on="ion-ios-keypad" title="Acties" ui-sref="child.actions"></ion-tab>
   </ion-tabs>
 </ion-view>

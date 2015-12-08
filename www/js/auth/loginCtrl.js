@@ -30,7 +30,7 @@
           });
           if (authData) {
             loggingService.showSuccess('User found in database', authData, vm.mod, false);
-            vm.loggedIn = true;
+
             if (authData.provider === "facebook") {
               findFacebookUser(authData);
             } else if (authData.provider === "google") {
@@ -38,8 +38,6 @@
             }
 
             userSvc.hasChildren(authData.uid).then(function(childrenArr) {
-                console.log("test");
-                console.log(childrenArr);
               if(childrenArr.length < 1) {
                   $state.go('app.start');
               }
@@ -51,6 +49,7 @@
             }, function(err) {
               loggingService.showError("Could net get children of user", err, vm.mod, false);
             });
+            vm.loggedIn = true;
             $ionicLoading.hide();
         } else {
           vm.loggedIn = false;

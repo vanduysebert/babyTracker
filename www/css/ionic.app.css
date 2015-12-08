@@ -9140,3 +9140,120 @@ a.button {
   text-decoration-style: dashed;
   color: #a1bbe5;
   cursor: text; }
+
+.messageItemSent {
+  width: 80%;
+  background-color: #c8f5e1;
+  border-radius: 20px;
+  margin-bottom: 10px; }
+
+.messageItemReceived {
+  left: 20%;
+  width: 80%;
+  background-color: #fcf4df;
+  border-radius: 20px;
+  margin-bottom: 10px; }
+
+.messageItemReceived p {
+  color: #444; }
+
+.messageItemReceived p.dateMessage {
+  border-top: 1px solid #f3cb69;
+  font-size: 75%;
+  font-style: italic;
+  margin-top: 5px;
+  padding-top: 8px;
+  margin-bottom: -10px;
+  padding-bottom: 0; }
+
+.messageItemSent p.dateMessage {
+  border-top: 1px #22b573;
+  border-style: dotted;
+  font-size: 75%;
+  font-style: italic;
+  margin-top: 5px;
+  padding-top: 8px;
+  margin-bottom: -10px;
+  padding-bottom: 0; }
+
+.item-action {
+  height: 14.6vh;
+  line-height: 10.6vh; }
+
+.item-action img {
+  margin-top: 2.5vh; }
+
+.item-food {
+  border-left: 8px solid #f3cb69; }
+
+.item-sleep {
+  border-left: 8px solid #a1bbe5; }
+
+.item-entertainment {
+  border-left: 8px solid #22b573; }
+
+.item-diaper {
+  border-left: 8px solid #ff4365; }
+
+.item-milestone {
+  border-left: 8px solid #9B539C; }
+
+.card div.item-photo {
+  border-left: 8px solid #5F454E; }
+
+.card div.item-food {
+  border-left: 8px solid #f3cb69; }
+
+.card div.item-sleep {
+  border-left: 8px solid #a1bbe5; }
+
+.card div.item-entertainment {
+  border-left: 8px solid #22b573; }
+
+.card div.item-diaper {
+  border-left: 8px solid #ff4365; }
+
+.card div.item-milestone {
+  border-top: 1px solid #e7d3e8;
+  border-bottom: 1px solid #e7d3e8;
+  margin: 10px 0; }
+
+.card div.noBorderBar {
+  border-top: none;
+  margin-top: -10px; }
+
+.card div.noBorderHeader {
+  border-bottom: none;
+  margin-bottom: -10px; }
+
+.mileStoneGrid img {
+  width: 80%; }
+
+.mileStoneGrid a {
+  text-decoration: none;
+  color: #444; }
+
+.white-text {
+  color: white; }
+
+.lowerContent {
+  height: 30px; }
+
+.rightAligned {
+  text-align: right; }
+
+.slide-in-right {
+  -webkit-transform: translateX(100%);
+  transform: translateX(100%); }
+
+.slide-in-right.ng-enter, .slide-in-right > .ng-enter {
+  -webkit-transition: all cubic-bezier(0.1, 0.7, 0.1, 1) 400ms;
+  transition: all cubic-bezier(0.1, 0.7, 0.1, 1) 400ms; }
+
+.slide-in-right.ng-enter-active, .slide-in-right > .ng-enter-active {
+  -webkit-transform: translateX(0);
+  transform: translateX(0); }
+
+.slide-in-right.ng-leave, .slide-in-right > .ng-leave {
+  -webkit-transition: all ease-in-out 250ms;
+  transition: all ease-in-out 250ms; }

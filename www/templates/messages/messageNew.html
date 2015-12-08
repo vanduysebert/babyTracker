@@ -1,5 +1,28 @@
-<ion-view view-title="Volgverzoeken">
+<ion-view view-title="Berichten met {{mesNew.userTo.firstName}}">
   <ion-content padding="true">
-
+    <ion-list >
+      <ion-item ng-repeat="mes in mesNew.messages" on-hold="mesNew.showDelete = !mesNew.showDelete" ng-class="({'messageItemSent': mes.sent, 'messageItemReceived': !mes.sent, 'item-avatar-left': mesNew.checkAvatar(mes), 'item-button-right': mesNew.showDelete})">
+        <img ng-if="!mesNew.userFrom.photoInDatabase && mes.sent" ng-src="{{mesNew.userFrom.profileImage}}">
+        <img ng-if="mesNew.userFrom.photoInDatabase && mes.sent" ng-src="data:image/jpeg;base64,{{mesNew.userFrom.profileImage}}">
+        <img ng-if="!mesNew.userTo.photoInDatabase && !mes.sent" ng-src="{{mesNew.userTo.profileImage}}">
+        <img ng-if="mesNew.userTo.photoInDatabase && !mes.sent" ng-src="data:image/jpeg;base64,{{mesNew.userTo.profileImage}}">
+        <p class="message">
+          {{mes.message}}
+        </p>
+        <p class="dateMessage">
+          <span am-time-ago="mes.dateCreated"></span>
+        </p>
+        <button ng-if="mesNew.showDelete" class="button button-assertive icon ion-ios-trash" on-tap="mesNew.deleteMessage(mes, $index)"></button>
+      </ion-item>
+    </ion-list>
   </ion-content>
+  <div class="bar bar-footer bar-stable item-input-inset" keyboard-attach>
+
+    <label class="item-input-wrapper">
+      <input dir="auto" ng-model="mesNew.message" type="text"/>
+    </label>
+
+    <submit class="button button-clear button-calm ion-ios-paperplane" ng-click="mesNew.sendMessage()"></submit>
+
+  </div>
 </ion-view>

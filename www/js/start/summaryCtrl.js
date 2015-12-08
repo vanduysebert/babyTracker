@@ -5,12 +5,13 @@
     .module('babyTracker')
     .controller('summaryCtrl', summaryCtrl);
 
-  summaryCtrl.$inject = ['Children', 'userDataSvc', 'childFollowerSvc', 'loggingService'];
+  summaryCtrl.$inject = ['Children', 'userDataSvc', 'childFollowerSvc', 'loggingService', '$scope', 'userSvc'];
 
-  function summaryCtrl(Children, userDataSvc, childFollowerSvc, loggingService) {
+  function summaryCtrl(Children, userDataSvc, childFollowerSvc, loggingService, $scope, userSvc) {
     var vm = this;
     vm.children = Children;
     vm.user = userDataSvc;
+    vm.doRefresh = doRefresh;
     vm.removeFollower = removeFollower;
     activate();
 
@@ -27,6 +28,13 @@
       }, function(err) {
         loggingService.showError("User removed failed", err, "followerCtrl", false);
       })
+    }
+
+    function doRefresh() {
+      userSvc.getChildren(userDataSvc.uid).then(function(childArr) {
+        vm.children = childArr;
+        $scope.$broadcast('scroll.refreshComplete');
+      });
     }
 
   }

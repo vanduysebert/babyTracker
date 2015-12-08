@@ -12,6 +12,7 @@
     var usersRef = new Firebase(config.dbUrls.base + "users");
     var service = {
       getFollower: getFollower,
+      getFollowersName: getFollowersName,
       addFollower: addFollower,
       deleteFollower: deleteFollower,
       hasFollower: hasFollower,
@@ -64,6 +65,29 @@
       }
       return deferred.promise;
     }*/
+
+    function getFollowersName(childId) {
+      var deferred = $q.defer();
+      var followArr = [];
+      var followers = $firebaseArray(childRef.child(childId).child("followers"));
+      followers.$loaded().then(function(folArr) {
+        angular.forEach(folArr, function(fol) {
+          userSvc.getUserProfile(fol.$id).then(function(usr) {
+            var user = {
+              name: usr.firstName + " " + usr.lastName,
+              id: fol.$id
+            }
+            followArr.push(user);
+            deferred.resolve(followArr);
+          }, function(err) {
+            deferred.reject(err);
+          })
+        });
+      }, function(err) {
+        return deferred.reject(err);
+      })
+      return deferred.promise;
+    }
 
     function addFollower(childId, uid, role, owner) {
       var deferred = $q.defer();

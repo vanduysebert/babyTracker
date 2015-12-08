@@ -74,8 +74,7 @@
     <ion-tab icon-off="ion-ios-list-outline" icon-on="ion-ios-list" title="Tijdlijn" ui-sref="child.posts"></ion-tab>
     <ion-tab icon-off="ion-ios-body-outline" icon-on="ion-ios-body" title="Profiel" ui-sref="child.profile"></ion-tab>
     <!-- TODO: add badge voor volgverzoeken (via ChirldCtrl) -->
-    <ion-tab ng-if="checkAdmin()" icon-off="ion-ios-people-outline" icon-on="ion-ios-people" title="Volgers" badge="badges.followRequests" badge-style="badge-assertive" ui-sref="child.followers"></ion-tab>
-    <ion-tab icon-off="ion-ios-people-outline" icon-on="ion-ios-people" title="Volgers" ui-sref="child.followers"></ion-tab>
+    <ion-tab icon-off="ion-ios-people-outline" icon-on="ion-ios-people" title="Volgers" badge="badges.followRequests" badge-style="badge-assertive" ui-sref="child.followers"></ion-tab>
     <ion-tab icon-off="ion-ios-keypad-outline" icon-on="ion-ios-keypad" title="Acties" ui-sref="child.actions"></ion-tab>
   </ion-tabs>
 </ion-view>

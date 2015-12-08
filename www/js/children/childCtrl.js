@@ -20,7 +20,11 @@
     vm.requestsReceived = childFollowerSvc.getChildRequestedUsers(Child.$id);
 
     vm.requestsReceived.$watch(function(e) {
+      if(userDataSvc.uid === Child.administrator) {
         $scope.badges.followRequests = vm.requestsReceived.length;
+      } else {
+        $scope.badges.followRequests = 0;
+      }
     });
 
     activate();

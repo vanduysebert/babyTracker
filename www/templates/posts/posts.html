@@ -3,15 +3,79 @@
     <button class="button button-icon icon ion-navicon" menu-toggle="left"></button>
   </ion-nav-buttons>
 
-  <ion-content has-header="true">
-    <h1>Test</h1>
+  <ion-content has-header="true" has-footer="true">
+
+    <div class="bar bar-header bar-positive">
+      <button class="button button-icon assertive icon ion-ios-compose" ui-sref="child.actions"></button>
+      <div class="h1 title">{{post.child.firstName}}
+        {{post.child.lastName}}</div>
+      <button class="button button-icon assertive icon ion-android-more-vertical" on-tap="post.showFilter()"></button>
+    </div>
+    <div class="lowerContent"></div>
+      <div class="button-bar" ng-if="post.filter.set">
+        <a class="button button-block button-assertive icon-left ion-ios-close" on-tap="post.resetFilter()">
+          Reset filter
+        </a>
+        <a  class="button button-block button-calm icon-left ion-edit" on-tap="post.showFilter()">
+          Pas filter aan
+        </a>
+      </div>
+
+    <ion-list >
+      <ion-item class="card animated" on-double-tap="post.likePost(mes)" ng-show="post.showFeed" ng-class="{'rollIn': post.showFeed}"  ng-repeat="mes in post.posts | orderBy: '-dateCreated' | filterBy: ['category.name']: post.filter.category | filterBy: ['uid'] : post.filter.user ">
+        <div class="item noBorderHeader" ng-class="{'item-avatar': mes.profileImage}">
+          <img ng-if="mes.profileImage && mes.photoInDatabase" ng-src="data:image/jpeg;base64,{{mes.profileImage}}">
+          <img ng-if="mes.profileImage && !mes.photoInDatabase" ng-src="{{mes.profileImage}}">
+
+          <h3>{{mes.userName}}</h3>
+          <h4>{{mes.dateCreated | amCalendar}}
+          </h4>
+        </div>
+
+        <div class="item item-avatar item-text-wrap" ng-class="{
+                                     'item-avatar': !mes.photo,
+                                     'item-milestone': mes.category.name === 'milestone',
+                                     'item-food': mes.category.name === 'food',
+                                     'item-sleep': mes.category.name === 'sleep',
+                                     'item-entertainment': mes.category.name === 'entertainment',
+                                     'item-photo': mes.category.name === 'photo',
+                                     'item-diaper': mes.category.name === 'diaper'}">
+          <img ng-if="!mes.photo" ng-src="{{mes.category.icon}}">
+
+          <h2>{{mes.titel}}</h2>
+          <img class="full-image" ng-if="mes.photo" ng-src="data:image/jpeg;base64,{{mes.photo}}">
+
+          <p>
+            {{mes.message}}
+          </p>
+          <p class="rightAligned">
+            <a class="subdued calm" href="#"><i class="icon ion-ios-chatboxes"></i> 1</a>
+            <a class="subdued assertive" href="#"><i ng-class="{'icon ion-ios-heart': mes.likes.length > 0, 'icon ion-ios-heart-outline': !mes.likes.length}"></i> {{mes.likes.length}}</a>
+          </p>
+        </div>
+
+        <div class="item noBorderBar tabs tabs-secondary tabs-icon-left">
+          <a class="tab-item assertive" href="#">
+            <i class="icon ion-ios-heart"></i>
+          </a>
+          <a class="tab-item calm" href="#">
+            <i class="icon ion-ios-chatboxes"></i>
+          </a>
+          <a class="tab-item balanced" href="#">
+            <i class="icon ion-android-more-vertical"></i>
+          </a>
+        </div>
+      </ion-item>
+    </ion-list>
+    <div class="lowerContent"></div>
+
   </ion-content>
+
   <ion-tabs class="tabs-positive tabs-icon-top">
     <ion-tab icon-off="ion-ios-list-outline" icon-on="ion-ios-list" title="Tijdlijn" ui-sref="child.posts"></ion-tab>
     <ion-tab icon-off="ion-ios-body-outline" icon-on="ion-ios-body" title="Profiel" ui-sref="child.profile"></ion-tab>
     <!-- TODO: add badge voor volgverzoeken (via ChirldCtrl) -->
-    <ion-tab ng-if="checkAdmin()" icon-off="ion-ios-people-outline" icon-on="ion-ios-people" title="Volgers" badge="badges.followRequests" badge-style="badge-assertive" ui-sref="child.followers"></ion-tab>
-    <ion-tab icon-off="ion-ios-people-outline" icon-on="ion-ios-people" title="Volgers" ui-sref="child.followers"></ion-tab>
+    <ion-tab badge-style="badge-assertive" badge="badges.followRequests" icon-off="ion-ios-people-outline" icon-on="ion-ios-people" title="Volgers" ui-sref="child.followers"></ion-tab>
     <ion-tab icon-off="ion-ios-keypad-outline" icon-on="ion-ios-keypad" title="Acties" ui-sref="child.actions"></ion-tab>
   </ion-tabs>
 </ion-view>

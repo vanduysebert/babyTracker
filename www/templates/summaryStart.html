@@ -1,14 +1,16 @@
 <ion-view view-title="Overzicht kinderen">
   <ion-content padding="true">
+    <ion-refresher on-refresh="sum.doRefresh()" ></ion-refresher>
     <ion-list can-swipe="true">
-      <ion-item ng-repeat="child in sum.children" class="item item-thumbnail-left" ui-sref="child.profile({childId: child.$id})">
+      <ion-item class="item item-thumbnail-left" ng-repeat="child in sum.children" ui-sref="child.profile({childId: child.$id})">
         <img ng-if="!child.photoInDatabase" ng-src="{{child.profileImage}}">
         <img ng-if="child.photoInDatabase" ng-src="data:image/jpeg;base64,{{child.profileImage}}">
-        <h2>{{child.firstName}} {{child.lastName}}</h2>
-        <h3>Relatie: {{child.role.nl}}</h5>
+        <h2>{{child.firstName}}
+          {{child.lastName}}</h2>
+        <h3>Relatie:
+          {{child.role.nl}}</h5>
         <p ng-if="child.administrator == sum.user.uid">Beheerder</p>
-        <ion-option-button class="button-assertive icon ion-trash-a" ng-click="sum.removeFollower(child, $index)">
-        </ion-option-button>
+        <ion-option-button class="button-assertive icon ion-trash-a" ng-click="sum.removeFollower(child, $index)"></ion-option-button>
         <!-- TODO misschien later toevoegen visit other userProfiles -->
         <!--<ion-option-button class="button-balanced icon ion-ios-person" ui-sref="app.userProfile({uid: usr.$id})">
         </ion-option-button>-->

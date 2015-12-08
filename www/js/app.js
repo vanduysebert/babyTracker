@@ -1,4 +1,4 @@
-angular.module('babyTracker', ['ionic', 'firebase', 'ngMessages', 'ngCordova', 'angularMoment', 'ngIOS9UIWebViewPatch'])
+angular.module('babyTracker', ['ionic', 'firebase', 'ngMessages', 'ngCordova', 'angularMoment', 'ngIOS9UIWebViewPatch', 'angular.filter'])
 
 .run(function($ionicPlatform, $rootScope, $location, Auth, userSvc, amMoment) {
   $ionicPlatform.ready(function() {
@@ -172,6 +172,9 @@ angular.module('babyTracker', ['ionic', 'firebase', 'ngMessages', 'ngCordova', '
         templateUrl: 'templates/messages/messages.html',
         controller: 'messageCtrl',
         controllerAs: 'mes',
+        /*resolve: {
+          allMessages: allMessages
+        }*/
       }
     }
   })
@@ -188,12 +191,16 @@ angular.module('babyTracker', ['ionic', 'firebase', 'ngMessages', 'ngCordova', '
   })
 
   .state('app.messageNew', {
-    url: '/messages/new',
+    url: '/messages/new/:uid/:childId',
     views: {
       'menuContent': {
         templateUrl: 'templates/messages/messageNew.html',
         controller: 'messageNewCtrl',
         controllerAs: 'mesNew',
+        resolve: {
+          Child: Child,
+          User: User
+        }
       }
     }
   })
@@ -280,7 +287,9 @@ angular.module('babyTracker', ['ionic', 'firebase', 'ngMessages', 'ngCordova', '
     url: '/posts',
     views: {
       'childSection': {
-        templateUrl: 'templates/posts/posts.html'
+        templateUrl: 'templates/posts/posts.html',
+        controller: 'postCtrl',
+        controllerAs:'post'
       }
     }
   })
@@ -290,10 +299,23 @@ angular.module('babyTracker', ['ionic', 'firebase', 'ngMessages', 'ngCordova', '
       url: '/action',
       views: {
         'childSection': {
-          templateUrl: 'templates/actions/action.html'
+          templateUrl: 'templates/actions/action.html',
+          controller: 'actionCtrl',
+          controllerAs: 'action'
         }
       }
     })
+
+    .state('child.milestones', {
+        url: '/action/milestone',
+        views: {
+          'childSection': {
+            templateUrl: 'templates/actions/milestones.html',
+            controller: 'mileStoneCtrl',
+            controllerAs: 'mile'
+          }
+        }
+      })
     //Delete when ready
     .state('app.home', {
       url: '/home',
@@ -328,6 +350,17 @@ angular.module('babyTracker', ['ionic', 'firebase', 'ngMessages', 'ngCordova', '
   function userProfile(Auth, userSvc) {
     var authData = Auth.$getAuth();
     return userSvc.getUserProfile(authData.uid);
+  }
+
+  User.$inject = ['$stateParams', 'userSvc'];
+  function User($stateParams, userSvc) {
+    return userSvc.getUserProfile($stateParams.uid);
+  }
+
+  allMessages.$inject = [ 'messageSvc', 'Auth'];
+  function allMessages(messageSvc, Auth) {
+    var authData = Auth.$getAuth();
+    return messageSvc.getAllMessageGroups(authData.uid);
   }
 
   Child.$inject = ['$stateParams', 'childSvc']

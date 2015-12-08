@@ -123,9 +123,7 @@
                   childRef.child(c.$id).child("followers").child("requests").child("received").child(uid).once('value', function(rec) {
                     if (!rec.exists()) {
                       c.name = c.firstName + " " + c.lastName;
-                      console.log("arr2", fnArr);
                       fnArr.push(c);
-                      console.log("arr3", fnArr);
                       deferred.resolve(fnArr);
                     }
                   });
