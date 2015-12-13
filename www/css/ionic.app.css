@@ -9095,6 +9095,9 @@ a.button {
 .successForm .input-label {
   color: #90C5A9; }
 
+.successInput input {
+  color: #22b573; }
+
 .error-container {
   background-color: #cd622d;
   color: white;
@@ -9187,7 +9190,7 @@ a.button {
   border-left: 8px solid #f3cb69; }
 
 .item-sleep {
-  border-left: 8px solid #a1bbe5; }
+  border-left: 8px solid #B6DEDC; }
 
 .item-entertainment {
   border-left: 8px solid #22b573; }
@@ -9205,7 +9208,7 @@ a.button {
   border-left: 8px solid #f3cb69; }
 
 .card div.item-sleep {
-  border-left: 8px solid #a1bbe5; }
+  border-left: 8px solid #B6DEDC; }
 
 .card div.item-entertainment {
   border-left: 8px solid #22b573; }
@@ -9257,3 +9260,11 @@ a.button {
 .slide-in-right.ng-leave, .slide-in-right > .ng-leave {
   -webkit-transition: all ease-in-out 250ms;
   transition: all ease-in-out 250ms; }
+
+.absoluteHeart {
+  position: absolute;
+  left: 43%;
+  font-size: 50px; }
+
+.ion-social-euro-outline {
+  content: url("../img/unhappyEmo.png") !important; }

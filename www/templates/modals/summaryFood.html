@@ -1,0 +1,53 @@
+<div class="modal">
+
+  <ion-header-bar class="bar-balanced">
+    <button class="button button-clear" on-tap="closeModal()">Terug</button>
+    <h1 class="title">Overzicht voeding</h1>
+  </ion-header-bar>
+  <ion-content>
+    <div class="card list">
+
+      <div class="item item-avatar">
+        <img ng-src="img/{{foodData.category.name}}.png">
+        <h2>{{foodData.category.nl}}</h2>
+
+      </div>
+      <div class="item item-positive">
+        Ingrediënten
+      </div>
+      <div class="item" ng-repeat="ingr in foodData.ingredients">
+
+        {{ingr.nl}}
+      </div>
+      <div class="item item-calm">
+        Hoeveelheid
+      </div>
+      <div class="item">
+
+        {{foodData.amount}}
+        gram
+      </div>
+      <div class="item">
+        Gemoedstoestand baby
+        <div class="button-bar padding">
+          <div class="button icon ion-happy-outline" ng-class="({'button-balanced': emo.happy})" on-tap="emo.happy = true; emo.normal = false; emo.sad = false"></div>
+          <div class="button icon ion-android-sad" ng-class="({'button-energized': emo.normal})" on-tap="emo.happy = false; emo.normal = true; emo.sad = false"></div>
+          <div class="button icon ion-sad-outline" ng-class="({'button-assertive': emo.sad})" on-tap="emo.happy = false; emo.normal = false; emo.sad = true"></div>
+        </div>
+      </div>
+      <label class="item item-input item-stacked-label item-icon-right">
+        <span class="input-label">Opmerking</span>
+        <input ng-model="foodData.remark" placeholder="Voeg een opmerking toe" type="text">
+      </label>
+
+      <div class="item">
+        <div class="button-bar">
+          <a class="button button-assertive" ng-click="closeModal()">Annuleer</a>
+          <a class="button button-balanced" ng-click="postFood()">Plaats voeding</a>
+        </div>
+      </div>
+
+    </div>
+
+  </ion-content>
+</div>

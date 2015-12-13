@@ -1,0 +1,77 @@
+<ion-view view-title="Slaap toevoegen">
+  <ion-nav-buttons side="left">
+    <button class="button button-icon icon ion-navicon" menu-toggle="left"></button>
+  </ion-nav-buttons>
+
+  <ion-content has-footer="true" has-header="true">
+    <form name="sleepForm" novalidate="true">
+      <div class="list card">
+        <div class="item item-divider item-positive">
+          Slaap gevat
+        </div>
+        <label class="item item-input" ng-if="sleep.datetimeInput">
+          <span class="input-label">Tijdstip</span>
+          <input name="dateTimeStart" ng-required="sleep.datetimeInput" ng-model="sleep.sleepData.startDateTime" type="datetime-local">
+          <div role="alert" class="animated zoomIn error-block" ng-messages="sleepForm.dateTimeStart.$error" ng-if="sleepForm.dateTimeStart.$dirty">
+            <div ng-messages-include= "templates/partials/errorMessages.html"></div>
+          </div>
+        </label>
+        <label class="item item-input" ng-if="!sleep.datetimeInput">
+          <span class="input-label">Datum</span>
+          <input name="dateStart" ng-required="!sleep.datetimeInput" ng-model="sleep.sleepData.startDate" type="date">
+          <div role="alert" class="animated zoomIn error-block" ng-messages="sleepForm.dateStart.$error" ng-if="sleepForm.dateStart.$dirty">
+            <div ng-messages-include= "templates/partials/errorMessages.html"></div>
+          </div>
+        </label>
+        <label class="item item-input" ng-if="!sleep.datetimeInput">
+          <span class="input-label">Tijd</span>
+          <input name="timeStart" ng-required="!sleep.datetimeInput" ng-model="sleep.sleepData.startTime" type="time">
+          <div role="alert" class="animated zoomIn error-block" ng-messages="sleepForm.timeStart.$error" ng-if="sleepForm.timeStart.$dirty">
+            <div ng-messages-include= "templates/partials/errorMessages.html"></div>
+          </div>
+        </label>
+        <div class="item item-divider item-calm">
+          Wakker geworden
+        </div>
+        <label class="item item-input" ng-if="sleep.datetimeInput">
+          <span class="input-label">Tijdstip</span>
+          <input name="dateTimeEnd" ng-required="sleep.datetimeInput" ng-model="sleep.sleepData.endDateTime" type="datetime-local">
+          <div role="alert" class="animated zoomIn error-block" ng-messages="sleepForm.dateTimeEnd.$error" ng-if="sleepForm.dateTimeEnd.$dirty">
+            <div ng-messages-include= "templates/partials/errorMessages.html"></div>
+          </div>
+        </label>
+        <label class="item item-input" ng-if="!sleep.datetimeInput">
+          <span class="input-label">Datum</span>
+          <input name="dateEnd" ng-required="!sleep.datetimeInput" ng-model="sleep.sleepData.endDate" type="date">
+          <div role="alert" class="animated zoomIn error-block" ng-messages="sleepForm.dateEnd.$error" ng-if="sleepForm.dateEnd.$dirty">
+            <div ng-messages-include= "templates/partials/errorMessages.html"></div>
+          </div>
+        </label>
+        <label class="item item-input" ng-if="!sleep.datetimeInput">
+          <span class="input-label">Tijd</span>
+          <input name="timeEnd" ng-required="!sleep.datetimeInput" ng-model="sleep.sleepData.endTime" type="time">
+          <div role="alert" class="animated zoomIn error-block" ng-messages="sleepForm.timeEnd.$error" ng-if="sleepForm.timeEnd.$dirty">
+            <div ng-messages-include= "templates/partials/errorMessages.html"></div>
+          </div>
+        </label>
+        <div class="item item-divider item-assertive">
+          Opmerking
+        </div>
+        <label class="item item-input">
+          <span class="input-label">Opmerking</span>
+          <input ng-model="sleep.sleepData.remark" type="text">
+        </label>
+      </div>
+      <div class="button button-full button-balanced" on-tap="sleep.addSleep()" ng-disabled="sleepForm.$invalid">
+        Plaats
+      </div>
+    </form>
+  </ion-content>
+  <ion-tabs class="tabs-positive tabs-icon-top">
+    <ion-tab icon-off="ion-ios-list-outline" icon-on="ion-ios-list" title="Tijdlijn" ui-sref="child.posts"></ion-tab>
+    <ion-tab icon-off="ion-ios-body-outline" icon-on="ion-ios-body" title="Profiel" ui-sref="child.profile"></ion-tab>
+    <!-- TODO: add badge voor volgverzoeken (via ChirldCtrl) -->
+    <ion-tab badge-style="badge-assertive" badge="badges.followRequests" icon-off="ion-ios-people-outline" icon-on="ion-ios-people" title="Volgers" ui-sref="child.followers"></ion-tab>
+    <ion-tab icon-off="ion-ios-keypad-outline" icon-on="ion-ios-keypad" title="Acties" ui-sref="child.actions"></ion-tab>
+  </ion-tabs>
+</ion-view>

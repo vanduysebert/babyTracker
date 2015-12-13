@@ -3,7 +3,7 @@
     <button class="button button-icon icon ion-navicon" menu-toggle="left"></button>
   </ion-nav-buttons>
 
-  <ion-content has-header="true" has-footer="true">
+  <ion-content has-footer="true" has-header="true">
 
     <div class="bar bar-header bar-positive">
       <button class="button button-icon assertive icon ion-ios-compose" ui-sref="child.actions"></button>
@@ -12,58 +12,120 @@
       <button class="button button-icon assertive icon ion-android-more-vertical" on-tap="post.showFilter()"></button>
     </div>
     <div class="lowerContent"></div>
-      <div class="button-bar" ng-if="post.filter.set">
-        <a class="button button-block button-assertive icon-left ion-ios-close" on-tap="post.resetFilter()">
-          Reset filter
-        </a>
-        <a  class="button button-block button-calm icon-left ion-edit" on-tap="post.showFilter()">
-          Pas filter aan
-        </a>
-      </div>
+    <div class="button-bar" ng-if="post.filter.set">
+      <a class="button button-block button-assertive icon-left ion-ios-close" on-tap="post.resetFilter()">
+        Reset filter
+      </a>
+      <a class="button button-block button-calm icon-left ion-edit" on-tap="post.showFilter()">
+        Pas filter aan
+      </a>
+    </div>
 
     <ion-list >
-      <ion-item class="card animated" on-double-tap="post.likePost(mes)" ng-show="post.showFeed" ng-class="{'rollIn': post.showFeed}"  ng-repeat="mes in post.posts | orderBy: '-dateCreated' | filterBy: ['category.name']: post.filter.category | filterBy: ['uid'] : post.filter.user ">
-        <div class="item noBorderHeader" ng-class="{'item-avatar': mes.profileImage}">
+      <ion-item class="card animated" ng-class="{'rollIn': post.showFeed}" ng-repeat="mes in post.posts | orderBy: '-dateCreated' | filterBy: ['category.name']: post.filter.category | filterBy: ['uid'] : post.filter.user " ng-show="post.showFeed" on-double-tap="post.likePost(mes)">
+        <div class="item noBorderHeader  item-text-wrap" ng-class="{'item-avatar': mes.profileImage}">
           <img ng-if="mes.profileImage && mes.photoInDatabase" ng-src="data:image/jpeg;base64,{{mes.profileImage}}">
           <img ng-if="mes.profileImage && !mes.photoInDatabase" ng-src="{{mes.profileImage}}">
 
           <h3>{{mes.userName}}</h3>
           <h4>{{mes.dateCreated | amCalendar}}
           </h4>
+
         </div>
 
-        <div class="item item-avatar item-text-wrap" ng-class="{
+        <div class="item item-text-wrap" ng-class="{
                                      'item-avatar': !mes.photo,
                                      'item-milestone': mes.category.name === 'milestone',
                                      'item-food': mes.category.name === 'food',
                                      'item-sleep': mes.category.name === 'sleep',
                                      'item-entertainment': mes.category.name === 'entertainment',
                                      'item-photo': mes.category.name === 'photo',
-                                     'item-diaper': mes.category.name === 'diaper'}">
+                                     'item-diaper': mes.category.name === 'diaper'
+                                      }">
           <img ng-if="!mes.photo" ng-src="{{mes.category.icon}}">
 
-          <h2>{{mes.titel}}</h2>
+          <h2 ng-class="({'item-icon-right': mes.category.name === 'food'})">{{mes.titel}}
+            <i class="icon" ng-class="({'ion-sad-outline assertive': mes.mood.sad, 'ion-happy-outline balanced': mes.mood.happy, 'ion-android-sad energized': mes.mood.normal})"></i>
+          </h2>
+          <h1 class="center assertive absoluteHeart animated" ng-class="{'fadeIn': mes.showHeart, 'fadeOut': !mes.showHeart}" ng-show="mes.showHeart">
+            <i class="icon ion-ios-heart"></i>
+          </h1>
           <img class="full-image" ng-if="mes.photo" ng-src="data:image/jpeg;base64,{{mes.photo}}">
+          <h3 ng-if="mes.category.name === 'sleep'">
+            <i class="fa fa-history"></i>
+            {{mes.timeData.duration | amDateFormat: 'H'}} uur en {{mes.timeData.duration | amDateFormat: 'm'}} minuten
+          </h3>
+          <p ng-if="mes.category.name === 'sleep'">
+            <i class="icon ion-ios-clock"></i>
+            {{mes.timeData.dateTimeStartString | amDateFormat: 'do MMM'}} om {{mes.timeData.dateTimeStartString | amDateFormat: 'H:mm'}} uur
+          </p>
+          <p ng-if="mes.category.name === 'sleep'">
+            <i class="icon ion-ios-clock-outline"></i>
+            {{mes.timeData.dateTimeEndString | amDateFormat: 'do MMM'}} om {{mes.timeData.dateTimeEndString | amDateFormat: 'H:mm'}} uur
+          </p>
 
-          <p>
+
+          <p >
             {{mes.message}}
           </p>
-          <p class="rightAligned">
-            <a class="subdued calm" href="#"><i class="icon ion-ios-chatboxes"></i> 1</a>
-            <a class="subdued assertive" href="#"><i ng-class="{'icon ion-ios-heart': mes.likes.length > 0, 'icon ion-ios-heart-outline': !mes.likes.length}"></i> {{mes.likes.length}}</a>
+          <p ng-if="mes.category.name === 'food'">
+            Ingrediënten:
+            {{mes.ingredients}}
           </p>
+          <p ng-if="mes.category.name === 'food'">
+            Hoeveelheid:
+            {{mes.amount}}
+            <span ng-if="mes.category == 'milk'">ml</span>
+            <span ng-if="mes.category != 'milk'">gram</span>
+          </p>
+          <h4 ng-if="mes.category.name === 'food' || mes.category.name === 'sleep'">
+            {{mes.remark}}
+          </h4>
+
+          <p class="rightAligned">
+            <a class="subdued calm" ng-if="mes.reactionCount">
+              <i class="icon ion-ios-chatboxes"></i>
+              {{mes.reactionCount}}</a>
+            <a class="subdued assertive" on-tap="post.showLikes(mes)">
+              <i ng-class="{'icon ion-ios-heart': mes.likeCount.count > 0, 'icon ion-ios-heart-outline': mes.likeCount.count == 0 || !mes.likeCount}"></i>
+              {{mes.likeCount.count}}</a>
+          </p>
+
+          <div class="item item-icon-left" ng-if="mes.showLikes">
+            <i class="icon assertive ion-ios-heart"></i>
+            <h4>
+              <a class="userArr" ng-repeat="usr in mes.likeString">{{$index >= 3 && !$last ?  '' : usr.userName}}{{$last && $index < 3 ? '' : ', '}}
+              </a>
+              <a class="userArr" ng-if="mes.showLikes.length > 3" ui-sref="child.postUserLikes({postId: mes.$id})">
+                en
+                {{mes.likeString.length - 3}}
+                anderen</a>
+            </h4>
+          </div>
         </div>
 
         <div class="item noBorderBar tabs tabs-secondary tabs-icon-left">
-          <a class="tab-item assertive" href="#">
+          <a class="tab-item assertive" ng-if="!post.checkLiked(mes)" on-tap="post.likePost(mes)">
+            <i class="icon ion-ios-heart-outline"></i>
+          </a>
+          <a class="tab-item assertive" ng-if="post.checkLiked(mes)" on-tap="post.unlikePost(mes)">
             <i class="icon ion-ios-heart"></i>
           </a>
-          <a class="tab-item calm" href="#">
+          <a class="tab-item calm" ui-sref="child.postReactions({postId: mes.$id})">
             <i class="icon ion-ios-chatboxes"></i>
           </a>
+          <!-- TODO: add social share plugins-->
           <a class="tab-item balanced" href="#">
             <i class="icon ion-android-more-vertical"></i>
           </a>
+
+        </div>
+        <div class="item item-input-inset" ng-if="mes.showReaction">
+          <label class="item-input-wrapper">
+            <i class="icon ion-ios-search placeholder-icon"></i>
+            <input ng-model="mes.reaction" placeholder="Reactie toevoegen" type="text">
+          </label>
+          <button class="button button-clear button-balanced icon ion-ios-paperplane" ng-disabled="!mes.reaction"></button>
         </div>
       </ion-item>
     </ion-list>

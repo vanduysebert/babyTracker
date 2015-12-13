@@ -1,0 +1,51 @@
+<ion-view view-title="Voeding toevoegen">
+  <ion-nav-buttons side="left">
+    <button class="button button-icon icon ion-navicon" menu-toggle="left"></button>
+  </ion-nav-buttons>
+
+  <ion-content has-footer="true" has-header="true">
+    <div class="list">
+      <label class="item item-input item-stacked-label item-icon-right">
+        <span class="input-label">Voeding</span>
+        <input ng-model="food.foodData.category.nl" on-touch="food.selectFood('fadeInLeft')" placeholder="Selecteer voeding" type="text">
+        <i class="icon ion-android-checkbox-outline balanced" ng-if="food.foodData.category.nl"></i>
+        <i class="icon ion-android-checkbox-outline-blank " ng-if="!food.foodData.category.nl"></i>
+      </label>
+
+      <label class="item item-input item-stacked-label item-icon-right" ng-if="food.foodData.category.nl">
+        <span class="input-label">Ingrediënten</span>
+        <i class="icon ion-android-checkbox-outline balanced" ng-if="food.foodData.ingredients.length > 0"></i>
+        <i class="icon ion-android-checkbox-outline-blank " ng-if="food.foodData.ingredients.length == 0"></i>
+      </label>
+      <div class="card" ng-if="food.foodData.category.nl">
+
+        <ion-list show-delete="true">
+          <ion-item ng-repeat="ingr in food.foodData.ingredients">
+            {{ingr.nl}}
+            <ion-delete-button class="ion-minus-circled assertive" ng-click="food.deleteItem($index, ingr)"></ion-delete-button>
+          </ion-item>
+
+        </ion-list>
+        <div class="item item-icon-left" ng-click="food.showIngredients('fadeInLeft')">
+          Ingrediënt toevoegen
+          <i class="icon ion-ios-plus balanced"></i>
+        </div>
+      </div>
+      <label class="item item-input item-stacked-label item-icon-right" ng-if="food.foodData.ingredients.length > 0">
+        <span class="input-label">Hoeveelheid</span>
+        <input ng-model="food.foodData.amount" placeholder="Hoeveelheid in g/ml" type="number">
+        <i class="icon ion-android-checkbox-outline balanced" ng-if="food.foodData.amount"></i>
+        <i class="icon ion-android-checkbox-outline-blank " ng-if="!food.foodData.amount"></i>
+      </label>
+      <button class="button-full button button-balanced" ng-if="food.foodData.amount" on-tap="food.showSummary('fadeInLeftBig')">Volgende</button>
+    </div>
+
+  </ion-content>
+  <ion-tabs class="tabs-positive tabs-icon-top">
+    <ion-tab icon-off="ion-ios-list-outline" icon-on="ion-ios-list" title="Tijdlijn" ui-sref="child.posts"></ion-tab>
+    <ion-tab icon-off="ion-ios-body-outline" icon-on="ion-ios-body" title="Profiel" ui-sref="child.profile"></ion-tab>
+    <!-- TODO: add badge voor volgverzoeken (via ChirldCtrl) -->
+    <ion-tab badge-style="badge-assertive" badge="badges.followRequests" icon-off="ion-ios-people-outline" icon-on="ion-ios-people" title="Volgers" ui-sref="child.followers"></ion-tab>
+    <ion-tab icon-off="ion-ios-keypad-outline" icon-on="ion-ios-keypad" title="Acties" ui-sref="child.actions"></ion-tab>
+  </ion-tabs>
+</ion-view>

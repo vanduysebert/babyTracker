@@ -1,0 +1,16 @@
+<ion-view view-title="{{postLike.post.titel}}">
+  <ion-content >
+    <div class="card">
+      <div class="item item-divider item-calm">
+        Mensen die dit leuk vinden
+      </div>
+      <ion-list>
+        <ion-item class="item-button-right" ng-repeat="like in postLike.followers">
+          {{like.userName}}
+          <!-- TODO: button naar userProfiel -->
+          <!--<button ng-if="like.uid == postLike.user.uid" class="button icon button-clear ion-ios-compose button-positive"></button>-->
+        </ion-item>
+      </ion-list>
+    </div>
+  </ion-content>
+</ion-view>

@@ -1,0 +1,15 @@
+<div class="modal">
+
+  <ion-header-bar class="bar-balanced">
+    <button class="button button-clear" on-tap="closeModal()">Terug</button>
+    <h1 class="title">Selecteer voeding</h1>
+  </ion-header-bar>
+  <ion-content>
+    <ion-list>
+
+      <ion-radio ng-model="data.cat" ng-change="setFoodSelected()" ng-repeat="cat in foodCats" ng-value="cat.value">{{cat.nl}}</ion-radio>
+
+    </ion-list>
+
+  </ion-content>
+</div>

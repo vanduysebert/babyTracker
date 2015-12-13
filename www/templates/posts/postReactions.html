@@ -1,0 +1,54 @@
+<ion-view view-title="{{reaction.post.titel}}">
+  <ion-content has-footer="true">
+    <div class="list">
+      <div class="item item-avatar">
+        <img ng-if="reaction.post.profileImage && reaction.post.photoInDatabase" ng-src="data:image/jpeg;base64,{{reaction.post.profileImage}}">
+        <img ng-if="reaction.post.profileImage && !reaction.post.photoInDatabase" ng-src="{{reaction.post.profileImage}}">
+
+        <h3>{{reaction.post.userName}}</h3>
+        <h4>{{reaction.post.dateCreated | amCalendar}}
+        </h4>
+      </div>
+
+      <div class="item item-avatar item-text-wrap" ng-class="{
+                                     'item-avatar': !reaction.post.photo,
+                                     'item-milestone': reaction.post.category.name === 'milestone',
+                                     'item-food': reaction.post.category.name === 'food',
+                                     'item-sleep': reaction.post.category.name === 'sleep',
+                                     'item-entertainment': reaction.post.category.name === 'entertainment',
+                                     'item-photo': reaction.post.category.name === 'photo',
+                                     'item-diaper': reaction.post.category.name === 'diaper'}">
+        <img ng-if="!reaction.post.photo" ng-src="{{reaction.post.category.icon}}">
+
+        <h2>{{reaction.post.titel}}</h2>
+        <img class="full-image" ng-if="reaction.post.photo" ng-src="data:image/jpeg;base64,{{reaction.post.photo}}">
+        <p>
+          {{reaction.post.message}}
+        </p>
+      </div>
+      <div class="item item-divider item-calm">
+        Reacties
+      </div>
+      <ion-list>
+        <ion-item class="item-avatar" ng-repeat="reac in reaction.reactions">
+          <img ng-if="reac.profileImage && reac.photoInDatabase" ng-src="data:image/jpeg;base64,{{reac.profileImage}}">
+          <img ng-if="reac.profileImage && !reac.photoInDatabase" ng-src="{{reac.profileImage}}">
+          <h2>{{reac.message}}</h2>
+          <h3>{{reac.userName}}</h3>
+          <h4>{{reac.dateCreated | amCalendar}}
+          </h4>
+        </ion-item>
+      </ion-list>
+    </div>
+
+  </ion-content>
+  <div class="bar bar-footer bar-stable item-input-inset" keyboard-attach>
+
+    <label class="item-input-wrapper">
+      <input dir="auto" ng-model="reaction.reaction" placeholder="Reactie ingeven" type="text"/>
+    </label>
+
+    <submit class="button button-clear icon button-calm ion-ios-paperplane" ng-click="reaction.postReaction()"></submit>
+
+  </div>
+</ion-view>

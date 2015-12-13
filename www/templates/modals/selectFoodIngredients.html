@@ -1,0 +1,24 @@
+<div class="modal">
+
+  <ion-header-bar class="bar-balanced">
+
+    <h1 class="title">Overzicht voeding</h1>
+    <button class="button button-clear" on-tap="closeModal()">Bewaar</button>
+
+  </ion-header-bar>
+  <ion-content>
+    <div class="list card" ng-if="months.length > 0">
+      <div ng-repeat="m in months">
+        <div class="item item-divider item-icon-right" on-tap="ingredients[m].show = !ingredients[m].show">
+          Vanaf
+          {{m}}
+          maanden
+          <i class="icon" ng-class="({'ion-ios-minus-outline': ingredients[m].show, 'ion-ios-plus-outline': !ingredients[m].show})"></i>
+        </div>
+        <ion-checkbox ng-change="setIngredients(ingr)" ng-if="ingredients[m].show" ng-model="ingr.checked" ng-repeat="ingr in ingredients[m].ingr">
+          {{ingr.nl}}
+        </ion-checkbox>
+      </div>
+    </div>
+  </ion-content>
+</div>

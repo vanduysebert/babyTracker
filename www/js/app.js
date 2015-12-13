@@ -1,11 +1,11 @@
-angular.module('babyTracker', ['ionic', 'firebase', 'ngMessages', 'ngCordova', 'angularMoment', 'ngIOS9UIWebViewPatch', 'angular.filter'])
+angular.module('babyTracker', ['ionic', 'firebase', 'ngMessages', 'ngCordova', 'angularMoment', 'ngIOS9UIWebViewPatch', 'angular.filter', 'ion-autocomplete', 'ion-affix', 'ion-gallery', 'jett.ionic.scroll.sista', 'ionic-timepicker'])
 
 .run(function($ionicPlatform, $rootScope, $location, Auth, userSvc, amMoment) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
     if (window.cordova && window.cordova.plugins.Keyboard) {
-      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(false);
       cordova.plugins.Keyboard.disableScroll(true);
 
     }
@@ -13,6 +13,22 @@ angular.module('babyTracker', ['ionic', 'firebase', 'ngMessages', 'ngCordova', '
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     };
+
+    var deviceInformation = ionic.Platform.device();
+    console.log(deviceInformation);
+    var isWebView = ionic.Platform.isWebView();
+    console.log(isWebView);
+    var isIPad = ionic.Platform.isIPad();
+    console.log(isIPad);
+    var isIOS = ionic.Platform.isIOS();
+    console.log(isIOS);
+    var isAndroid = ionic.Platform.isAndroid();
+    var isWindowsPhone = ionic.Platform.isWindowsPhone();
+
+    var currentPlatform = ionic.Platform.platform();
+    console.log(currentPlatform);
+    var currentPlatformVersion = ionic.Platform.version();
+    console.log("grade", ionic.Platform.grade);
 
     $rootScope.$on('stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
       if (error === "AUTH_REQUIRED") {
@@ -289,33 +305,79 @@ angular.module('babyTracker', ['ionic', 'firebase', 'ngMessages', 'ngCordova', '
       'childSection': {
         templateUrl: 'templates/posts/posts.html',
         controller: 'postCtrl',
-        controllerAs:'post'
+        controllerAs: 'post'
+      }
+    }
+  })
+
+  //Main page of child
+  .state('child.postUserLikes', {
+    url: '/posts/:postId',
+    views: {
+      'childSection': {
+        templateUrl: 'templates/posts/postUserLikes.html',
+        controller: 'postUserLikesCtrl',
+        controllerAs: 'postLike'
+      }
+    }
+  })
+
+  //Main page of child
+  .state('child.postReactions', {
+    url: '/posts/reactions/:postId',
+    views: {
+      'childSection': {
+        templateUrl: 'templates/posts/postReactions.html',
+        controller: 'postReactionCtrl',
+        controllerAs: 'reaction'
       }
     }
   })
 
   //Main page of child
   .state('child.actions', {
-      url: '/action',
+    url: '/action',
+    views: {
+      'childSection': {
+        templateUrl: 'templates/actions/action.html',
+        controller: 'actionCtrl',
+        controllerAs: 'action'
+      }
+    }
+  })
+
+  .state('child.milestones', {
+    url: '/action/milestone',
+    views: {
+      'childSection': {
+        templateUrl: 'templates/actions/milestones.html',
+        controller: 'mileStoneCtrl',
+        controllerAs: 'mile'
+      }
+    }
+  })
+
+  .state('child.foods', {
+    url: '/action/food',
+    views: {
+      'childSection': {
+        templateUrl: 'templates/actions/foods.html',
+        controller: 'foodCtrl',
+        controllerAs: 'food'
+      }
+    }
+  })
+
+  .state('child.sleep', {
+      url: '/action/sleep',
       views: {
         'childSection': {
-          templateUrl: 'templates/actions/action.html',
-          controller: 'actionCtrl',
-          controllerAs: 'action'
+          templateUrl: 'templates/actions/sleeps.html',
+          controller: 'sleepCtrl',
+          controllerAs: 'sleep'
         }
       }
     })
-
-    .state('child.milestones', {
-        url: '/action/milestone',
-        views: {
-          'childSection': {
-            templateUrl: 'templates/actions/milestones.html',
-            controller: 'mileStoneCtrl',
-            controllerAs: 'mile'
-          }
-        }
-      })
     //Delete when ready
     .state('app.home', {
       url: '/home',
@@ -353,11 +415,13 @@ angular.module('babyTracker', ['ionic', 'firebase', 'ngMessages', 'ngCordova', '
   }
 
   User.$inject = ['$stateParams', 'userSvc'];
+
   function User($stateParams, userSvc) {
     return userSvc.getUserProfile($stateParams.uid);
   }
 
-  allMessages.$inject = [ 'messageSvc', 'Auth'];
+  allMessages.$inject = ['messageSvc', 'Auth'];
+
   function allMessages(messageSvc, Auth) {
     var authData = Auth.$getAuth();
     return messageSvc.getAllMessageGroups(authData.uid);

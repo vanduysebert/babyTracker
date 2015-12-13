@@ -1,0 +1,17 @@
+<div class="modal">
+
+  <ion-header-bar class="bar-balanced">
+    <button class="button button-clear" on-tap="closeModal()">Terug</button>
+    <h1 class="title">Selecteer voeding</h1>
+  </ion-header-bar>
+  <ion-content>
+    <div class="list">
+      <ion-radio ng-model="ageCat" ng-repeat="age in ageCats" ng-value="age.name">{{age.nl}}</ion-radio>
+      
+    </div>
+    <div class="list">
+      <ion-checkbox ng-checked="ingredient.indexOf(ingr)" ng-click="toggleSelection(ingr)" ng-value="{{ingr.name}}" ng-repeat="ingr in ingredients">{{ingr.nl}}</ion-checkbox>
+    </div>
+
+  </ion-content>
+</div>

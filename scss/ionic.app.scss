@@ -35,6 +35,10 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
   color: $success;
 }
 
+.successInput input{
+  color: $balanced;
+}
+
 .error-container {
   background-color: lighten($error, 10%);
   color: white;
@@ -142,7 +146,7 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 }
 
 .item-sleep {
-  border-left: 8px solid $calm;
+  border-left: 8px solid $positive;
 }
 
 .item-entertainment {
@@ -166,7 +170,7 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 }
 
 .card div.item-sleep {
-  border-left: 8px solid $calm;
+  border-left: 8px solid $positive;
 }
 
 .card div.item-entertainment {
@@ -228,3 +232,13 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 .slide-in-right.ng-leave, .slide-in-right > .ng-leave {
   -webkit-transition: all ease-in-out 250ms;
   transition: all ease-in-out 250ms; }
+
+  .absoluteHeart {
+    position: absolute;
+    left: 43%;
+    font-size: 50px;
+  }
+
+  .ion-social-euro-outline {
+    content: url('../img/unhappyEmo.png') !important;
+  }
