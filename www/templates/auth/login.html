@@ -8,59 +8,45 @@
   <ion-content padding="true">
     <div class="background"></div>
     <div ng-if='!login.loggedIn'>
-    <form name="loginForm" novalidate>
-      <div class="list">
-        <label class="item item-input item-floating-label animated" ng-class="{'shake errorForm': (loginForm.email.$invalid && loginForm.email.$touched), 'successForm': (loginForm.email.$valid && loginForm.email.$dirty)}">
-          <span class="input-label">Email</span>
-          <input ng-model="login.user.email" required placeholder="Email" type="email" name="email">
-          <div role="alert" class="animated zoomIn error-block" ng-messages="loginForm.email.$error" ng-if="loginForm.email.$touched">
-            <div ng-messages-include= "templates/partials/errorMessages.html"></div>
-          </div>
-        </label>
-        <label class="item item-input item-floating-label animated" ng-class="{'shake errorForm': (loginForm.password.$invalid && loginForm.password.$touched), 'successForm': (loginForm.password.$valid && loginForm.password.$dirty)}">
-          <span class="input-label">Paswoord</span>
-          <input required ng-model="login.user.password" placeholder="Paswoord" type="password" name="password">
-          <div role="alert" class="animated zoomIn error-block" ng-messages="loginForm.password.$error" ng-if="loginForm.password.$touched">
-            <div ng-messages-include= "templates/partials/errorMessages.html"></div>
-          </div>
-        </label>
+      <form name="loginForm" novalidate>
+        <div class="list">
+          <label class="item item-input item-floating-label animated" ng-class="{'shake errorForm': (loginForm.email.$invalid && loginForm.email.$touched), 'successForm': (loginForm.email.$valid && loginForm.email.$dirty)}">
+            <span class="input-label">Email</span>
+            <input name="email" ng-model="login.user.email" placeholder="Email" required type="email">
+            <div class="animated zoomIn error-block" ng-if="loginForm.email.$touched" ng-messages="loginForm.email.$error" role="alert">
+              <div ng-messages-include="templates/partials/errorMessages.html"></div>
+            </div>
+          </label>
+          <label class="item item-input item-floating-label animated" ng-class="{'shake errorForm': (loginForm.password.$invalid && loginForm.password.$touched), 'successForm': (loginForm.password.$valid && loginForm.password.$dirty)}">
+            <span class="input-label">Paswoord</span>
+            <input name="password" ng-model="login.user.password" placeholder="Paswoord" required type="password">
+            <div class="animated zoomIn error-block" ng-if="loginForm.password.$touched" ng-messages="loginForm.password.$error" role="alert">
+              <div ng-messages-include="templates/partials/errorMessages.html"></div>
+            </div>
+          </label>
 
+        </div>
+        <button class="button button-balanced button-block icon-left ion-log-in" ng-click="login.loginMail(loginForm)" ng-disabled="loginForm.$invalid">Aanmelden</button>
+      </form>
+
+      <div class="error-container card" ng-if="login.loginFailed">
+        <p>
+          <i class="ion-information-circled"></i>{{login.failMessage}}</p>
+        <p class="center">
+          <a class="button button-icon icon ion-ios-help" href="mailto:vanduysebert@gmail.com"></a>
+        </p>
       </div>
-      <button ng-disabled="loginForm.$invalid" ng-click="login.loginMail(loginForm)" class="button button-balanced button-block icon-left ion-log-in">Aanmelden</button>
-    </form>
-    <div class="error-container card" ng-if="login.loginFailed">
-      <p><i class="ion-information-circled"> </i>{{login.failMessage}}</p>
-      <p class="center">
-        <a class="button button-icon icon ion-ios-help" href="mailto:vanduysebert@gmail.com"></a>
-      </p>
+
+      <div class="list">
+        <button class="button-block button button-calm icon-left ion-social-facebook-outline" ng-click="login.facebookLogin()">Aanmelden met Facebook</button>
+        <button class="button-block button button-positive icon-left ion-social-google" ng-click="login.googleLogin()">Aanmelden met Google</button>
+        <button class="button-block button button-royal icon-left ion-person-add" ng-click="login.signup()">Registreren</button>
+      </div>
     </div>
-    <div class="list">
-
-          <button class="button-block button button-calm icon-left ion-social-facebook-outline" ng-click="login.facebookLogin()">Aanmelden met Facebook</button>
-
-
-
-          <button class="button-block button button-positive icon-left ion-social-google" ng-click="login.googleLogin()">Aanmelden met Google</button>
-
-          <button class="button-block button button-royal icon-left ion-person-add" ng-click="login.signup()">Registreren</button>
-
-    </div>
-    </div>
-    <div ng-if='login.loggedIn'>
-      <div class="card">
-        <div class="item item-avatar item-text-wrap">
-            <img ng-src="{{login.loggedInUser.profileImage}}">
-          <h3>{{login.loggedInUser.firstName}} {{login.loggedInUser.lastName}} is reeds aangemeld.</h3>
-        </div>
-        <div class="row">
-          <div class="col">
-            <button class="button button-block icon-left button-dark ion-log-out" ng-click='login.logout()'>Uitloggen</button>
-          </div>
-          <div class="col">
-            <!-- TODO: link naar profiel -->
-            <a class="button button-block icon-left button-calm ion-person">Profiel</a>
-          </div>
-        </div>
+    <div class="row-center row" ng-if='login.loggedIn'>
+      <div class="col center">
+        <h2 class="royal">Bezig met inloggen</h2>
+          <ion-spinner icon="ripple" class="spinner-calm"></ion-spinner>
       </div>
     </div>
   </ion-content>

@@ -13,8 +13,9 @@
     var service = {
       bindAllMessages: bindAllMessages,
       getAllMessages: getAllMessages,
-      getAllMessageGroups: getAllMessageGroups,
+      /*getAllMessageGroups: getAllMessageGroups,*/
       getDialogs: getDialogs,
+      getAllDialogs: getAllDialogs,
       bindAllUnreadMessages: bindAllUnreadMessages,
       getAllUnreadMessages: getAllUnreadMessages,
       bindReadMessages: bindReadMessages,
@@ -23,7 +24,9 @@
       deleteUnreadMessage: deleteUnreadMessage,
       deleteMessage: deleteMessage,
       deleteMessageGroup: deleteMessageGroup,
-      markMessageAsRead: markMessageAsRead
+      markMessageAsRead: markMessageAsRead,
+      getUserLastMessage: getUserLastMessage,
+      getLastMessageTime: getLastMessageTime
     };
 
     return service;
@@ -36,8 +39,13 @@
       return $firebaseArray(messRef.child(uid).child("messages")).$loaded();
     }
 
-    function getDialogs(groupId, uid, childId) {
-      return $firebaseArray(messRef.child(uid).child("messages").child(groupId).child(childId));
+    function getDialogs(groupId, uid, date) {
+      var ref = messRef.child(uid).child("messages").child(groupId).orderByChild('dateCreated').startAt(date);
+      return $firebaseArray(ref);
+    }
+
+    function getAllDialogs(groupId, uid) {
+      return $firebaseArray(messRef.child(uid).child("messages").child(groupId));
     }
 
 
@@ -45,89 +53,17 @@
       return $firebaseArray(messRef.child(uid).child("messages").child("unread"));
     }
 
-    function getAllMessageGroups(uid) {
-      var deferred = $q.defer();
-      var mesGroups = [];
-      var children = "";
-      var messages = $firebaseArray(messRef.child(uid).child("messages")).$loaded();
-      messages.then(function(mesArr) {
-        if (mesArr.length > 0) {
-          angular.forEach(mesArr, function(dialog) {
-            var m = {
-              groupId: dialog.$id,
-              groupName: '',
-              profileImage: '',
-              photoInDatabase: '',
-              lastMessage: '',
-              lastMessageRead: '',
-              lastMessageCreated: '',
-              child: ''
-            }
-            userSvc.getUserProfile(dialog.$id).then(function(group) {
-              m.groupName = group.firstName + " " + group.lastName;
-              m.profileImage = group.profileImage;
-              m.photoInDatabase = group.photoInDatabase;
-              //TODO: bij prestatieproblemen kan deze optie worden weggelaten
-              var dialogs = $firebaseArray(messRef.child(uid).child("messages").child(dialog.$id)).$loaded();
-              dialogs.then(function(dial) {
-                angular.forEach(dial, function(child) {
-                  childSvc.getChild(child.$id).then(function(c) {
-                    m.child = c.firstName + " " + c.lastName;
-                    m.childId = child.$id;
-                    messRef.child(uid).child("messages").child(dialog.$id).child(child.$id).orderByChild("dateCreated").limitToLast(1).once("value", function(data) {
-                      data.forEach(function(obj) {
-                        var mesObj = obj.val();
-                        m.lastMessage = mesObj.message;
-                        m.lastMessageRead = mesObj.read;
-                        m.lastMessageCreated = mesObj.dateCreated;
-                        mesGroups.push(m);
-                        deferred.resolve(mesGroups);
-                      });
-                    }, function(err) {
-                      deferred.reject(err);
-                    })
-                  }, function(err) {
-                    deferred.reject(err);
-                  });
-                });
-              }, function(err) {
-                if (err) {
-                  deferred.reject(err);
-                }
-              });
-
-            }, function(err) {
-              deferred.reject(err);
-            });
-          });
-        } else {
-          deferred.resolve(mesGroups);
-        }
-      }, function(err) {
-        deferred.reject(err);
-      });
-      return deferred.promise;
-    }
-
     //TODO: Order by childId + include childId
-    function getAllUnreadMessages(uid, groupId, count) {
+    function getAllUnreadMessages(uid, groupId) {
+      var arr = [];
       var deferred = $q.defer();
-      console.log("count", count);
       var dialogs = $firebaseArray(messRef.child(uid).child("messages").child(groupId)).$loaded();
       dialogs.then(function(dial) {
-        angular.forEach(dial, function(child) {
-          messRef.child(uid).child("messages").child(groupId).child(child.$id).orderByChild("dateCreated").limitToLast(1).once("value", function(data) {
-            data.forEach(function(obj) {
-              var mesObj = obj.val();
-              if (!mesObj.read) {
-                count++;
-                deferred.resolve(count);
-
-              }
-            });
-          }, function(err) {
-            deferred.reject(err);
-          });
+        angular.forEach(dial, function(mess) {
+          if (!mess.read) {
+            arr.push(mess.$id);
+            deferred.resolve(arr);
+          }
         });
       }, function(err) {
         if (err) {
@@ -149,21 +85,38 @@
 
     function addMessage(uid, groupId, childId, mess) {
       var deferred = $q.defer();
-      var date = Firebase.ServerValue.TIMESTAMP;
-      var mes = {
-        message: mess,
-        dateCreated: date,
-        read: true,
-        sent: true
+      if (mess != "") {
+        childSvc.getChild(childId).then(function(c) {
+          var date = Firebase.ServerValue.TIMESTAMP;
+          var mes = {
+            message: mess,
+            dateCreated: date,
+            read: true,
+            bothRead: false,
+            sent: true,
+            subject: childId,
+            child: c.firstName + ' ' + c.lastName
+          }
+          var userFrom = $firebaseArray(messRef.child(uid).child("messages").child(groupId)).$add(mes);
+          userFrom.then(function(ref) {
+            mes.read = false;
+            mes.sent = false;
+            var userTo = $firebaseArray(messRef.child(groupId).child("messages").child(uid)).$add(mes);
+            userTo.then(function(res) {
+              deferred.resolve(res);
+            }, function(err) {
+              deferred.reject(err);
+            });
+          }, function(err) {
+            deferred.reject(err);
+          })
+        }, function(err) {
+          deferred.reject(err);
+        });
+      } else {
+        deferred.reject("No message");
       }
-      var userFrom = $firebaseArray(messRef.child(uid).child("messages").child(groupId).child(childId)).$add(mes);
-      userFrom.then(function(ref) {
-        mes.read = false;
-        mes.sent = false;
-        return $firebaseArray(messRef.child(groupId).child("messages").child(uid).child(childId)).$add(mes);
-      }, function(err) {
-        deferred.reject(err);
-      })
+
       return deferred.promise;
     }
 
@@ -172,10 +125,10 @@
       return list.$remove(mes);
     }
 
-    function deleteMessage(uid, groupId, childId, mes) {
+    function deleteMessage(uid, groupId, mes) {
       var deferred = $q.defer();
 
-      messRef.child(uid).child("messages").child(groupId).child(childId).child(mes.$id).remove(function(err) {
+      messRef.child(uid).child("messages").child(groupId).child(mes.$id).remove(function(err) {
         if (err) {
           deferred.reject(err);
         } else {
@@ -185,18 +138,30 @@
       return deferred.promise;
     }
 
-    function markMessageAsRead(uid, groupId, childId) {
-      var messageArr = $firebaseArray(messRef.child(uid).child("messages").child(groupId).child(childId)).$loaded();
+    function markMessageAsRead(uid, groupId) {
+      var messageArr = $firebaseArray(messRef.child(uid).child("messages").child(groupId)).$loaded();
       messageArr.then(function(messages) {
         angular.forEach(messages, function(mes) {
-          if (!mes.read) {
-            messRef.child(uid).child("messages").child(groupId).child(childId).child(mes.$id).update({
-              read: true
+          if (!mes.read && !mes.sent && !mes.bothRead) {
+            var mref = messRef.child(uid).child("messages").child(groupId).child(mes.$id);
+            mref.update({
+              read: true,
+              bothRead: true
             });
           }
         });
       });
-
+      var messageArrSender = $firebaseArray(messRef.child(groupId).child("messages").child(uid)).$loaded();
+      messageArrSender.then(function(messages) {
+        angular.forEach(messages, function(mes) {
+          if (mes.read && mes.sent && !mes.bothRead) {
+            var bothRef = messRef.child(groupId).child("messages").child(uid).child(mes.$id);
+            bothRef.update({
+              bothRead: true
+            });
+          }
+        });
+      });
     }
 
     function deleteMessageGroup(groupId, uid) {
@@ -209,6 +174,16 @@
         }
       });
       return deferred.promise;
+    }
+
+    function getUserLastMessage(uid, mesUserId) {
+      var filtered = messRef.child(uid).child("messages").child(mesUserId).orderByChild("dateCreated").limitToLast(1);
+      return $firebaseArray(filtered).$loaded();
+    }
+
+    function getLastMessageTime(uid, groupId) {
+      var filtered = messRef.child(uid).child("messages").child(groupId).orderByChild("dateCreated").limitToLast(1);
+      return $firebaseArray(filtered);
     }
 
   }

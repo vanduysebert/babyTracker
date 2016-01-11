@@ -15,6 +15,7 @@
       usersRef: usersRef,
       getLoggedInUser: getLoggedInUser,
       getUserProfile: getUserProfile,
+      getUserInfo: getUserInfo,
       getFullName: getFullName,
       getFullNamePromise: getFullNamePromise,
       updateUser: updateUser,
@@ -136,7 +137,7 @@
       arr.$loaded().then(function(x) {
         angular.forEach(x, function(child) {
           if (child.$id != "requests") {
-            
+
             var ch = $firebaseObject(childrenRef.child(child.$id));
             ch.$loaded().then(function(c) {
               c.owner = child.owner;
@@ -159,6 +160,18 @@
 
     function getUserProfile(uid) {
       return $firebaseObject(usersRef.child(uid)).$loaded();
+    }
+
+    function getUserInfo(uid) {
+      var deferred = $q.defer();
+      var usr = {
+        name: users.$getRecord(uid).firstName + ' ' + users.$getRecord(uid).lastName,
+        photoInDatabase: users.$getRecord(uid).photoInDatabase,
+        profileImage: users.$getRecord(uid).profileImage
+      }
+      deferred.resolve(usr);
+      return deferred.promise;
+
     }
 
     function getFullName(uid) {

@@ -7,6 +7,9 @@
 
     loggingService.$inject = ['$cordovaToast', '$log', 'config'];
 
+    /**
+     * Handles log-messages
+     */
     function loggingService($cordovaToast, $log, config) {
         var service = {
             showError: showError,
@@ -22,7 +25,7 @@
             mod = mod ? '[' + mod + ']' : '';
             $log.error(mod, mess, obj);
           }
-          if(showToast) {
+          if(showToast && !config.debug) {
             showToastMess(mess);
           }
         }
@@ -33,7 +36,7 @@
 
                 $log.info(mod, mess, obj);
             }
-            if(showToast) {
+            if(showToast && !config.debug) {
               showToastMess(mess);
             }
         }
@@ -44,7 +47,7 @@
 
                 $log.warn(mod, mess, obj);
             }
-            if(showToast) {
+            if(showToast && !config.debug) {
               showToastMess(mess);
             }
         }

@@ -1,18 +1,20 @@
-<ion-view view-title="Berichten">
+<ion-view view-title="Berichten" cache-view="false">
   <ion-content padding="true">
     <ion-list can-swipe="true">
       <div  ng-repeat="(group, mesGroup) in mes.allMessages | groupBy: 'child' | orderBy: 'dateCreated'">
         <div class="item item-divider item-text-wrap">
           {{group}}
         </div>
-        <ion-item class="item-thumbnail-left" ui-sref="app.messageNew({uid: message.groupId, childId: message.childId})" ng-class="{'item-positive': !message.lastMessageRead}" ng-repeat="message in mesGroup | orderBy: 'dateCreated'">
+        <ion-item class="item-thumbnail-left" ui-sref="app.messageNew({uid: message.groupId, childId: message.subject})" ng-class="{'item-positive': !message.read}" ng-repeat="message in mesGroup | orderBy: 'dateCreated'">
           <img ng-if="!message.photoInDatabase" ng-src="{{message.profileImage}}">
           <img ng-if="message.photoInDatabase" ng-src="data:image/jpeg;base64,{{message.profileImage}}">
-          <h2>{{message.groupName}}</h2>
+          <h2>{{message.name}}</h2>
           <h3>
-            {{message.lastMessage}}
+            {{message.message}}
           </h3>
-          <p><span am-time-ago="{{message.lastMessageCreated}}"></span></p>
+          <h5 ng-if="message.sent">Verstuurd door jou</h5>
+          <h5 ng-if="!message.sent">Verstuurd door {{message.name}}</h5>
+          <p><span am-time-ago="{{message.dateCreated}}"></span></p>
           <ion-option-button class="button-assertive" ng-click="mes.removeGroup(message.groupId)">
             Verwijder
           </ion-option-button>

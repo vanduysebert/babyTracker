@@ -1,0 +1,42 @@
+<ion-view view-title="Fotoalbum toevoegen">
+  <ion-nav-buttons side="left">
+    <button class="button button-icon icon ion-navicon" menu-toggle="left"></button>
+  </ion-nav-buttons>
+
+  <ion-content has-footer="true" has-header="true">
+    <form name="photoForm" novalidate="true">
+      <div class="list card">
+        <label class="item item-input item-stacked-label">
+          <span class="input-label">Titel album</span>
+          <input name="title" required ng-model="photo.title" type="text">
+          <div role="alert" class="animated zoomIn error-block" ng-messages="photoForm.title.$error" ng-if="photoForm.title.$dirty">
+            <div ng-messages-include= "templates/partials/errorMessages.html"></div>
+          </div>
+        </label>
+        <div class="item item-body" ng-if="photo.photosUrl.length > 0">
+          <div ng-repeat="url in photo.photosUrl">
+            <img  class="full-image" ng-src="{{url}}">
+
+          </div>
+        </div>
+
+        <div class="item">
+          <button class="button icon-left ion-images button-full button-positive icon-left ion-ios-camera-outline" on-tap="photo.addPhoto()">Foto's toevoegen</button>
+        </div>
+      </div>
+      <div class="button button-full button-balanced" on-tap="photo.addAlbum()" ng-disabled="photoForm.$invalid || photo.photosUrl.length == 0">
+        Plaats album
+      </div>
+    </form>
+    <div class="lowerContent">
+
+    </div>
+  </ion-content>
+  <ion-tabs class="tabs-positive tabs-icon-top">
+    <ion-tab icon-off="ion-ios-list-outline" icon-on="ion-ios-list" title="Tijdlijn" ui-sref="child.posts"></ion-tab>
+    <ion-tab icon-off="ion-ios-body-outline" icon-on="ion-ios-body" title="Profiel" ui-sref="child.profile"></ion-tab>
+    <!-- TODO: add badge voor volgverzoeken (via ChirldCtrl) -->
+    <ion-tab badge-style="badge-assertive" badge="badges.followRequests" icon-off="ion-ios-people-outline" icon-on="ion-ios-people" title="Volgers" ui-sref="child.followers"></ion-tab>
+    <ion-tab icon-off="ion-ios-keypad-outline" icon-on="ion-ios-keypad" title="Acties" ui-sref="child.actions"></ion-tab>
+  </ion-tabs>
+</ion-view>

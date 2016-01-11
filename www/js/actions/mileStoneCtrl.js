@@ -5,11 +5,12 @@
         .module('babyTracker')
         .controller('mileStoneCtrl', mileStoneCtrl);
 
-    mileStoneCtrl.$inject = ['actionSvc', 'milestoneSvc', 'Child', 'postSvc', 'userDataSvc', 'loggingService'];
+    mileStoneCtrl.$inject = ['actionSvc', 'milestoneSvc', 'Child', 'postSvc', 'userDataSvc', 'loggingService', '$ionicScrollDelegate'];
 
-    function mileStoneCtrl(actionSvc, milestoneSvc, Child, postSvc, userDataSvc, loggingService) {
+    function mileStoneCtrl(actionSvc, milestoneSvc, Child, postSvc, userDataSvc, loggingService, $ionicScrollDelegate) {
 
         var vm = this;
+        vm.resizeWindow = resizeWindow;
         vm.showSenses6 = false;
         vm.showSocial6 = false;
         vm.showFood6 = false;
@@ -73,6 +74,10 @@
             milestoneSvc.getSensesMilestones6().then(function(arr) {
                 console.log(arr);
             })
+        }
+
+        function resizeWindow() {
+            $ionicScrollDelegate.resize();
         }
 
         function setAllShowFalse() {

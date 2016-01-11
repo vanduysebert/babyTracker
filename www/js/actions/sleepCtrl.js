@@ -5,19 +5,10 @@
     .module('babyTracker')
     .controller('sleepCtrl', sleepCtrl);
 
-  sleepCtrl.$inject = ['postSvc', 'userDataSvc', 'Child', 'childSvc'];
+  sleepCtrl.$inject = ['postSvc', 'userDataSvc', 'Child', 'childSvc', '$state', '$ionicLoading'];
 
-  function sleepCtrl(postSvc, userDataSvc, Child, childSvc) {
+  function sleepCtrl(postSvc, userDataSvc, Child, childSvc, $state, $ionicLoading) {
     var vm = this;
-    vm.sleepData = {
-      startDate: "",
-      startTime: "",
-      endDate: "",
-      endTime: "",
-      remark: "",
-      startDateTime: "",
-      endDateTime: ""
-    }
 
     vm.addSleep = addSleep;
     vm.error = "";
@@ -26,7 +17,19 @@
 
     function activate() {
       vm.datetimeInput = checkInputType();
+      initData();
+    }
 
+    function initData() {
+      vm.sleepData = {
+        startDate: "",
+        startTime: "",
+        endDate: "",
+        endTime: "",
+        remark: "",
+        startDateTime: "",
+        endDateTime: ""
+      }
     }
 
     function checkInputType() {
@@ -45,7 +48,9 @@
     }
 
     function addSleep() {
-      console.log("1");
+      $ionicLoading.show({
+        template: '<ion-spinner icon="ripple"></ion-spinner>'
+      });
       if (vm.sleepData.startDateTime && vm.sleepData.endDateTime) {
         var start = moment(vm.sleepData.startDateTime);
         var end = moment(vm.sleepData.endDateTime);
@@ -55,25 +60,27 @@
           duration: end.diff(start),
           dayOfYear: start.dayOfYear(),
           month: start.month(),
-          weekOfYear: start.week();
+          weekOfYear: start.week(),
           remark: vm.sleepData.remark
         }
+        console.log(start);
+        console.log(end);
+        console.log(data);
         if (start.isBefore(end)) {
-          console.log("data");
-          console.log(data);
-
           var title = Child.firstName + " was in dromenland!";
           childSvc.addSleepSession(Child.$id, data).then(function(res) {
             postSvc.postSleep(userDataSvc.uid, Child.$id, data, title).then(function(res) {
-
+              initData();
+              $state.go('child.posts');
+              $ionicLoading.hide();
             }, function(err) {
-
+              $ionicLoading.hide();
             });
           }, function(err) {
-
+            $ionicLoading.hide();
           });
         } else {
-          console.log("not before");
+          $ionicLoading.hide();
           vm.error = "Het tijdstip om te gaan slapen moet vroeger liggen dan het tijdstip om wakker te worden."
         }
 
@@ -90,24 +97,28 @@
             timeDifference: start.diff(end)
           }
           if (start.isBefore(end)) {
-            console.log("data");
-            console.log(data);
             var title = Child.firstName + " was in dromenland!";
             childSvc.postSleepSession(Child.$id, data).then(function(res) {
               postSvc.postSleep(userDataSvc.uid, Child.$id, data, title).then(function(res) {
-
+                initData();
+                $state.go('child.posts');
+                $ionicLoading.hide();
               }, function(err) {
+                $ionicLoading.hide();
 
               });
             }, function(err) {
+              $ionicLoading.hide();
 
             });
           } else {
             vm.error = "Het tijdstip om te gaan slapen moet vroeger liggen dan het tijdstip om wakker te worden."
+            $ionicLoading.hide();
+
           }
         } else {
-          console.log("error");
           vm.error = "Niet alle velden zijn ingevuld";
+          $ionicLoading.hide();
         }
       }
     }

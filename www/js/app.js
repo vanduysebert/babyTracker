@@ -1,6 +1,6 @@
-angular.module('babyTracker', ['ionic', 'firebase', 'ngMessages', 'ngCordova', 'angularMoment', 'ngIOS9UIWebViewPatch', 'angular.filter', 'ion-autocomplete', 'ion-affix', 'ion-gallery', 'jett.ionic.scroll.sista', 'ionic-timepicker'])
+angular.module('babyTracker', ['ionic', 'firebase', 'ngMessages', 'ngCordova', 'angularMoment', 'ngIOS9UIWebViewPatch', 'angular.filter', 'ion-autocomplete', 'ion-affix', 'ion-gallery', 'jett.ionic.scroll.sista', 'ionic-timepicker', 'ionic.utils'])
 
-.run(function($ionicPlatform, $rootScope, $location, Auth, userSvc, amMoment) {
+.run(function($ionicPlatform, $rootScope, $location, Auth, userSvc, amMoment, $cordovaNativeAudio) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -9,12 +9,17 @@ angular.module('babyTracker', ['ionic', 'firebase', 'ngMessages', 'ngCordova', '
       cordova.plugins.Keyboard.disableScroll(true);
 
     }
+
+
+
+
     if (window.StatusBar) {
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     };
 
-    var deviceInformation = ionic.Platform.device();
+    //TODO: check platform and adjust app
+/*    var deviceInformation = ionic.Platform.device();
     console.log(deviceInformation);
     var isWebView = ionic.Platform.isWebView();
     console.log(isWebView);
@@ -28,7 +33,7 @@ angular.module('babyTracker', ['ionic', 'firebase', 'ngMessages', 'ngCordova', '
     var currentPlatform = ionic.Platform.platform();
     console.log(currentPlatform);
     var currentPlatformVersion = ionic.Platform.version();
-    console.log("grade", ionic.Platform.grade);
+    console.log("grade", ionic.Platform.grade);*/
 
     $rootScope.$on('stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
       if (error === "AUTH_REQUIRED") {
@@ -183,6 +188,7 @@ angular.module('babyTracker', ['ionic', 'firebase', 'ngMessages', 'ngCordova', '
 
   .state('app.messages', {
     url: '/messages',
+    cache: false,
     views: {
       'menuContent': {
         templateUrl: 'templates/messages/messages.html',
@@ -197,6 +203,7 @@ angular.module('babyTracker', ['ionic', 'firebase', 'ngMessages', 'ngCordova', '
 
   .state('app.messageDetail', {
     url: '/messages/:messageId',
+    cache: false,
     views: {
       'menuContent': {
         templateUrl: 'templates/messages/messageDetail.html',
@@ -208,6 +215,7 @@ angular.module('babyTracker', ['ionic', 'firebase', 'ngMessages', 'ngCordova', '
 
   .state('app.messageNew', {
     url: '/messages/new/:uid/:childId',
+    chache: false,
     views: {
       'menuContent': {
         templateUrl: 'templates/messages/messageNew.html',
@@ -248,16 +256,25 @@ angular.module('babyTracker', ['ionic', 'firebase', 'ngMessages', 'ngCordova', '
   })
 
   //Main page of child
+  .state('child.foodAllergics', {
+    url: '/foodAllergic',
+    views: {
+      'childSection': {
+        templateUrl: 'templates/children/foodAllergic.html',
+        controller: 'foodAllergicCtrl',
+        controllerAs: 'allergic'
+      }
+    }
+  })
+
+  //Main page of child
   .state('child.emergencyNumbers', {
     url: '/emergency',
     views: {
       'childSection': {
         templateUrl: 'templates/children/emergency.html',
         controller: 'emergencyCtrl',
-        controllerAs: 'emergency',
-        resolve: {
-          Child: Child
-        }
+        controllerAs: 'emergency'
       }
     }
   })
@@ -369,21 +386,66 @@ angular.module('babyTracker', ['ionic', 'firebase', 'ngMessages', 'ngCordova', '
   })
 
   .state('child.sleep', {
-      url: '/action/sleep',
+    url: '/action/sleep',
+    views: {
+      'childSection': {
+        templateUrl: 'templates/actions/sleeps.html',
+        controller: 'sleepCtrl',
+        controllerAs: 'sleep'
+      }
+    }
+  })
+
+  .state('child.entertainment', {
+      url: '/action/entertainment',
       views: {
         'childSection': {
-          templateUrl: 'templates/actions/sleeps.html',
-          controller: 'sleepCtrl',
-          controllerAs: 'sleep'
+          templateUrl: 'templates/actions/entertainment.html',
+          controller: 'entertainmentCtrl',
+          controllerAs: 'ent'
         }
       }
     })
-    //Delete when ready
-    .state('app.home', {
-      url: '/home',
+    .state('child.diaper', {
+      url: '/action/diaper',
       views: {
-        'menuContent': {
-          templateUrl: 'templates/search.html'
+        'childSection': {
+          templateUrl: 'templates/actions/diaper.html',
+          controller: 'diaperCtrl',
+          controllerAs: 'diaper'
+        }
+      }
+    })
+
+    .state('child.photos', {
+      url: '/action/photo',
+      views: {
+        'childSection': {
+          templateUrl: 'templates/actions/photo.html',
+          controller: 'photoCtrl',
+          controllerAs: 'photo'
+        }
+      }
+    })
+
+    .state('child.photoAlbums', {
+      url: '/action/photoAlbums',
+      views: {
+        'childSection': {
+          templateUrl: 'templates/photoAlbums/photoAlbums.html',
+          controller: 'albumsCtrl',
+          controllerAs: 'albums'
+        }
+      }
+    })
+
+    .state('child.photoAlbum', {
+      url: '/action/photoAlbum/:albumId',
+      views: {
+        'childSection': {
+          templateUrl: 'templates/photoAlbums/photoAlbum.html',
+          controller: 'albumCtrl',
+          controllerAs: 'album'
         }
       }
     });

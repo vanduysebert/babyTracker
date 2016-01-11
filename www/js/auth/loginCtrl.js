@@ -1,68 +1,89 @@
 (function() {
-    'use strict';
+  'use strict';
 
-    angular
-      .module('babyTracker')
-      .controller('loginCtrl', loginCtrl);
+  angular
+    .module('babyTracker')
+    .controller('loginCtrl', loginCtrl);
 
-    loginCtrl.$inject = ['$scope', '$state', 'Auth', '$ionicLoading', 'config', 'userSvc', 'loggingService'];
+  loginCtrl.$inject = ['$scope', '$state', 'Auth', '$ionicLoading', 'config', 'userSvc', 'loggingService'];
 
-    function loginCtrl($scope, $state, Auth, $ionicLoading, config, userSvc, loggingService) {
-      var vm = this;
-      vm.mod = 'login';
-      vm.signup = signup;
-      vm.user = {
-        email: '',
-        password: ''
-      };
-      vm.loginMail = loginMail;
-      vm.failMessage = '';
-      vm.loginFailed = false;
-      vm.loggedIn = false;
-      vm.loggedInUser = "";
-      vm.logout = logout;
-      vm.facebookLogin = facebookLogin;
-      vm.googleLogin = googleLogin;
+  /**
+   * Controller that handles the login
+   */
+  function loginCtrl($scope, $state, Auth, $ionicLoading, config, userSvc, loggingService) {
+    var vm = this;
 
-      Auth.$onAuth(function(authData) {
-          $ionicLoading.show({
-            template: '<ion-spinner icon="ripple"></ion-spinner>'
-          });
-          if (authData) {
-            loggingService.showSuccess('User found in database', authData, vm.mod, false);
+    //variables
+    vm.mod = 'login';
 
-            if (authData.provider === "facebook") {
-              findFacebookUser(authData);
-            } else if (authData.provider === "google") {
-              findGoogleUser(authData);
-            }
+    vm.user = {
+      email: '',
+      password: ''
+    };
+    vm.failMessage = '';
+    vm.loginFailed = false;
+    vm.loggedIn = false;
+    vm.loggedInUser = "";
 
-            userSvc.hasChildren(authData.uid).then(function(childrenArr) {
-              if(childrenArr.length < 1) {
-                  $state.go('app.start');
-              }
-              else if (childrenArr.length > 1) {
-                $state.go('app.summaryStart');
-              } else {
-                $state.go('child.profile', {childId: childrenArr[0]})
-              }
-            }, function(err) {
-              loggingService.showError("Could net get children of user", err, vm.mod, false);
-            });
-            vm.loggedIn = true;
-            $ionicLoading.hide();
-        } else {
-          vm.loggedIn = false;
-          vm.failMessage = "Gebruiker niet gevonden in de database";
-          $ionicLoading.hide();
-        }
+    //Login-functions
+    vm.loginMail = loginMail;
+    vm.facebookLogin = facebookLogin;
+    vm.googleLogin = googleLogin;
+
+    //registeren
+    vm.signup = signup;
+
+    //Logout
+    vm.logout = logout;
+
+    // Firebase Auth-watcher that fires when authentication
+    Auth.$onAuth(function(authData) {
+      console.log(authData);
+      $ionicLoading.show({
+        template: '<ion-spinner icon="ripple"></ion-spinner>'
       });
+      if (authData) {
+        loggingService.showSuccess('User found in authentication-database', authData, vm.mod, false);
+        if (authData.provider === "facebook") {
+          findFacebookUser(authData);
+        } else if (authData.provider === "google") {
+          findGoogleUser(authData);
+        }
+
+        //Check if user is in database
+        userSvc.hasChildren(authData.uid).then(function(childrenArr) {
+          //If no children registered, go to start-page
+          if (childrenArr.length < 1) {
+            $state.go('app.start');
+          }
+          //If more then one child registered, go to summary-page
+          else if (childrenArr.length > 1) {
+            $state.go('app.summaryStart');
+          }
+          // Else go to timeline of child
+          else {
+            $state.go('child.posts', {
+              childId: childrenArr[0]
+            })
+          }
+        }, function(err) {
+          loggingService.showError("Could not get children of user", err, vm.mod, false);
+        });
+        vm.loggedIn = true;
+        $ionicLoading.hide();
+      } else {
+        vm.loggedIn = false;
+        vm.failMessage = "Gebruiker niet gevonden in de database";
+        $ionicLoading.hide();
+      }
+    });
 
     function findFacebookUser(authData) {
       var ref = new Firebase(config.dbUrls.auth + "/" + authData.auth.uid);
       ref.once("value", function(data) {
-
+        //Check if user is already in firebase-database
         if (!data.exists()) {
+          //Add user to database
           var user = userSvc.usersRef.child(authData.uid);
           user.set({
             firstName: authData.facebook.cachedUserProfile.first_name,
@@ -106,10 +127,6 @@
       });
     }
 
-    activate();
-
-    function activate() {}
-
     function logout() {
       Auth.$unauth();
     }
@@ -126,13 +143,13 @@
           template: '<ion-spinner icon="ripple"></ion-spinner>'
         });
 
+        //Authenticate with email
         Auth.$authWithPassword({
           email: vm.user.email,
           password: vm.user.password
         }).then(function(authData) {
           loggingService.showSuccess("User logged in", authData, vm.mod, false);
           $ionicLoading.hide();
-          //$state.go('app.home');
         }).catch(function(error) {
           $ionicLoading.hide();
           vm.loginFailed = true;
@@ -171,6 +188,7 @@
 
 
     function socialLogin(authMethod) {
+      //Authenticate with social login
       Auth.$authWithOAuthRedirect(authMethod).then(function(authData) {
         loggingService.showSuccess("Social login succeeded", authData, vm.mod, false);
       }).catch(function(error) {
@@ -186,6 +204,5 @@
         }
       });
     }
-
   }
 })();

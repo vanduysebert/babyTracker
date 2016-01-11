@@ -15,7 +15,7 @@
       name: "Kind & Gezin",
       phone: "078150100",
       website: "www.kindengezin.be",
-      thumbnail: "img/kindGezinThumb.png"
+      thumbnail: "img/LogoKG.jpg"
     },
     {
       name: "Antigifcentrum",
@@ -24,64 +24,15 @@
       thumbnail: "img/AntigifcentrumThumb.jpg"
     }
   ]
-  /*var childFollowerRoles = {
-    "mother": {
-      "relationship": "parent",
-      "nl": "moeder"
-    },
-    "father": {
-      "relationship": "parent",
-      "nl": "vader"
-    },
-    "uncle": {
-      "relationship": "family",
-      "nl": "oom"
-    },
-    "aunt": {
-      "relationship": "family",
-      "nl": "tante"
-    },
-    "godfather": {
-      "relationship": "familyDegree2",
-      "nl": "peter"
-    },
-    "godmother": {
-      "relationship": "familyDegree2",
-      "nl": "meter"
-    },
-    "brother": {
-      "relationship": "familyDegree2",
-      "nl": "broer"
-    },
-    "sister": {
-      "relationship": "familyDegree2",
-      "nl": "zus"
-    },
-    "grandfather": {
-      "relationship": "familyDegree2",
-      "nl": "grootvader"
-    },
-    "grandmother": {
-      "relationship": "familyDegree2",
-      "nl": "grootmoeder"
-    },
-    "family": {
-      "relationship": "parent",
-      "nl": "moeder"
-    },
-    "friend": {
-      "value": "noFamily",
-      "nl": "vriend"
-    }
-  };*/
-  /*var childFollowerRoles = ["mother", "father", "uncle", "aunt", "godfather", "godmother", "brother", "sister", "grandfather", "grandmother", "family", "friend"];
-  var childFollowerRolesLang = ["moeder", "vader", "oom", "tante", "peter", "meter", "broer", "zus", "grootvader", "grootmoeder", "familie(ver)", "vriend"];
-  */
+
+  var appLink = "https://itunes.apple.com/be/app/babytracker/id310633997?l=nl&mt=8";
+
   var config = {
     emergencyNumbers: emergencyNumbersBelgium,
     dbUrls: dbUrls,
     debug: debug,
-    version: version
+    version: version,
+    appLink: appLink
   };
   app.value('config', config);
 })();

@@ -5,12 +5,14 @@
     .module('babyTracker')
     .controller('appCtrl', appCtrl);
 
-  appCtrl.$inject = ['$ionicHistory', '$scope', 'userDataSvc', '$state', 'Auth', 'messageSvc', 'userSvc', 'userFollowerSvc'];
+  appCtrl.$inject = ['$ionicHistory', '$scope', 'userDataSvc', '$state', 'Auth', 'messageSvc', 'userSvc', 'userFollowerSvc', '$cordovaMedia'];
 
-  function appCtrl($ionicHistory, $scope, userDataSvc, $state, Auth, messageSvc, userSvc, userFollowerSvc) {
+  function appCtrl($ionicHistory, $scope, userDataSvc, $state, Auth, messageSvc, userSvc, userFollowerSvc, $cordovaMedia) {
     var vm = this;
     vm.loggedInUser = userDataSvc;
     vm.logout = logout;
+    var src = "audio/dingaling.mp3";
+    var bass = $cordovaMedia.newMedia(src);
     vm.userProfile = userProfile;
     $scope.userBadges = {
       messages: 0,
@@ -26,11 +28,12 @@
       $scope.userBadges.requests = vm.requestsReceived.length;
     });
 
-    vm.messagesUser.$watch(function(e){
+    vm.messagesUser.$watch(function(e) {
       console.log(e);
-      if(e.event == "child_added" || e.event == "child_changed") {
-        messageSvc.getAllUnreadMessages(userDataSvc.uid, e.key, $scope.userBadges.messages).then(function(count) {
-          $scope.userBadges.messages = count;
+      if (e.event == "child_added" || e.event == "child_changed") {
+        bass.play();
+        messageSvc.getAllUnreadMessages(userDataSvc.uid, e.key).then(function(count) {
+          $scope.userBadges.messages = count.length;
         });
       }
 

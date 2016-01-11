@@ -5,7 +5,9 @@
 
       <ion-nav-buttons side="left">
         <button class="button button-clear" menu-toggle="left">
-          <i class="ion-navicon icon"><span ng-if="userBadges.messages || userBadges.requests" class="badge badge-assertive">{{userBadges.messages + userBadges.requests}}</span></i>
+          <i class="ion-navicon icon">
+            <span class="badge badge-assertive" ng-if="userBadges.messages || userBadges.requests">{{userBadges.messages + userBadges.requests}}</span>
+          </i>
         </button>
 
       </ion-nav-buttons>
@@ -22,14 +24,15 @@
     </ion-header-bar>
     <ion-content has-header="true">
       <ion-list>
-        <ion-item menu-close ng-click="app.userProfile()">
-          Profiel
-        </ion-item>
-        <ion-item menu-close ui-sref="app.start">
+
+        <ion-item class="item-positive" menu-close ui-sref="app.start">
           Kind registreren
         </ion-item>
-        <ion-item menu-close ui-sref="app.summaryStart">
+        <ion-item class="item-positive" menu-close ui-sref="app.summaryStart">
           Overzicht kinderen
+        </ion-item>
+        <ion-item  menu-close ng-click="app.userProfile()">
+          Profiel
         </ion-item>
         <ion-item menu-close ui-sref="app.requests">
           Volgverzoeken
@@ -42,11 +45,13 @@
         <ion-item menu-close ui-sref="app.about">
           Over babytracker
         </ion-item>
-        <ion-item menu-close ng-click="app.logout()">
+        <ion-item class="item-assertive" menu-close ng-click="app.logout()">
           <i class="icon ion-log-out"></i>
           Afmelden
         </ion-item>
       </ion-list>
+
     </ion-content>
+
   </ion-side-menu>
 </ion-side-menus>

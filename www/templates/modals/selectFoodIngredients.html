@@ -6,7 +6,7 @@
     <button class="button button-clear" on-tap="closeModal()">Bewaar</button>
 
   </ion-header-bar>
-  <ion-content>
+  <ion-content on-scroll="resizeWindow()">
     <div class="list card" ng-if="months.length > 0">
       <div ng-repeat="m in months">
         <div class="item item-divider item-icon-right" on-tap="ingredients[m].show = !ingredients[m].show">
@@ -15,8 +15,10 @@
           maanden
           <i class="icon" ng-class="({'ion-ios-minus-outline': ingredients[m].show, 'ion-ios-plus-outline': !ingredients[m].show})"></i>
         </div>
-        <ion-checkbox ng-change="setIngredients(ingr)" ng-if="ingredients[m].show" ng-model="ingr.checked" ng-repeat="ingr in ingredients[m].ingr">
-          {{ingr.nl}}
+        <ion-checkbox ng-change="setIngredients(ingr)" ng-class="{'text-disabled checkbox-assertive' : ingr.disabled}" ng-if="ingredients[m].show" ng-model="ingr.checked" ng-disabled="ingr.disabled" ng-repeat="ingr in ingredients[m].ingr">
+          {{ingr.nl}} <span ng-if="ingr.amount && ingr.nl != 'eieren'">(max {{ingr.amount}} g)</span>
+                      <span ng-if="ingr.nl == 'eieren'">(max {{ingr.amount}})</span>
+                      <span ng-if="ingr.nitrateRich">(nitraatrijk)</span>
         </ion-checkbox>
       </div>
     </div>

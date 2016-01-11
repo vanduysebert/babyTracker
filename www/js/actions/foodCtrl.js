@@ -5,18 +5,20 @@
     .module('babyTracker')
     .controller('foodCtrl', foodCtrl);
 
-  foodCtrl.$inject = ['foodSvc', '$ionicModal', '$scope', '$q', 'Child', 'childSvc', 'postSvc', 'userDataSvc', '$state'];
+  foodCtrl.$inject = ['foodSvc', '$ionicModal', '$scope', '$q', 'Child', 'childSvc', 'postSvc', 'userDataSvc', '$state', '$ionicScrollDelegate'];
 
-  function foodCtrl(foodSvc, $ionicModal, $scope, $q, Child, childSvc, postSvc, userDataSvc, $state) {
+  function foodCtrl(foodSvc, $ionicModal, $scope, $q, Child, childSvc, postSvc, userDataSvc, $state, $ionicScrollDelegate) {
     var vm = this;
     vm.foodData = {
       category: "",
       ingredients: [],
       amount: ""
     };
+    vm.resizeWindow = resizeWindow;
     vm.childAge = "";
     vm.showSummary = showSummary;
     vm.months = [];
+    vm.foodAllergics = childSvc.bindFoodAllergics(Child.$id);
     vm.deleteItem = deleteItem;
     vm.ingredients = {};
     vm.data = "";
@@ -29,7 +31,7 @@
       value: 'fruits',
       nl: 'Fruitpap'
     }, {
-      value: 'vegetable',
+      value: 'vegetables',
       nl: 'Groentenpap'
     }, {
       value: 'meat',
@@ -51,6 +53,10 @@
         console.log(age);
       });
     }
+
+    function resizeWindow() {
+            $ionicScrollDelegate.resize();
+        }
 
     function selectFood(animation) {
       $ionicModal.fromTemplateUrl('templates/modals/selectFoodCategory.html', {
@@ -125,7 +131,7 @@
               ingredients: [],
               amount: ""
             };
-            
+
             $scope.foodData = {};
             $scope.modal.remove();
             $state.go('child.posts');
@@ -140,6 +146,7 @@
             if (c.value == $scope.data.cat) {
               vm.foodData.category = c;
               getIngredients(c.value).then(function(ingredients) {
+                console.log("test");
                 vm.ingredients = ingredients;
                 $scope.modal.hide();
               });
@@ -160,7 +167,7 @@
         $scope.modal.show();
         $scope.ingredients = vm.ingredients;
         $scope.months = vm.months;
-
+        $scope.resizeWindow = resizeWindow();
         $scope.openModal = function() {
           $scope.modal.show();
         };
@@ -194,7 +201,7 @@
       var deferred = $q.defer();
       if (cat == 'fruits' ) {
         deferred.resolve(["4", "6", "12"]);
-      } else if(cat == 'vegetable') {
+      } else if(cat == 'vegetables') {
         deferred.resolve(["4", "6", "8", "12"])
       }
         else if (cat == 'meat') {
@@ -225,9 +232,18 @@
           }
           var time = "from" + m + "Months";
           foodSvc.getIngredients(cat, time).then(function(ingr) {
+            var i = [];
+            angular.forEach(ingr, function(ing) {
+              angular.forEach(vm.foodAllergics, function(food) {
+                if(ing.name == food.name) {
+                  ing.disabled = true;
+                }
+              });
+              i.push(ing);
+            });
             ingredients[m] =
               {
-                  ingr: ingr,
+                  ingr: i,
                   show: isAge
               }
               deferred.resolve(ingredients);

@@ -5,9 +5,7 @@
       <div class="item item-text-wrap item-calm item-icon-left">
         <i class="icon ion-ios-information"></i>
         {{photo.child.firstName}}
-        is succesvol geregistreerd. U kan
-        {{photo.genderChild}}
-        profiel verder aanvullen met een foto.
+        is succesvol geregistreerd.
       </div>
     </div>
 
@@ -46,10 +44,6 @@
         <a class="tab-item" ng-click="photo.choosePhotoInput()">
           <i class="icon ion-camera"></i>
           Foto toevoegen
-        </a>
-        <a class="tab-item" ui-sref="app.linkUser({childId: photo.child.$id})">
-          <i class="icon ion-forward"></i>
-          Ga verder
         </a>
       </div>
     </div>

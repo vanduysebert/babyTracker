@@ -26,7 +26,7 @@
       getChildRequestedUser: getChildRequestedUser,
       getUserRequestedUsers: getUserRequestedUsers,
       getUserInvitedUsers: getUserInvitedUsers,
-
+      getAllFollowers: getAllFollowers,
       getUnfollowedUsersFullName: getUnfollowedUsersFullName,
 
       acceptRequest: acceptRequest
@@ -182,6 +182,11 @@
 
     function bindFollowers(childId) {
       return $firebaseArray(childRef.child(childId).child("followers"));
+    }
+
+    function getAllFollowers(childId) {
+      return $firebaseArray(childRef.child(childId).child("followers")).$loaded();
+
     }
 
     //Child invite User

@@ -13,6 +13,9 @@
       postMilestone: postMilestone,
       postFood: postFood,
       postSleep: postSleep,
+      postActivity: postActivity,
+      postDiaper: postDiaper,
+      postAlbum: postAlbum,
       getAllPosts: getAllPosts,
       bindAllPosts: bindAllPosts,
       bindPostsLimit: bindPostsLimit,
@@ -26,7 +29,9 @@
       getReactionCount: getReactionCount,
       deletePost: deletePost,
       getLikes: getLikes,
-      getPost: getPost
+      getPost: getPost,
+      getNumberOfPosts: getNumberOfPosts,
+      loadMorePosts: loadMorePosts
     };
 
     return service;
@@ -122,6 +127,97 @@
           titel: title,
           timeData: sleepData,
           remark: sleepData.remark ? sleepData.remark : ""
+        }
+        var ref = postRef.child(childId).push(post, function(err) {
+          if (!err) {
+            deferred.resolve(ref);
+          } else {
+            deferred.reject(err);
+          }
+        })
+      }, function(err) {
+        deferred.reject(err);
+      });
+      return deferred.promise;
+    }
+
+    function postActivity(uid, childId, title, mess, photoUrl) {
+      var deferred = $q.defer();
+      userSvc.getUserProfile(uid).then(function(usr) {
+        var post = {
+          category: {
+            name: "entertainment",
+            color: "balanced",
+            icon: "img/iconEntertainment.png"
+          },
+          uid: uid,
+          userName: usr.firstName + " " + usr.lastName,
+          profileImage: usr.profileImage,
+          photoInDatabase: usr.photoInDatabase,
+          dateCreated: Firebase.ServerValue.TIMESTAMP,
+          titel: title,
+          message: mess,
+          photo: photoUrl
+        }
+        var ref = postRef.child(childId).push(post, function(err) {
+          if (!err) {
+            deferred.resolve(ref);
+          } else {
+            deferred.reject(err);
+          }
+        })
+      }, function(err) {
+        deferred.reject(err);
+      });
+      return deferred.promise;
+    }
+
+    function postDiaper(uid, childId, title, mess) {
+      var deferred = $q.defer();
+      userSvc.getUserProfile(uid).then(function(usr) {
+        var post = {
+          category: {
+            name: "diaper",
+            color: "assertive",
+            icon: "img/iconDiaper.png"
+          },
+          uid: uid,
+          userName: usr.firstName + " " + usr.lastName,
+          profileImage: usr.profileImage,
+          photoInDatabase: usr.photoInDatabase,
+          dateCreated: Firebase.ServerValue.TIMESTAMP,
+          titel: title,
+          message: mess
+        }
+        var ref = postRef.child(childId).push(post, function(err) {
+          if (!err) {
+            deferred.resolve(ref);
+          } else {
+            deferred.reject(err);
+          }
+        })
+      }, function(err) {
+        deferred.reject(err);
+      });
+      return deferred.promise;
+    }
+
+    function postAlbum(uid, childId, title, photos) {
+      var deferred = $q.defer();
+      userSvc.getUserProfile(uid).then(function(usr) {
+        var post = {
+          category: {
+            name: "photo",
+            color: "brown",
+            icon: "img/iconPhoto.png"
+          },
+          uid: uid,
+          userName: usr.firstName + " " + usr.lastName,
+          profileImage: usr.profileImage,
+          photoInDatabase: usr.photoInDatabase,
+          dateCreated: Firebase.ServerValue.TIMESTAMP,
+          titel: title,
+          photos: photos
         }
         var ref = postRef.child(childId).push(post, function(err) {
           if (!err) {
@@ -273,6 +369,21 @@
         })
       }, function(err) {
         deferred.reject(err);
+      });
+      return deferred.promise;
+    }
+
+
+    function loadMorePosts(lastPostDate, childId, limit) {
+      var ref = postRef.child(childId).orderByChild('dateCreated').limitToLast(limit);
+      return $firebaseArray(ref).$loaded();
+    }
+
+    function getNumberOfPosts(childId) {
+      var deferred = $q.defer()
+      postRef.once("value", function(snap) {
+        deferred.resolve(snap.child(childId).numChildren());
+
       });
       return deferred.promise;
     }

@@ -7,6 +7,9 @@
 
   signupCtrl.$inject = ['$scope', 'Auth', '$state', '$ionicLoading', 'config', 'loggingService'];
 
+  /**
+   * Handles the registration of a new user
+   */
   function signupCtrl($scope, Auth, $state, $ionicLoading, config, loggingService) {
     var vm = this;
     vm.userSvc = new Firebase(config.dbUrls.auth);
@@ -20,18 +23,12 @@
       profileImage: ''
     };
 
-
-
     vm.signupFail = false;
     vm.failMessage = '';
 
     vm.createUser = createUser;
-    activate();
 
-    function activate() {
-
-    }
-
+    // Register new user
     function createUser(form) {
       if (form.$valid) {
         $ionicLoading.show( {
@@ -43,7 +40,6 @@
           password: vm.user.password
         }).then(function(userData) {
           var user = vm.userSvc.child(userData.uid);
-          console.log("data", userData);
           user.set({
             firstName: vm.user.firstName,
             lastName: vm.user.lastName,
@@ -59,7 +55,6 @@
         }).then(function(authData) {
           loggingService.showSuccess('User logged in as:', authData, 'signup', false);
           $ionicLoading.hide();
-
           $state.go('app.start')
         }).catch(function(error) {
           vm.signupFail = true;
@@ -77,7 +72,7 @@
           } else {
             vm.failMessage = "Er is een fout opgetreden. Probeer het opnieuw of raadpleeg de beheerder als het probleem zich blijft voordoen.";
           }
-          loggingService.showError("Error signup user", error, "signup", false);
+          loggingService.showError("Error signup user", error, "signup", true);
         });
       }
     }

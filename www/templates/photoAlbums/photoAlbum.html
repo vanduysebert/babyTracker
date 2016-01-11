@@ -1,0 +1,45 @@
+<ion-view view-title="{{album.albumTitle}}">
+  <ion-nav-buttons side="left">
+    <button class="button button-icon icon ion-navicon" menu-toggle="left"></button>
+  </ion-nav-buttons>
+  <ion-nav-buttons side="right">
+    <button class="button button-clear"  on-tap="album.showDelete = !album.showDelete">Wijzig</button>
+  </ion-nav-buttons>
+
+  <ion-content has-header="true" has-footer="true">
+    <div class="row" ng-if="$index % 3 === 0" ng-repeat="al in album.photos">
+      <div class="col col-33 imageBorder " ng-if="$index < album.photos.length" >
+        <img on-tap="album.showSlider($index)" ng-src="{{album.photos[$index].src}}" width="100%"/>
+        <div ng-if="album.showDelete" class="item item-icon">
+          <button  on-tap="album.deleteAlbum($index)" class="button icon ion-ios-trash button-assertive"></button>
+        </div>
+      </div>
+
+      <div class="col col-33 imageBorder " ng-if="$index + 1 < album.photos.length" >
+        <img on-tap="album.showSlider($index + 1)" ng-src="{{album.photos[$index + 1].src}}" width="100%"/>
+        <div ng-if="album.showDelete" class="item item-icon">
+          <button  on-tap="album.deleteAlbum($index + 1)" class="button icon ion-ios-trash button-assertive"></button>
+        </div>
+      </div>
+
+      <div class="col col-33 imageBorder " ng-if="$index + 2 < album.photos.length" >
+        <img on-tap="album.showSlider($index + 2)" ng-src="{{album.photos[$index +2].src}}" width="100%"/>
+        <div ng-if="albums.showDelete" class="item item-icon">
+          <button on-tap="album.deletePhoto($index + 2)" class="button icon ion-ios-trash button-assertive"></button>
+        </div>
+      </div>
+
+
+    </div>
+    <div class="lowerContent">
+
+    </div>
+  </ion-content>
+  <ion-tabs class="tabs-positive tabs-icon-top" nav-clear>
+    <ion-tab icon-off="ion-ios-list-outline" icon-on="ion-ios-list" title="Tijdlijn" ui-sref="child.posts"></ion-tab>
+    <ion-tab icon-off="ion-ios-body-outline" icon-on="ion-ios-body" title="Profiel" ui-sref="child.profile"></ion-tab>
+    <!-- TODO: add badge voor volgverzoeken (via ChirldCtrl) -->
+    <ion-tab badge-style="badge-assertive" badge="badges.followRequests" icon-off="ion-ios-people-outline" icon-on="ion-ios-people" title="Volgers" ui-sref="child.followers"></ion-tab>
+    <ion-tab icon-off="ion-ios-keypad-outline" icon-on="ion-ios-keypad" title="Acties" ui-sref="child.actions"></ion-tab>
+  </ion-tabs>
+</ion-view>

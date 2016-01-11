@@ -6955,7 +6955,7 @@ textarea {
   border-radius: 4px;
   padding-right: 8px;
   padding-left: 8px;
-  background: #eee; }
+  background: #fff; }
 
 .item-input-inset .item-input-wrapper input {
   padding-left: 4px;
@@ -9111,7 +9111,7 @@ a.button {
   color: #261208; }
 
 .greyLabel {
-  padding: 7px 10px 7px 0px;
+  padding: 7px 10px 7px 0;
   max-width: 200px;
   width: 35%;
   color: #aaaaaa;
@@ -9121,7 +9121,7 @@ a.button {
   vertical-align: bottom; }
 
 .image-list-thumb {
-  padding: 2px 2px 2px 2px;
+  padding: 2px;
   height: 100px; }
 
 .editForm input[disabled],
@@ -9130,7 +9130,7 @@ a.button {
 .editForm input[readonly]:not(.cloned-text-input),
 .editForm textarea[readonly]:not(.cloned-text-input),
 .editForm select[readonly] {
-  background-color: #ffffff;
+  background-color: #fff;
   padding: 3px;
   text-decoration: none;
   color: #aaaaaa;
@@ -9201,6 +9201,9 @@ a.button {
 .item-milestone {
   border-left: 8px solid #9B539C; }
 
+.item-photo {
+  border-left: 8px solid #5F454E; }
+
 .card div.item-photo {
   border-left: 8px solid #5F454E; }
 
@@ -9249,22 +9252,47 @@ a.button {
   -webkit-transform: translateX(100%);
   transform: translateX(100%); }
 
-.slide-in-right.ng-enter, .slide-in-right > .ng-enter {
+.slide-in-right.ng-enter,
+.slide-in-right > .ng-enter {
   -webkit-transition: all cubic-bezier(0.1, 0.7, 0.1, 1) 400ms;
   transition: all cubic-bezier(0.1, 0.7, 0.1, 1) 400ms; }
 
-.slide-in-right.ng-enter-active, .slide-in-right > .ng-enter-active {
+.slide-in-right.ng-enter-active,
+.slide-in-right > .ng-enter-active {
   -webkit-transform: translateX(0);
   transform: translateX(0); }
 
-.slide-in-right.ng-leave, .slide-in-right > .ng-leave {
+.slide-in-right.ng-leave,
+.slide-in-right > .ng-leave {
   -webkit-transition: all ease-in-out 250ms;
   transition: all ease-in-out 250ms; }
 
 .absoluteHeart {
   position: absolute;
+  top: -24px;
   left: 43%;
-  font-size: 50px; }
+  font-size: 40px; }
 
 .ion-social-euro-outline {
   content: url("../img/unhappyEmo.png") !important; }
+
+.borderBottomImg {
+  border-bottom: 4px solid #f3cb69; }
+
+.borderBottomImgSocial {
+  border-bottom: 4px solid #ff4365; }
+
+.borderBottomImgFood {
+  border-bottom: 4px solid #22b573; }
+
+.whiteInput {
+  background: red;
+  border: 2px solid red; }
+
+input:disabled + .checkbox-icon:before {
+  border-color: #ff4365;
+  background-color: #E3E3E3;
+  opacity: 0.8; }
+
+.text-disabled {
+  text-decoration: line-through; }

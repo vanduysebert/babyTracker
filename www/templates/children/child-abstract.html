@@ -13,18 +13,24 @@
         <h1 class="title">{{ch.child.firstName}} {{ch.child.lastName}}</h1>
       </ion-header-bar>
       <ion-content has-header="true">
-        <ul class="list">
-          <!-- TODO: voeg icons toe aan lis -->
-          <a ui-sref="app.summaryStart" nav-clear class="item" ng-click="ch.toggleLeft()">Overzicht kinderen</a>
-          <a ui-sref="child.profile" nav-clear class="item" ng-click="ch.toggleLeft()">Profiel</a>
-          <a ui-sref="child.photos" nav-clear class="item" ng-click="ch.toggleLeft()">Foto's</a>
-          <a ui-sref="child.milestones" nav-clear class="item" ng-click="ch.toggleLeft()">Mijlpalen</a>
-          <a ui-sref="child.emergencyNumbers" nav-clear class="item" ng-click="ch.toggleLeft()">Noodnummers</a>
-          <a ui-sref="child.measurements" nav-clear class="item" ng-click="ch.toggleLeft()">Metingen</a>
-          <a ui-sref="child.settings" nav-clear class="item" ng-click="ch.toggleLeft()">Instellingen</a>
+        <ion-list>
 
-
-        </ul>
+          <ion-item menu-close ui-sref="child.profile">
+            Profiel
+          </ion-item>
+          <ion-item menu-close ui-sref="child.photoAlbums">
+            Fotoalbums
+          </ion-item>
+          <ion-item  menu-close ui-sref="child.milestones">
+            Mijlpalen
+          </ion-item>
+          <ion-item menu-close ui-sref="child.emergencyNumbers">
+            Noodnummers
+          </ion-item>
+          <ion-item class="item-assertive" menu-close ui-sref="app.summaryStart">
+            Terug naar overzicht
+          </ion-item>
+        </ion-list>
       </ion-content>
 
     </ion-side-menu>

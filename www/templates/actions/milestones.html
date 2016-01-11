@@ -3,7 +3,7 @@
     <button class="button button-icon icon ion-navicon" menu-toggle="left"></button>
   </ion-nav-buttons>
 
-  <ion-content has-header="true">
+  <ion-content has-header="true" on-scroll="mile.resizeWindow()">
     <div class="calm-bg">
 
       <div class="item item-divider item-calm">
@@ -11,20 +11,20 @@
       </div>
       <div class="row">
         <div class="col mileStoneGrid center">
-          <a class="" on-tap="mile.setSenses6()"><img src="img/iconSenses3_6.png">
+          <a ng-class="({ 'borderBottomImg': mile.showSenses6})" on-tap="mile.setSenses6()"><img src="img/iconSenses3_6.png">
           </a>
         </div>
         <div class="col mileStoneGrid">
-          <a class="" on-tap="mile.setSocial6()"><img src="img/iconSocial6.png">
+          <a ng-class="({ 'borderBottomImgSocial': mile.showSocial6})" on-tap="mile.setSocial6()"><img src="img/iconSocial6.png">
           </a>
         </div>
         <div class="col mileStoneGrid">
-          <a class="" on-tap="mile.setFood6()"><img src="img/iconFood6.png">
+          <a ng-class="({ 'borderBottomImgFood': mile.showFood6})" on-tap="mile.setFood6()"><img src="img/iconFood6.png">
           </a>
         </div>
       </div>
       <div ng-if="mile.showSenses6">
-        <div class="list animated" ng-class="{'flipInX': mile.showSenses6, 'flipOutX': !mile.showSenses6}" ng-show="mile.showSenses6">
+        <div class="list " ng-class="{'flipInX': mile.showSenses6, 'flipOutX': !mile.showSenses6}" ng-if="mile.showSenses6">
           <h3 class="padding white-text">Motoriek en zintuigen</h2>
         <li class="item item-text-wrap item-checkbox" ng-repeat="stone in mile.sensesMilestones6">
           <label class="checkbox">
@@ -39,7 +39,7 @@
     </div>
 
     <div ng-if="mile.showSocial6">
-      <div class="list animated" ng-class="{'flipInX': mile.showSocial6, 'flipOutX': !mile.showSocial6}" ng-show="mile.showSocial6">
+      <div class="list " ng-class="{'flipInX': mile.showSocial6, 'flipOutX': !mile.showSocial6}" ng-if="mile.showSocial6">
         <h3 class="padding white-text">Sociaal en kennen</h2>
         <li class="item item-text-wrap item-checkbox" ng-repeat="stone in mile.socialMilestones6">
           <label class="checkbox">
@@ -54,7 +54,7 @@
     </div>
 
     <div ng-if="mile.showFood6">
-      <div class="list animated" ng-class="{'flipInX': mile.showFood6, 'flipOutX': !mile.showFood6}" ng-show="mile.showFood6">
+      <div class="list " ng-class="{'flipInX': mile.showFood6, 'flipOutX': !mile.showFood6}" ng-if="mile.showFood6">
         <h3 class="padding white-text">Voeding en zindelijkheid</h2>
         <li class="item item-text-wrap item-checkbox" ng-repeat="stone in mile.foodMilestones6">
           <label class="checkbox">
@@ -76,194 +76,201 @@
     </div>
     <div class="row">
       <div class="col mileStoneGrid center">
-        <a class="" on-tap="mile.setSenses9()"><img src="img/iconSenses9.png">
+        <a ng-class="({ 'borderBottomImg': mile.showSenses9})" on-tap="mile.setSenses9()"><img src="img/iconSenses9.png">
         </a>
       </div>
       <div class="col mileStoneGrid">
-        <a class="" on-tap="mile.setSocial9()"><img src="img/iconSocial9.png">
+        <a ng-class="({ 'borderBottomImgSocial': mile.showSocial9})" on-tap="mile.setSocial9()"><img src="img/iconSocial9.png">
         </a>
       </div>
       <div class="col mileStoneGrid">
-        <a class="" on-tap="mile.setFood9()"><img src="img/iconFood9.png">
+        <a ng-class="({ 'borderBottomImgFood': mile.showFood9})" on-tap="mile.setFood9()"><img src="img/iconFood9.png">
         </a>
       </div>
     </div>
     <div ng-if="mile.showSenses9">
-      <div class="list animated" ng-class="{'flipInX': mile.showSenses9, 'flipOutX': !mile.showSenses9}" ng-show="mile.showSenses9">
+      <div class="list " ng-class="{'flipInX': mile.showSenses9, 'flipOutX': !mile.showSenses9}" ng-if="mile.showSenses9">
         <h3 class="padding white-text">Motoriek en zintuigen</h2>
-      <li class="item item-text-wrap item-checkbox" ng-repeat="stone in mile.sensesMilestones9">
-        <label class="checkbox">
-          <input ng-change="mile.changeStone(stone, mile.sensesMilestones9)" ng-disabled="!checkAdmin()" ng-model="stone.children[mile.child.$id].val" type="checkbox">
-        </label>
-        {{stone.nl}}
-        <h4>
-          <span>{{stone.children[mile.child.$id].dateCreated | amCalendar}}</span>
-        </h4>
-      </li>
+        <li class="item item-text-wrap item-checkbox" ng-repeat="stone in mile.sensesMilestones9">
+          <label class="checkbox">
+            <input ng-change="mile.changeStone(stone, mile.sensesMilestones9)" ng-disabled="!checkAdmin()" ng-model="stone.children[mile.child.$id].val" type="checkbox">
+          </label>
+          {{stone.nl}}
+          <h4>
+            <span>{{stone.children[mile.child.$id].dateCreated | amCalendar}}</span>
+          </h4>
+        </li>
+      </div>
     </div>
-  </div>
 
-  <div ng-if="mile.showSocial9">
-    <div class="list animated" ng-class="{'flipInX': mile.showSocial9, 'flipOutX': !mile.showSocial9}" ng-show="mile.showSocial9">
-      <h3 class="padding white-text">Sociaal en kennen</h2>
-      <li class="item item-text-wrap item-checkbox" ng-repeat="stone in mile.socialMilestones9">
-        <label class="checkbox">
-          <input ng-change="mile.changeStone(stone, mile.socialMilestones9)" ng-disabled="!checkAdmin()" ng-model="stone.children[mile.child.$id].val" type="checkbox">
-        </label>
-        {{stone.nl}}
-        <h4>
-          <span>{{stone.children[mile.child.$id].dateCreated | amCalendar}}</span>
-        </h4>
-      </li>
+    <div ng-if="mile.showSocial9">
+      <div class="list " ng-class="{'flipInX': mile.showSocial9, 'flipOutX': !mile.showSocial9}" ng-if="mile.showSocial9">
+        <h3 class="padding white-text">Sociaal en kennen</h2>
+        <li class="item item-text-wrap item-checkbox" ng-repeat="stone in mile.socialMilestones9">
+          <label class="checkbox">
+            <input ng-change="mile.changeStone(stone, mile.socialMilestones9)" ng-disabled="!checkAdmin()" ng-model="stone.children[mile.child.$id].val" type="checkbox">
+          </label>
+          {{stone.nl}}
+          <h4>
+            <span>{{stone.children[mile.child.$id].dateCreated | amCalendar}}</span>
+          </h4>
+        </li>
+      </div>
     </div>
-  </div>
 
-  <div ng-if="mile.showFood9">
-    <div class="list animated" ng-class="{'flipInX': mile.showFood9, 'flipOutX': !mile.showFood9}" ng-show="mile.showFood9">
-      <h3 class="padding white-text">Voeding en zindelijkheid</h2>
-      <li class="item item-text-wrap item-checkbox" ng-repeat="stone in mile.foodMilestones9">
-        <label class="checkbox">
-          <input ng-change="mile.changeStone(stone, mile.foodMilestones9)" ng-disabled="!checkAdmin()" ng-model="stone.children[mile.child.$id].val" type="checkbox">
-        </label>
-        {{stone.nl}}
-        <h4>
-          <span>{{stone.children[mile.child.$id].dateCreated | amCalendar}}</span>
-        </h4>
-      </li>
+    <div ng-if="mile.showFood9">
+      <div class="list " ng-class="{'flipInX': mile.showFood9, 'flipOutX': !mile.showFood9}" ng-if="mile.showFood9">
+        <h3 class="padding white-text">Voeding en zindelijkheid</h2>
+        <li class="item item-text-wrap item-checkbox" ng-repeat="stone in mile.foodMilestones9">
+          <label class="checkbox">
+            <input ng-change="mile.changeStone(stone, mile.foodMilestones9)" ng-disabled="!checkAdmin()" ng-model="stone.children[mile.child.$id].val" type="checkbox">
+          </label>
+          {{stone.nl}}
+          <h4>
+            <span>{{stone.children[mile.child.$id].dateCreated | amCalendar}}</span>
+          </h4>
+        </li>
+      </div>
     </div>
-  </div>
 
-</div>
-<div class="positive-bg">
-
-  <div class="item item-divider item-positive">
-    9-12 maand
   </div>
-  <div class="row">
-    <div class="col mileStoneGrid center">
-      <a class="" on-tap="mile.setSenses12()"><img src="img/iconSenses12.png">
-      </a>
+  <div class="positive-bg">
+
+    <div class="item item-divider item-positive">
+      9-12 maand
     </div>
-    <div class="col mileStoneGrid">
-      <a class="" on-tap="mile.setSocial12()"><img src="img/iconSocial12.png">
-      </a>
+    <div class="row">
+      <div class="col mileStoneGrid center">
+        <a ng-class="({ 'borderBottomImg': mile.showSenses12})" on-tap="mile.setSenses12()"><img src="img/iconSenses12.png">
+        </a>
+      </div>
+      <div class="col mileStoneGrid">
+        <a ng-class="({ 'borderBottomImgSocial': mile.showSocial12})" on-tap="mile.setSocial12()"><img src="img/iconSocial12.png">
+        </a>
+      </div>
+      <div class="col mileStoneGrid">
+        <a ng-class="({ 'borderBottomImgFood': mile.showFood12})" on-tap="mile.setFood12()"><img src="img/iconFood12.png">
+        </a>
+      </div>
     </div>
-    <div class="col mileStoneGrid">
-      <a class="" on-tap="mile.setFood12()"><img src="img/iconFood12.png">
-      </a>
+    <div ng-if="mile.showSenses12">
+      <div class="list " ng-class="{'flipInX': mile.showSenses12, 'flipOutX': !mile.showSenses12}" ng-if="mile.showSenses12">
+        <h3 class="padding white-text">Motoriek en zintuigen</h2>
+        <li class="item item-text-wrap item-checkbox" ng-repeat="stone in mile.sensesMilestones12">
+          <label class="checkbox">
+            <input ng-change="mile.changeStone(stone, mile.sensesMilestones12)" ng-disabled="!checkAdmin()" ng-model="stone.children[mile.child.$id].val" type="checkbox">
+          </label>
+          {{stone.nl}}
+          <h4>
+            <span>{{stone.children[mile.child.$id].dateCreated | amCalendar}}</span>
+          </h4>
+        </li>
+      </div>
     </div>
-  </div>
-  <div ng-if="mile.showSenses12">
-    <div class="list animated" ng-class="{'flipInX': mile.showSenses12, 'flipOutX': !mile.showSenses12}" ng-show="mile.showSenses12">
-      <h3 class="padding white-text">Motoriek en zintuigen</h2>
-    <li class="item item-text-wrap item-checkbox" ng-repeat="stone in mile.sensesMilestones12">
-      <label class="checkbox">
-        <input ng-change="mile.changeStone(stone, mile.sensesMilestones12)" ng-disabled="!checkAdmin()" ng-model="stone.children[mile.child.$id].val" type="checkbox">
-      </label>
-      {{stone.nl}}
-      <h4>
-        <span>{{stone.children[mile.child.$id].dateCreated | amCalendar}}</span>
-      </h4>
-    </li>
-  </div>
-</div>
 
-<div ng-if="mile.showSocial12">
-  <div class="list animated" ng-class="{'flipInX': mile.showSocial12, 'flipOutX': !mile.showSocial12}" ng-show="mile.showSocial12">
-    <h3 class="padding white-text">Sociaal en kennen</h2>
-    <li class="item item-text-wrap item-checkbox" ng-repeat="stone in mile.socialMilestones12">
-      <label class="checkbox">
-        <input ng-change="mile.changeStone(stone, mile.socialMilestones12)" ng-disabled="!checkAdmin()" ng-model="stone.children[mile.child.$id].val" type="checkbox">
-      </label>
-      {{stone.nl}}
-      <h4>
-        <span>{{stone.children[mile.child.$id].dateCreated | amCalendar}}</span>
-      </h4>
-    </li>
-  </div>
-</div>
-
-<div ng-if="mile.showFood12">
-  <div class="list animated" ng-class="{'flipInX': mile.showFood12, 'flipOutX': !mile.showFood12}" ng-show="mile.showFood12">
-    <h3 class="padding white-text">Voeding en zindelijkheid</h2>
-    <li class="item item-text-wrap item-checkbox" ng-repeat="stone in mile.foodMilestones12">
-      <label class="checkbox">
-        <input ng-change="mile.changeStone(stone, mile.foodMilestones12)" ng-disabled="!checkAdmin()" ng-model="stone.children[mile.child.$id].val" type="checkbox">
-      </label>
-      {{stone.nl}}
-      <h4>
-        <span>{{stone.children[mile.child.$id].dateCreated | amCalendar}}</span>
-      </h4>
-    </li>
-  </div>
-</div>
-
-</div>
-<div class="dark-bg">
-
-  <div class="item item-divider item-dark">
-    12-18 maand
-  </div>
-  <div class="row">
-    <div class="col mileStoneGrid center">
-      <a class="" on-tap="mile.setSenses18()"><img src="img/iconSenses18.png">
-      </a>
+    <div ng-if="mile.showSocial12">
+      <div class="list " ng-class="{'flipInX': mile.showSocial12, 'flipOutX': !mile.showSocial12}" ng-if="mile.showSocial12">
+        <h3 class="padding white-text">Sociaal en kennen</h2>
+        <li class="item item-text-wrap item-checkbox" ng-repeat="stone in mile.socialMilestones12">
+          <label class="checkbox">
+            <input ng-change="mile.changeStone(stone, mile.socialMilestones12)" ng-disabled="!checkAdmin()" ng-model="stone.children[mile.child.$id].val" type="checkbox">
+          </label>
+          {{stone.nl}}
+          <h4>
+            <span>{{stone.children[mile.child.$id].dateCreated | amCalendar}}</span>
+          </h4>
+        </li>
+      </div>
     </div>
-    <div class="col mileStoneGrid">
-      <a class="" on-tap="mile.setSocial18()"><img src="img/iconSocial18.png">
-      </a>
+
+    <div ng-if="mile.showFood12">
+      <div class="list " ng-class="{'flipInX': mile.showFood12, 'flipOutX': !mile.showFood12}" ng-if="mile.showFood12">
+        <h3 class="padding white-text">Voeding en zindelijkheid</h2>
+        <li class="item item-text-wrap item-checkbox" ng-repeat="stone in mile.foodMilestones12">
+          <label class="checkbox">
+            <input ng-change="mile.changeStone(stone, mile.foodMilestones12)" ng-disabled="!checkAdmin()" ng-model="stone.children[mile.child.$id].val" type="checkbox">
+          </label>
+          {{stone.nl}}
+          <h4>
+            <span>{{stone.children[mile.child.$id].dateCreated | amCalendar}}</span>
+          </h4>
+        </li>
+      </div>
     </div>
-    <div class="col mileStoneGrid">
-      <a class="" on-tap="mile.setFood18()"><img src="img/iconFood18.png">
-      </a>
+
+  </div>
+  <div class="dark-bg">
+
+    <div class="item item-divider item-dark">
+      12-18 maand
     </div>
-  </div>
-  <div ng-if="mile.showSenses18">
-    <div class="list animated" ng-class="{'flipInX': mile.showSenses18, 'flipOutX': !mile.showSenses18}" ng-show="mile.showSenses18">
-      <h3 class="padding white-text">Motoriek en zintuigen</h2>
-    <li class="item item-text-wrap item-checkbox" ng-repeat="stone in mile.sensesMilestones18">
-      <label class="checkbox">
-        <input ng-change="mile.changeStone(stone, mile.sensesMilestones18)" ng-disabled="!checkAdmin()" ng-model="stone.children[mile.child.$id].val" type="checkbox">
-      </label>
-      {{stone.nl}}
-      <h4>
-        <span>{{stone.children[mile.child.$id].dateCreated | amCalendar}}</span>
-      </h4>
-    </li>
-  </div>
-</div>
+    <div class="row">
+      <div class="col mileStoneGrid center">
+        <a ng-class="({ 'borderBottomImg': mile.showSenses18})" on-tap="mile.setSenses18()"><img src="img/iconSenses18.png">
+        </a>
+      </div>
+      <div class="col mileStoneGrid">
+        <a ng-class="({ 'borderBottomImgSocial': mile.showSocial18})" on-tap="mile.setSocial18()"><img src="img/iconSocial18.png">
+        </a>
+      </div>
+      <div class="col mileStoneGrid">
+        <a ng-class="({ 'borderBottomImgFood': mile.showFood18})" on-tap="mile.setFood18()"><img src="img/iconFood18.png">
+        </a>
+      </div>
+    </div>
+    <div ng-if="mile.showSenses18">
+      <div class="list " ng-class="{'flipInX': mile.showSenses18, 'flipOutX': !mile.showSenses18}" ng-if="mile.showSenses18">
+        <h3 class="padding white-text">Motoriek en zintuigen</h2>
+        <li class="item item-text-wrap item-checkbox" ng-repeat="stone in mile.sensesMilestones18">
+          <label class="checkbox">
+            <input ng-change="mile.changeStone(stone, mile.sensesMilestones18)" ng-disabled="!checkAdmin()" ng-model="stone.children[mile.child.$id].val" type="checkbox">
+          </label>
+          {{stone.nl}}
+          <h4>
+            <span>{{stone.children[mile.child.$id].dateCreated | amCalendar}}</span>
+          </h4>
+        </li>
+      </div>
+    </div>
 
-<div ng-if="mile.showSocial18">
-  <div class="list animated" ng-class="{'flipInX': mile.showSocial18, 'flipOutX': !mile.showSocial18}" ng-show="mile.showSocial18">
-    <h3 class="padding white-text">Sociaal en kennen</h2>
-    <li class="item item-text-wrap item-checkbox" ng-repeat="stone in mile.socialMilestones18">
-      <label class="checkbox">
-        <input ng-change="mile.changeStone(stone, mile.socialMilestones18)" ng-disabled="!checkAdmin()" ng-model="stone.children[mile.child.$id].val" type="checkbox">
-      </label>
-      {{stone.nl}}
-      <h4>
-        <span>{{stone.children[mile.child.$id].dateCreated | amCalendar}}</span>
-      </h4>
-    </li>
-  </div>
-</div>
+    <div ng-if="mile.showSocial18">
+      <div class="list " ng-class="{'flipInX': mile.showSocial18, 'flipOutX': !mile.showSocial18}" ng-if="mile.showSocial18">
+        <h3 class="padding white-text">Sociaal en kennen</h2>
+        <li class="item item-text-wrap item-checkbox" ng-repeat="stone in mile.socialMilestones18">
+          <label class="checkbox">
+            <input ng-change="mile.changeStone(stone, mile.socialMilestones18)" ng-disabled="!checkAdmin()" ng-model="stone.children[mile.child.$id].val" type="checkbox">
+          </label>
+          {{stone.nl}}
+          <h4>
+            <span>{{stone.children[mile.child.$id].dateCreated | amCalendar}}</span>
+          </h4>
+        </li>
+      </div>
+    </div>
 
-<div ng-if="mile.showFood18">
-  <div class="list animated" ng-class="{'flipInX': mile.showFood18, 'flipOutX': !mile.showFood18}" ng-show="mile.showFood18">
-    <h3 class="padding white-text">Voeding en zindelijkheid</h2>
-    <li class="item item-text-wrap item-checkbox" ng-repeat="stone in mile.foodMilestones18">
-      <label class="checkbox">
-        <input ng-change="mile.changeStone(stone, mile.foodMilestones18)" ng-disabled="!checkAdmin()" ng-model="stone.children[mile.child.$id].val" type="checkbox">
-      </label>
-      {{stone.nl}}
-      <h4>
-        <span>{{stone.children[mile.child.$id].dateCreated | amCalendar}}</span>
-      </h4>
-    </li>
-  </div>
-</div>
+    <div ng-if="mile.showFood18">
+      <div class="list " ng-class="{'flipInX': mile.showFood18, 'flipOutX': !mile.showFood18}" ng-if="mile.showFood18">
+        <h3 class="padding white-text">Voeding en zindelijkheid</h2>
+        <li class="item item-text-wrap item-checkbox" ng-repeat="stone in mile.foodMilestones18">
+          <label class="checkbox">
+            <input ng-change="mile.changeStone(stone, mile.foodMilestones18)" ng-disabled="!checkAdmin()" ng-model="stone.children[mile.child.$id].val" type="checkbox">
+          </label>
+          {{stone.nl}}
+          <h4>
+            <span>{{stone.children[mile.child.$id].dateCreated | amCalendar}}</span>
+          </h4>
+        </li>
+      </div>
+    </div>
 
-</div>
+  </div>
+  <ion-infinite-scroll
+    on-infinite="loadMore()"
+    distance="1%">
+  </ion-infinite-scroll>
+  <div class="lowerContent">
+
+  </div>
 </ion-content>
 <ion-tabs class="tabs-positive tabs-icon-top">
   <ion-tab icon-off="ion-ios-list-outline" icon-on="ion-ios-list" title="Tijdlijn" ui-sref="child.posts"></ion-tab>

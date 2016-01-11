@@ -31,6 +31,9 @@
         <label class="item item-input animated" ng-class="{'successForm': registerForm.birthLengthChild.$dirty}">
           <input name="birthLengthChild" ng-model="register.child.birthLength" placeholder="Lengte geboorte (in cm)" type="number">
         </label>
+        <label class="item item-input animated" ng-class="{'successForm': registerForm.birthHeadWidthChild.$dirty}">
+          <input name="birthHeadWidthChild" ng-model="register.child.birthHeadWidth" placeholder="Hoofdomtrek (in cm)" type="number">
+        </label>
         <label class="item item-input item-select animated" ng-class="{'shake errorForm': (registerForm.linkRelationship.$invalid && registerForm.linkRelationship.$touched), 'successForm': (registerForm.linkRelationship.$valid && registerForm.linkRelationship.$dirty)}">
           <div class="input-label greyLabel">
             Relatie tot kind

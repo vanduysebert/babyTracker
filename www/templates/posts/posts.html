@@ -1,24 +1,16 @@
-<ion-view view-title="Tijdlijn">
+<ion-view view-title="Tijdlijn {{post.child.firstName}}">
   <ion-nav-buttons side="left">
     <button class="button button-icon icon ion-navicon" menu-toggle="left"></button>
   </ion-nav-buttons>
-
+  <ion-nav-buttons side="right">
+    <button class="button" ng-class="({'button-clear': !post.filter.set, 'button-outline button-assertive': post.filter.set})" on-tap="post.showFilter()">Filter</button>
+  </ion-nav-buttons>
   <ion-content has-footer="true" has-header="true">
-
-    <div class="bar bar-header bar-positive">
-      <button class="button button-icon assertive icon ion-ios-compose" ui-sref="child.actions"></button>
-      <div class="h1 title">{{post.child.firstName}}
-        {{post.child.lastName}}</div>
-      <button class="button button-icon assertive icon ion-android-more-vertical" on-tap="post.showFilter()"></button>
-    </div>
-    <div class="lowerContent"></div>
-    <div class="button-bar" ng-if="post.filter.set">
-      <a class="button button-block button-assertive icon-left ion-ios-close" on-tap="post.resetFilter()">
-        Reset filter
-      </a>
-      <a class="button button-block button-calm icon-left ion-edit" on-tap="post.showFilter()">
-        Pas filter aan
-      </a>
+    <div class="list list-inset">
+      <label class="item item-input">
+        <i class="icon ion-ios-compose-outline placeholder-icon"></i>
+        <input on-touch="post.newPost()" placeholder="Schrijf op de tijdlijn van {{post.child.firstName}}" type="text">
+      </label>
     </div>
 
     <ion-list >
@@ -44,35 +36,59 @@
                                       }">
           <img ng-if="!mes.photo" ng-src="{{mes.category.icon}}">
 
-          <h2 ng-class="({'item-icon-right': mes.category.name === 'food'})">{{mes.titel}}
+          <h2 ng-if="mes.category.name != 'photo'">{{mes.titel}}
             <i class="icon" ng-class="({'ion-sad-outline assertive': mes.mood.sad, 'ion-happy-outline balanced': mes.mood.happy, 'ion-android-sad energized': mes.mood.normal})"></i>
           </h2>
+          <h2 ng-if="mes.category.name == 'photo'">
+            Nieuw album van
+            {{post.child.firstName}}
+          </h2>
+          <div class="section">
+            <ion-slide-box does-continue="true" ng-if="mes.category.name === 'photo'" show-pager="false">
+              <ion-slide ng-repeat="photo in mes.photos">
+                <div class="box">
+                  <h3 class="middle">{{mes.titel}}</h3>
+                  <img class="full-image imageSlide" ng-src="{{photo.src}}" />
+                  <h4>{{photo.caption}}</h4>
+                </div>
+              </ion-slide>
+            </ion-slide-box>
+          </div>
+
           <h1 class="center assertive absoluteHeart animated" ng-class="{'fadeIn': mes.showHeart, 'fadeOut': !mes.showHeart}" ng-show="mes.showHeart">
             <i class="icon ion-ios-heart"></i>
           </h1>
-          <img class="full-image" ng-if="mes.photo" ng-src="data:image/jpeg;base64,{{mes.photo}}">
+          <img class="full-image" ng-if="mes.photo && mes.category.name != 'photo'" ng-src="data:image/jpeg;base64,{{mes.photo}}">
           <h3 ng-if="mes.category.name === 'sleep'">
             <i class="fa fa-history"></i>
-            {{mes.timeData.duration | amDateFormat: 'H'}} uur en {{mes.timeData.duration | amDateFormat: 'm'}} minuten
+            {{mes.timeData.duration | amDateFormat: 'H'}}
+            uur en
+            {{mes.timeData.duration | amDateFormat: 'm'}}
+            minuten
           </h3>
           <p ng-if="mes.category.name === 'sleep'">
             <i class="icon ion-ios-clock"></i>
-            {{mes.timeData.dateTimeStartString | amDateFormat: 'do MMM'}} om {{mes.timeData.dateTimeStartString | amDateFormat: 'H:mm'}} uur
+            {{mes.timeData.dateTimeStartString | amDateFormat: 'Do MMM'}}
+            om
+            {{mes.timeData.dateTimeStartString | amDateFormat: 'H:mm'}}
+            uur
           </p>
           <p ng-if="mes.category.name === 'sleep'">
             <i class="icon ion-ios-clock-outline"></i>
-            {{mes.timeData.dateTimeEndString | amDateFormat: 'do MMM'}} om {{mes.timeData.dateTimeEndString | amDateFormat: 'H:mm'}} uur
+            {{mes.timeData.dateTimeEndString | amDateFormat: 'Do MMM'}}
+            om
+            {{mes.timeData.dateTimeEndString | amDateFormat: 'H:mm'}}
+            uur
           </p>
-
 
           <p >
             {{mes.message}}
           </p>
-          <p ng-if="mes.category.name === 'food'">
+          <p ng-if="mes.category.name === 'food' && mes.ingredients">
             Ingrediënten:
             {{mes.ingredients}}
           </p>
-          <p ng-if="mes.category.name === 'food'">
+          <p ng-if="mes.category.name === 'food' && mes.amount">
             Hoeveelheid:
             {{mes.amount}}
             <span ng-if="mes.category == 'milk'">ml</span>
@@ -82,14 +98,16 @@
             {{mes.remark}}
           </h4>
 
-          <p class="rightAligned">
-            <a class="subdued calm" ng-if="mes.reactionCount">
-              <i class="icon ion-ios-chatboxes"></i>
-              {{mes.reactionCount}}</a>
-            <a class="subdued assertive" on-tap="post.showLikes(mes)">
-              <i ng-class="{'icon ion-ios-heart': mes.likeCount.count > 0, 'icon ion-ios-heart-outline': mes.likeCount.count == 0 || !mes.likeCount}"></i>
-              {{mes.likeCount.count}}</a>
-          </p>
+          <div class="item">
+            <p class="rightAligned">
+              <a class="subdued calm" ng-if="mes.reactionCount">
+                <i class="icon ion-ios-chatboxes"></i>
+                {{mes.reactionCount}}</a>
+              <a class="subdued assertive" on-tap="post.showLikes(mes)">
+                <i ng-class="{'icon ion-ios-heart': mes.likeCount.count > 0, 'icon ion-ios-heart-outline': mes.likeCount.count == 0 || !mes.likeCount}"></i>
+                {{mes.likeCount.count}}</a>
+            </p>
+          </div>
 
           <div class="item item-icon-left" ng-if="mes.showLikes">
             <i class="icon assertive ion-ios-heart"></i>
@@ -105,17 +123,17 @@
         </div>
 
         <div class="item noBorderBar tabs tabs-secondary tabs-icon-left">
-          <a class="tab-item assertive" ng-if="!post.checkLiked(mes)" on-tap="post.likePost(mes)">
+          <a class="tab-item assertive" ng-if="!post.checkLiked(mes) && mes.category.name != 'photo'" on-tap="post.likePost(mes)">
             <i class="icon ion-ios-heart-outline"></i>
           </a>
-          <a class="tab-item assertive" ng-if="post.checkLiked(mes)" on-tap="post.unlikePost(mes)">
+          <a class="tab-item assertive" ng-if="post.checkLiked(mes) && mes.category.name != 'photo'" on-tap="post.unlikePost(mes)">
             <i class="icon ion-ios-heart"></i>
           </a>
           <a class="tab-item calm" ui-sref="child.postReactions({postId: mes.$id})">
             <i class="icon ion-ios-chatboxes"></i>
           </a>
           <!-- TODO: add social share plugins-->
-          <a class="tab-item balanced" href="#">
+          <a class="tab-item balanced" on-tap="post.showSocialShare(mes)">
             <i class="icon ion-android-more-vertical"></i>
           </a>
 
@@ -129,6 +147,8 @@
         </div>
       </ion-item>
     </ion-list>
+    <ion-infinite-scroll immediate-check="false" ng-if="post.moreDataCanBeLoaded()" distance="5%" on-infinite="post.loadMoreData()"></ion-infinite-scroll>
+
     <div class="lowerContent"></div>
 
   </ion-content>

@@ -5,13 +5,18 @@
     .module('babyTracker')
     .controller('userProfileCtrl', userProfileCtrl);
 
-  userProfileCtrl.$inject = ['$scope', 'userDataSvc', '$ionicScrollDelegate', '$firebaseObject', 'userSvc', 'loggingService', '$cordovaCamera', '$ionicModal', 'fullName', 'userProfile', 'Auth', '$ionicLoading'];
+  userProfileCtrl.$inject = ['$scope', 'userDataSvc', '$ionicScrollDelegate', '$firebaseObject', 'userSvc', 'loggingService', '$cordovaCamera', '$ionicModal', 'fullName', 'userProfile', 'Auth', '$ionicLoading', '$location','$ionicActionSheet'];
 
-  function userProfileCtrl($scope, userDataSvc, $ionicScrollDelegate, $firebaseObject, userSvc, loggingService, $cordovaCamera, $ionicModal, fullName, userProfile, Auth, $ionicLoading) {
+  /**
+   * Controller that handles the profile of the user
+   */
+  function userProfileCtrl($scope, userDataSvc, $ionicScrollDelegate, $firebaseObject, userSvc, loggingService, $cordovaCamera, $ionicModal, fullName, userProfile, Auth, $ionicLoading, $location, $ionicActionSheet) {
     var vm = this;
+    //Variables
     vm.user = userProfile;
     vm.fullName = fullName;
-    vm.editForm = editForm;
+    vm.isEdit = false;
+    vm.birthDate = false;
     vm.authPassword = {
       isPassword: false,
       oldEmail: '',
@@ -19,9 +24,13 @@
       oldPassword: '',
       newPassword: ''
     };
-    vm.birthDate = new Date(vm.user.birthDateTime);
+
+
     vm.auth = "";
+
+    //Functions
     vm.choosePhotoInput = choosePhotoInput;
+    vm.editForm = editForm;
 
     vm.updateUser = updateUser;
     vm.updatePhotoUser = updatePhotoUser;
@@ -32,6 +41,7 @@
     activate();
 
     function activate() {
+      //Get authentication-method
       userSvc.getAuth().then(function(authData) {
         vm.auth = authData;
         if (authData.provider === "password") {
@@ -40,8 +50,12 @@
       }, function(err) {
         loggingService.showError("Retrieving authData failed", err, "profileCtrl", false);
       });
+      //Set default profileImage
       if (!vm.user.profileImage) {
         vm.user.profileImage = getDefaultProfileImage();
+      }
+      if(vm.user.birthDateTime) {
+        vm.birthDate = new Date(vm.user.birthDateTime);
       }
     }
 
@@ -53,22 +67,34 @@
       }
     }
 
+    //Edit form
     function editForm(id) {
-      vm.write = true;
-      $ionicScrollDelegate.anchorScroll(id);
+      vm.write = !vm.write;
+      $location.hash(id);
+      $ionicScrollDelegate.anchorScroll(true);
     }
 
+    //Update user
     function updateUser(form) {
+      console.log("test");
       $ionicLoading.show({
         template: '<ion-spinner icon="ripple"></ion-spinner>'
       });
       if (form.$valid) {
+        console.log("test");
         if (vm.birthDate) {
           vm.user.birthDateTime = vm.birthDate.getTime();
           vm.user.birthDateString = moment(vm.birthDate).format("DD-MM-YYYY");
+        } else {
+          vm.user.birthDateTime = false;
+          vm.user.birthDateString = false;
         }
+        console.log("test");
+        console.log(vm.user);
         userSvc.updateUser(vm.auth.uid, vm.user).then(function(ref) {
+          console.log("test");
           userSvc.getUserProfile(ref.key()).then(function(user) {
+            console.log("test");
             vm.user = user;
             vm.write = false;
             $ionicLoading.hide();
@@ -85,12 +111,12 @@
       }
     }
 
+    //Update profile picture
     function updatePhotoUser() {
       userSvc.updateUser(vm.auth.uid, vm.user).then(function(ref) {
         userSvc.getUserProfile(ref.key()).then(function(user) {
           vm.user = user;
           vm.writePhoto = false;
-
         }, function(err) {
           loggingService.showError("Update user failed", err, "userProfile", false);
         });
@@ -99,38 +125,33 @@
       });
     }
 
+    //Show actionsheet new photo
     function choosePhotoInput() {
-      $ionicModal.fromTemplateUrl('templates/modals/cameraChoice.html', {
-        scope: $scope,
-        animation: 'slide-in-up'
-      }).then(function(modal) {
-        $scope.modal = modal;
-        $scope.modal.show();
+      var hideSheet = $ionicActionSheet.show({
+        buttons: [{
+          text: 'Maak foto'
+        }, {
+          text: 'Kies foto'
+        }],
+        titleText: 'Profielfoto wijzigen',
+        cancelText: 'Annuleer',
+        cancel: function() {
+          hideSheet();
+        },
+        buttonClicked: function(index) {
+          if(index == 0) {
+            var sourceType = Camera.PictureSourceType.CAMERA;
+            uploadProfilePicture(sourceType);
+          } else if(index == 1) {
+            var sourceType = Camera.PictureSourceType.PHOTOLIBRARY;
+            uploadProfilePicture(sourceType);
+          }
+          return true;
+        }
       });
-      $scope.openModal = function() {
-        $scope.modal.show();
-      };
-      $scope.closeModal = function() {
-        $scope.modal.hide();
-      };
-      //Cleanup the modal when we're done with it!
-      $scope.$on('$destroy', function() {
-        $scope.modal.remove();
-      });
-
-      $scope.useNewPhoto = function() {
-        var sourceType = Camera.PictureSourceType.CAMERA;
-        uploadProfilePicture(sourceType);
-        $scope.modal.hide();
-      }
-
-      $scope.usePhotoFromLibrary = function() {
-        var sourceType = Camera.PictureSourceType.PHOTOLIBRARY;
-        uploadProfilePicture(sourceType);
-        $scope.modal.hide();
-      }
     };
 
+    //Upload picture
     function uploadProfilePicture(sourceType) {
       var options = {
         quality: 75,
@@ -153,6 +174,7 @@
       });
     }
 
+    //change password authenticated user
     function showNewPassword() {
       $ionicModal.fromTemplateUrl('templates/modals/newPassword.html', {
         scope: $scope,
@@ -203,6 +225,7 @@
       }
     }
 
+    //Change authenticated emailadres user
     function showNewMail() {
       $ionicModal.fromTemplateUrl('templates/modals/newEmail.html', {
         scope: $scope,

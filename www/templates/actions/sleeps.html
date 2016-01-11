@@ -11,23 +11,23 @@
         </div>
         <label class="item item-input" ng-if="sleep.datetimeInput">
           <span class="input-label">Tijdstip</span>
-          <input name="dateTimeStart" ng-required="sleep.datetimeInput" ng-model="sleep.sleepData.startDateTime" type="datetime-local">
-          <div role="alert" class="animated zoomIn error-block" ng-messages="sleepForm.dateTimeStart.$error" ng-if="sleepForm.dateTimeStart.$dirty">
-            <div ng-messages-include= "templates/partials/errorMessages.html"></div>
+          <input name="dateTimeStart" ng-model="sleep.sleepData.startDateTime" ng-required="sleep.datetimeInput" type="datetime-local">
+          <div class="animated zoomIn error-block" ng-if="sleepForm.dateTimeStart.$dirty" ng-messages="sleepForm.dateTimeStart.$error" role="alert">
+            <div ng-messages-include="templates/partials/errorMessages.html"></div>
           </div>
         </label>
         <label class="item item-input" ng-if="!sleep.datetimeInput">
           <span class="input-label">Datum</span>
-          <input name="dateStart" ng-required="!sleep.datetimeInput" ng-model="sleep.sleepData.startDate" type="date">
-          <div role="alert" class="animated zoomIn error-block" ng-messages="sleepForm.dateStart.$error" ng-if="sleepForm.dateStart.$dirty">
-            <div ng-messages-include= "templates/partials/errorMessages.html"></div>
+          <input name="dateStart" ng-model="sleep.sleepData.startDate" ng-required="!sleep.datetimeInput" type="date">
+          <div class="animated zoomIn error-block" ng-if="sleepForm.dateStart.$dirty" ng-messages="sleepForm.dateStart.$error" role="alert">
+            <div ng-messages-include="templates/partials/errorMessages.html"></div>
           </div>
         </label>
         <label class="item item-input" ng-if="!sleep.datetimeInput">
           <span class="input-label">Tijd</span>
-          <input name="timeStart" ng-required="!sleep.datetimeInput" ng-model="sleep.sleepData.startTime" type="time">
-          <div role="alert" class="animated zoomIn error-block" ng-messages="sleepForm.timeStart.$error" ng-if="sleepForm.timeStart.$dirty">
-            <div ng-messages-include= "templates/partials/errorMessages.html"></div>
+          <input name="timeStart" ng-model="sleep.sleepData.startTime" ng-required="!sleep.datetimeInput" type="time">
+          <div class="animated zoomIn error-block" ng-if="sleepForm.timeStart.$dirty" ng-messages="sleepForm.timeStart.$error" role="alert">
+            <div ng-messages-include="templates/partials/errorMessages.html"></div>
           </div>
         </label>
         <div class="item item-divider item-calm">
@@ -35,23 +35,23 @@
         </div>
         <label class="item item-input" ng-if="sleep.datetimeInput">
           <span class="input-label">Tijdstip</span>
-          <input name="dateTimeEnd" ng-required="sleep.datetimeInput" ng-model="sleep.sleepData.endDateTime" type="datetime-local">
-          <div role="alert" class="animated zoomIn error-block" ng-messages="sleepForm.dateTimeEnd.$error" ng-if="sleepForm.dateTimeEnd.$dirty">
-            <div ng-messages-include= "templates/partials/errorMessages.html"></div>
+          <input name="dateTimeEnd" ng-model="sleep.sleepData.endDateTime" ng-required="sleep.datetimeInput" type="datetime-local">
+          <div class="animated zoomIn error-block" ng-if="sleepForm.dateTimeEnd.$dirty" ng-messages="sleepForm.dateTimeEnd.$error" role="alert">
+            <div ng-messages-include="templates/partials/errorMessages.html"></div>
           </div>
         </label>
         <label class="item item-input" ng-if="!sleep.datetimeInput">
           <span class="input-label">Datum</span>
-          <input name="dateEnd" ng-required="!sleep.datetimeInput" ng-model="sleep.sleepData.endDate" type="date">
-          <div role="alert" class="animated zoomIn error-block" ng-messages="sleepForm.dateEnd.$error" ng-if="sleepForm.dateEnd.$dirty">
-            <div ng-messages-include= "templates/partials/errorMessages.html"></div>
+          <input name="dateEnd" ng-model="sleep.sleepData.endDate" ng-required="!sleep.datetimeInput" type="date">
+          <div class="animated zoomIn error-block" ng-if="sleepForm.dateEnd.$dirty" ng-messages="sleepForm.dateEnd.$error" role="alert">
+            <div ng-messages-include="templates/partials/errorMessages.html"></div>
           </div>
         </label>
         <label class="item item-input" ng-if="!sleep.datetimeInput">
           <span class="input-label">Tijd</span>
-          <input name="timeEnd" ng-required="!sleep.datetimeInput" ng-model="sleep.sleepData.endTime" type="time">
-          <div role="alert" class="animated zoomIn error-block" ng-messages="sleepForm.timeEnd.$error" ng-if="sleepForm.timeEnd.$dirty">
-            <div ng-messages-include= "templates/partials/errorMessages.html"></div>
+          <input name="timeEnd" ng-model="sleep.sleepData.endTime" ng-required="!sleep.datetimeInput" type="time">
+          <div class="animated zoomIn error-block" ng-if="sleepForm.timeEnd.$dirty" ng-messages="sleepForm.timeEnd.$error" role="alert">
+            <div ng-messages-include="templates/partials/errorMessages.html"></div>
           </div>
         </label>
         <div class="item item-divider item-assertive">
@@ -62,7 +62,12 @@
           <input ng-model="sleep.sleepData.remark" type="text">
         </label>
       </div>
-      <div class="button button-full button-balanced" on-tap="sleep.addSleep()" ng-disabled="sleepForm.$invalid">
+      <div class="card" ng-if="sleep.error != ''">
+        <div class="item item-icon-left ion-alert item-assertive item-text-wrap">
+          {{sleep.error}}
+        </div>
+      </div>
+      <div class="button button-full button-balanced" ng-disabled="sleepForm.$invalid" on-tap="sleep.addSleep()">
         Plaats
       </div>
     </form>

@@ -25,18 +25,12 @@
         </ion-item>
 
       </ion-list>
-      <a class="item item-icon-left item-balanced" ng-if="emergency.checkAdmin()" href on-touch="emergency.addEmergency()">
+      <a class="item item-icon-left item-balanced" ng-if="emergency.checkAdmin()" href on-tap="emergency.addEmergency()">
         <i class="icon ion-ios-plus"></i>
         Noodnummer toevoegen</a>
 </div>
 
   </ion-content>
-  <ion-tabs class="tabs-positive tabs-icon-top">
-    <ion-tab icon-off="ion-ios-list-outline" icon-on="ion-ios-list" title="Tijdlijn" ui-sref="child.posts"></ion-tab>
-    <ion-tab icon-off="ion-ios-body-outline" icon-on="ion-ios-body" title="Profiel" ui-sref="child.profile"></ion-tab>
-    <!-- TODO: add badge voor volgverzoeken (via ChirldCtrl) -->
-    <ion-tab icon-off="ion-ios-people-outline" icon-on="ion-ios-people" title="Volgers" badge="badges.followRequests" badge-style="badge-assertive" ui-sref="child.followers"></ion-tab>
-    <ion-tab icon-off="ion-ios-keypad-outline" icon-on="ion-ios-keypad" title="Acties" ui-sref="child.actions"></ion-tab>
-  </ion-tabs>
+
 
 </ion-view>

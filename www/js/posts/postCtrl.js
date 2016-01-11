@@ -5,9 +5,9 @@
     .module('babyTracker')
     .controller('postCtrl', postCtrl);
 
-  postCtrl.$inject = ['postSvc', 'Child', 'userDataSvc', '$scope', '$ionicModal', 'childFollowerSvc', '$timeout', "$ionicLoading"];
+  postCtrl.$inject = ['config', '$cordovaSocialSharing', '$ionicActionSheet', 'postSvc', 'Child', 'userDataSvc', '$scope', '$ionicModal', 'childFollowerSvc', '$timeout', "$ionicLoading", "$state"];
 
-  function postCtrl(postSvc, Child, userDataSvc, $scope, $ionicModal, childFollowerSvc, $timeout, $ionicLoading) {
+  function postCtrl(config, $cordovaSocialSharing, $ionicActionSheet, postSvc, Child, userDataSvc, $scope, $ionicModal, childFollowerSvc, $timeout, $ionicLoading, $state) {
     var vm = this;
     vm.child = Child;
     vm.user = userDataSvc;
@@ -18,13 +18,17 @@
       set: false
     }
 
+    vm.showSocialShare = showSocialShare;
     vm.showHeart = false;
+    vm.newPost = newPost;
     vm.checkLiked = checkLiked;
     vm.resetFilter = resetFilter;
     vm.likePost = likePost;
     vm.unlikePost = unlikePost;
     vm.showLikes = showLikes;
-
+    vm.loadMoreData = loadMoreData;
+    vm.moreDataCanBeLoaded = moreDataCanBeLoaded;
+    vm.count = 0;
     vm.getReactionCount = getReactionCount;
 
     vm.categories = [{
@@ -47,24 +51,100 @@
       nl: "Foto"
     }];
     vm.showFilter = showFilter;
-    vm.limit = 10;
+    vm.limit = 20;
     vm.followers = [];
-
+    vm.posts = [];
     vm.showFeed = true;
 
     activate();
 
     function activate() {
       $ionicLoading.show({
-            template: '<ion-spinner icon="ripple"></ion-spinner>'
-          });
-      postSvc.getPostsLimit(Child.$id, vm.limit).then(function(res) {
-        vm.posts = res;
-        childFollowerSvc.getFollowersName(Child.$id).then(function(fol) {
-          vm.followers = fol;
-          $ionicLoading.hide();
-        });
+        template: '<ion-spinner icon="ripple"></ion-spinner>'
       });
+      postSvc.getPostsLimit(Child.$id, vm.limit).then(function(res) {
+        console.log(res);
+        vm.posts = res;
+        $ionicLoading.hide();
+        childFollowerSvc.getFollowersName(Child.$id).then(function(fol) {
+          console.log(fol);
+          vm.followers = fol;
+        }, function(err) {
+          console.log(err);
+          $ionicLoading.hide();
+
+        });
+      }, function(err) {
+        console.log(err);
+        $ionicLoading.hide();
+
+      });
+
+      postSvc.getNumberOfPosts(Child.$id).then(function(count) {
+        vm.count = count;
+      })
+    }
+
+    function newPost() {
+      $state.go('child.actions');
+    }
+
+    function showSocialShare(post) {
+      var hideSheet = $ionicActionSheet.show({
+        buttons: [{
+          text: 'Facebook'
+        }, {
+          text: 'Twitter'
+        }, {
+          text: 'WhatsApp'
+        }],
+        titleText: 'Deel deze post',
+        cancelText: 'Annuleer',
+        cancel: function() {
+          hideSheet();
+        },
+        buttonClicked: function(index) {
+          var p = post.photo ? "data:image/jpeg;base64," + post.photo : post.category.icon;
+          var link = config.appLink;
+          if (index == 0) {
+            shareViaFacebook(post.titel, p, link);
+          } else if (index == 1) {
+            shareViaTwitter(post.titel + " #babytracker", p, link);
+          } else if (index == 2) {
+            shareViaWhatsApp(post.titel, p, link);
+          }
+        }
+      });
+    }
+
+    function shareViaFacebook(message, image) {
+      $cordovaSocialSharing
+          .shareViaFacebook(message, image)
+          .then(function(result) {
+            // Success!
+          }, function(err) {
+            // An error occurred. Show a message to the user
+          });
+    }
+
+    function shareViaTwitter(message, image) {
+      $cordovaSocialSharing
+        .shareViaTwitter(message, image)
+        .then(function(result) {
+
+        }, function(err) {
+          // An error occurred. Show a message to the user
+        });
+    }
+
+    function shareViaWhatsApp(message, image) {
+      $cordovaSocialSharing
+          .shareViaWhatsApp(message, image)
+          .then(function(result) {
+            // Success!
+          }, function(err) {
+            // An error occurred. Show a message to the user
+          });
     }
 
     function showFilter() {
@@ -96,8 +176,23 @@
         if ($scope.filter.category != "" || $scope.filter.user != "") {
           vm.filter.set = true;
         }
-        $scope.filter = vm.filter;
-        $scope.modal.hide();
+        if (moreDataCanBeLoaded) {
+          $ionicLoading.show({
+            template: '<ion-spinner icon="ripple"></ion-spinner>'
+          });
+          postSvc.getAllPosts(Child.$id).then(function(posts) {
+            vm.posts = posts;
+            $scope.filter = vm.filter;
+            $scope.modal.hide();
+            $ionicLoading.hide();
+          }, function(err) {
+            $scope.filter = vm.filter;
+            $scope.modal.hide();
+            $ionicLoading.hide();
+
+          });
+        }
+
       }
 
       $scope.resetFilter = function() {
@@ -122,10 +217,13 @@
     function likePost(post) {
       if (!checkLiked(post)) {
         postSvc.likePost(post, userDataSvc.uid, userDataSvc.firstName + " " + userDataSvc.lastName, Child.$id).then(function(res) {
-          post.showHeart = true;
-          $timeout(function() {
-            post.showHeart = false;
-          }, 1000);
+          if (post.category.name != "photo") {
+            post.showHeart = true;
+            $timeout(function() {
+              post.showHeart = false;
+            }, 1000);
+          }
+
         })
       }
     }
@@ -146,7 +244,6 @@
         angular.forEach(likeArr, function(like) {
           if (like.uid === userDataSvc.uid) {
             postSvc.unLikePost(post, like.$id, Child.$id);
-
           }
         })
       })
@@ -168,12 +265,34 @@
     }
 
     function getReactionCount(post) {
-      postSvc.getReactionCount(post.$id, Child.$id).then(function(res){
+      postSvc.getReactionCount(post.$id, Child.$id).then(function(res) {
         return res;
       }, function(err) {
         return 0;
       })
+    }
 
+    function loadMoreData() {
+      var l = vm.posts[vm.posts.length - 1];
+      console.log(l);
+      if (l) {
+        var dateLast = l.dateCreated;
+        console.log(dateLast);
+        vm.limit += 5;
+        postSvc.loadMorePosts(dateLast, Child.$id, vm.limit).then(function(res) {
+          console.log(res);
+          vm.posts = res;
+        })
+      }
+    }
+
+    function moreDataCanBeLoaded() {
+      if (vm.count > vm.posts.length + 1) {
+        console.log(true);
+        return true;
+      } else {
+        return false;
+      }
     }
   }
 })();

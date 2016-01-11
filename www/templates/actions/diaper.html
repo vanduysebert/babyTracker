@@ -1,0 +1,36 @@
+<ion-view view-title="Luier toevoegen">
+  <ion-nav-buttons side="left">
+    <button class="button button-icon icon ion-navicon" menu-toggle="left"></button>
+  </ion-nav-buttons>
+
+  <ion-content has-footer="true" has-header="true">
+    <form name="diaperForm" novalidate="true">
+      <div class="list card">
+        <div class="item item-divider item-assertive">
+          Luier
+        </div>
+        <ion-list>
+          <ion-radio required ng-model="diaper.diaper" ng-value="'wet'">Nat</ion-radio>
+          <ion-radio required ng-model="diaper.diaper" ng-value="'dirty'">Vuil</ion-radio>
+          <ion-radio required ng-model="diaper.diaper" ng-value="'both'">Nat en vuil</ion-radio>
+        </ion-list>
+        <div class="item item-divider item-positive">
+          Opmerking
+        </div>
+        <label class="item item-input">
+          <input ng-model="diaper.remark" type="text">
+        </label>
+      </div>
+      <div class="button button-full button-balanced" ng-disabled="diaperForm.$invalid" on-tap="diaper.addDiaper()">
+        Plaats
+      </div>
+    </form>
+  </ion-content>
+  <ion-tabs class="tabs-positive tabs-icon-top">
+    <ion-tab icon-off="ion-ios-list-outline" icon-on="ion-ios-list" title="Tijdlijn" ui-sref="child.posts"></ion-tab>
+    <ion-tab icon-off="ion-ios-body-outline" icon-on="ion-ios-body" title="Profiel" ui-sref="child.profile"></ion-tab>
+    <!-- TODO: add badge voor volgverzoeken (via ChirldCtrl) -->
+    <ion-tab badge-style="badge-assertive" badge="badges.followRequests" icon-off="ion-ios-people-outline" icon-on="ion-ios-people" title="Volgers" ui-sref="child.followers"></ion-tab>
+    <ion-tab icon-off="ion-ios-keypad-outline" icon-on="ion-ios-keypad" title="Acties" ui-sref="child.actions"></ion-tab>
+  </ion-tabs>
+</ion-view>

@@ -5,9 +5,9 @@
     .module('babyTracker')
     .controller('childProfileCtrl', childProfileCtrl);
 
-  childProfileCtrl.$inject = ['$state', '$scope', 'Child', 'userDataSvc', 'childSvc', 'childFollowerSvc', '$ionicSlideBoxDelegate', '$ionicModal', 'roleSvc', 'loggingService', 'userSvc', '$ionicLoading', "$cordovaCamera", '$ionicActionSheet', '$timeout'];
+  childProfileCtrl.$inject = ['$state', '$scope', 'Child', 'userDataSvc', 'childSvc', 'childFollowerSvc', '$ionicSlideBoxDelegate', '$ionicModal', 'roleSvc', 'loggingService', 'userSvc', '$ionicLoading', "$cordovaCamera", '$ionicActionSheet', '$timeout', '$ionicPopup', 'userFollowerSvc'];
 
-  function childProfileCtrl($state, $scope, Child, userDataSvc, childSvc, childFollowerSvc, $ionicSlideBoxDelegate, $ionicModal, roleSvc, loggingService, userSvc, $ionicLoading, $cordovaCamera, $ionicActionSheet, $timeout) {
+  function childProfileCtrl($state, $scope, Child, userDataSvc, childSvc, childFollowerSvc, $ionicSlideBoxDelegate, $ionicModal, roleSvc, loggingService, userSvc, $ionicLoading, $cordovaCamera, $ionicActionSheet, $timeout, $ionicPopup, userFollowerSvc) {
     var vm = this;
     vm.child = Child;
     vm.checkAdmin = checkAdmin;
@@ -18,6 +18,10 @@
     vm.goToSlide = goToSlide;
     vm.goToEmergency = goToEmergency;
     vm.hasFollower = false;
+
+    vm.inviteChild = inviteChild;
+    vm.unInviteChild = unInviteChild;
+    vm.requestSend = false;
 
     vm.showGeneral = true;
 
@@ -47,6 +51,9 @@
     vm.removeAllergic = removeAllergic;
     vm.newAllergic = false;
 
+    vm.foodAllergics = childSvc.bindFoodAllergics(Child.$id);
+    vm.removeFoodAllergic = removeFoodAllergic;
+
     vm.addHealthIssue = addHealthIssue;
     vm.healthIssues = childSvc.bindHealthIssues(Child.$id);
     vm.removeHealthIssue = removeHealthIssue;
@@ -58,7 +65,7 @@
     vm.newDrug = false;
 
     vm.choosePhotoInput = choosePhotoInput;
-    vm.allRoles = [];
+    vm.allRoles = roleSvc.bindAllRoles;
     activate();
 
     function activate() {
@@ -70,7 +77,18 @@
         vm.staticFamilyMembers = arr;
       });
 
+      userFollowerSvc.isInvited(Child.$id, userDataSvc.uid).then(function(res) {
+        console.log(res);
+        if(res) {
+          console.log(res);
+          vm.requestSend = true;
+        } else {
+          vm.requestSend = false;
+        }
+      });
+
       childFollowerSvc.hasFollower(userDataSvc.uid, vm.child).then(function(check) {
+
         vm.hasFollower = check;
       }, function(err) {
         loggingService.showError("Checking follower failed", err, "childProfile", false);
@@ -271,7 +289,7 @@
           initAllergic();
           vm.newAllergic = false;
           loggingService.showSuccess("Allergie toegevoegd", ref.key(), "childProfile", false);
-        })
+        });
       }
 
     }
@@ -292,6 +310,10 @@
 
     function removeHealthIssue(issueId) {
       childSvc.removeHealthIssue(Child.$id, issueId);
+    }
+
+    function removeFoodAllergic(allId) {
+      childSvc.deleteFoodAllergic(Child.$id, allId);
     }
 
     function addDrug(form) {
@@ -325,6 +347,51 @@
         vm.showHealthIssue = false;
         vm.showDrug = false;
       }
+    }
+
+    function inviteChild() {
+      $scope.role = {};
+      $scope.allRoles = vm.allRoles;
+      var rolePopup = $ionicPopup.show({
+        templateUrl: "templates/popups/rolePopup.html",
+        title: 'Selecteer relatie tot het kind',
+        scope: $scope,
+        buttons: [{
+          text: 'Cancel'
+        }, {
+          text: '<b>Bewaar</b>',
+          type: 'button-balanced',
+          onTap: function(e) {
+            if (!$scope.role) {
+              e.preventDefault();
+            } else {
+              return $scope.role.id;
+            }
+          }
+        }]
+      });
+      rolePopup.then(function(res) {
+        if (res) {
+          userFollowerSvc.addUserInvite(userDataSvc.uid,vm.child.$id, res).then(function(result) {
+            vm.requestSend = true;
+            loggingService.showSuccess("Verzoek verstuurd", "Request sent", "linkUser", true);
+          }, function(err) {
+            loggingService.showError("Verzoek kon niet worden voltooid", err, "linkUser", true);
+          });
+        } else {
+          loggingService.showError("Geen relatie geselecteerd", "No role selected", "linkUser", false);
+        }
+
+      });
+    }
+
+    function unInviteChild() {
+      var id = vm.child.$id;
+      userFollowerSvc.unInviteChild(userDataSvc.uid, id).then(function(res) {
+        vm.requestSend = false;
+      }, function(err) {
+
+      });
     }
 
   }

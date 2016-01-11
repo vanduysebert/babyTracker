@@ -1,4 +1,4 @@
-(function() {
+/*(function() {
     'use strict';
 
     angular
@@ -11,3 +11,4 @@
         return $firebaseArray(Ref.child('users'));
     }
 })();
+*/

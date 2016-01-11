@@ -1,0 +1,43 @@
+<div class="modal">
+
+  <ion-header-bar class="bar-energized">
+    <h1 class="title">Metingen toevoegen</h1>
+  </ion-header-bar>
+  <ion-content>
+    <form name="newMeasurementForm" novalidate="true">
+      <div class="list">
+        <label class="item item-input item-floating-label animated" ng-class="{'shake errorForm': (newMeasurementForm.oldEmailUser.$invalid && newMeasurementForm.oldEmailUser.$touched), 'successForm': (newMeasurementForm.oldEmailUser.$valid && newMeasurementForm.oldEmailUser.$dirty)}">
+          <span class="input-label">Huidige email</span>
+          <input required placeholder="Huidige email" ng-model="user.oldEmail" name="oldEmailUser" type="email">
+          <div role="alert" class="animated zoomIn error-block" ng-messages="newMeasurementForm.oldEmailUser.$error" ng-if="newMeasurementForm.oldEmailUser.$touched && newMeasurementForm.oldEmailUser.$error">
+            <div ng-messages-include= "templates/partials/errorMessages.html"></div>
+          </div>
+        </label>
+        <label class="item item-input item-floating-label animated" ng-class="{'shake errorForm': (newMeasurementForm.newEmailUser.$invalid && newMeasurementForm.newEmailUser.$touched), 'successForm': (newMeasurementForm.newEmailUser.$valid && newMeasurementForm.newEmailUser.$dirty)}">
+          <span class="input-label">Nieuwe email</span>
+          <input required placeholder="Nieuwe email" ng-model="user.newEmail" name="newEmailUser" type="email">
+          <div role="alert" class="animated zoomIn error-block" ng-messages="newMeasurementForm.newEmailUser.$error" ng-if="newMeasurementForm.newEmailUser.$touched && newMeasurementForm.newEmailUser.$error">
+            <div ng-messages-include= "templates/partials/errorMessages.html"></div>
+          </div>
+        </label>
+        <label class="item item-input item-floating-label animated" ng-class="{'shake errorForm': (newMeasurementForm.passwordUser.$invalid && newMeasurementForm.passwordUser.$touched), 'successForm': (newMeasurementForm.passwordUser.$valid && newMeasurementForm.passwordUser.$dirty)}">
+          <span class="input-label">Paswoord</span>
+          <input required placeholder="Paswoord" ng-model="user.password" name="passwordUser" type="password">
+          <div role="alert" class="animated zoomIn error-block" ng-messages="newMeasurementForm.passwordUser.$error" ng-if="newMeasurementForm.passwordUser.$touched">
+            <div ng-messages-include= "templates/partials/errorMessages.html"></div>
+          </div>
+        </label>
+        <p class="errorMessage">
+          {{errMess}}
+        </p>
+        <div class="button-bar">
+          <a class="button button-assertive ion-ios-close icon-left" on-touch="closeModal()">
+            Annuleer</a>
+          <a class="button button-balanced ion-ios-download icon-left" ng-disabled="newMeasurementForm.$invalid" on-touch="changeEmail()">
+            Email wijzigen</a>
+        </div>
+
+      </div>
+    </form>
+  </ion-content>
+</div>

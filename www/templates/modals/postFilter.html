@@ -22,7 +22,7 @@
         Gebruiker
       </div>
       <div class="item" ng-if="showUser">
-        <ion-radio ng-model="filter.user" ng-repeat="usr in users" ng-value="usr.id">{{usr.name}}</ion-radio>
+        <ion-radio ng-model="filter.user" ng-repeat="usr in users" ng-if="usr.id != 'requests'" ng-value="usr.id">{{usr.name}}</ion-radio>
       </div>
 
     </div>

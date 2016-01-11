@@ -1,23 +1,24 @@
 <ion-view view-title="Zoek">
   <ion-content>
-    <div class="bar bar-header item-input-inset">
-      <label class="item-input-wrapper">
-        <i class="icon ion-ios-search placeholder-icon"></i>
-        <input ng-change="search.findChild()" ng-model="search.searchField" placeholder="Zoek kinderen" type="search">
+    <div class="list list-inset">
+      <label class="item item-input">
+        <i class="icon ion-search placeholder-icon"></i>
+        <input ng-change="search.searchChildren()" ng-model="search.search" placeholder="Zoek kinderen" type="search">
       </label>
-      <button class="button button-clear" on-click="search.goBack()">
-        Cancel
-      </button>
     </div>
-    <div class="list">
-      <!--TODO: ngRepeat van gevonden kinderen -->
-    <a class="item item-avatar" href="#">
-      <img src="venkman.jpg">
-      <h2>Venkman</h2>
-      <p>Back off, man. I'm a scientist.</p>
-    </a>
 
 
-</div>
+    <ion-list>
+    <li class="item" ng-if="search.search && search.childrenFound.length == 0">
+      Geen kind gevonden
+    </li>
+    <ion-item class="fade-in" ng-class="{'item-avatar': child.profileImage}" ng-repeat="child in search.childrenFound" ui-sref="child.profile({childId: child.$id})">
+      <img ng-if="!child.photoInDatabase" ng-src="{{child.profileImage}}">
+      <img ng-if="child.photoInDatabase" ng-src="data:image/jpeg;base64,{{child.profileImage}}">
+      <h2>{{child.firstName}}
+        {{child.lastName}}</h2>
+
+    </ion-item>
+  </ion-list>
   </ion-content>
 </ion-view>

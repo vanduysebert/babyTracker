@@ -47,15 +47,16 @@
       bindDrugs: bindDrugs,
       addDrug: addDrug,
       removeDrug: removeDrug,
-      getFoodAllergics: getFoodAllergics,
+      bindFoodAllergics: bindFoodAllergics,
       addFoodAllergic: addFoodAllergic,
       deleteFoodAllergic: deleteFoodAllergic,
+      saveFoodAllergics: saveFoodAllergics,
       addSleepSession: addSleepSession,
       deleteSleepSession: deleteSleepSession,
       getAllSleepSessions: getAllSleepSessions,
       getSleepSessionsByMonth: getSleepSessionsByMonth,
       getSleepSessionsByWeek: getSleepSessionsByWeek,
-      getSleepSessionsByDay: getSleepSessionsByDay
+      getSleepSessionsByDay: getSleepSessionsByDay,
     };
 
     return factory;
@@ -109,7 +110,7 @@
 
     function addFamilyMember(childId, member) {
       var list = "";
-      if(member.follower) {
+      if (member.follower) {
         list = $firebaseArray(ref.child(childId).child("familyMembers").child("followers"));
       } else {
         list = $firebaseArray(ref.child(childId).child("familyMembers").child("staticMembers"));
@@ -134,7 +135,7 @@
       return $firebaseArray(ref.child(childId).child("familyMembers").child("followers")).$loaded();
     }
 
-    function removeUserFamilyMember (childId, index) {
+    function removeUserFamilyMember(childId, index) {
       var deferred = $q.defer()
       var list = $firebaseArray(ref.child(childId).child("familyMembers").child("followers"));
       list.$loaded().then(function(li) {
@@ -146,7 +147,7 @@
       return deferred.promise;
     }
 
-    function removeStaticFamilyMember (childId, index) {
+    function removeStaticFamilyMember(childId, index) {
       var deferred = $q.defer()
       var list = $firebaseArray(ref.child(childId).child("familyMembers").child("staticMembers"));
       list.$loaded().then(function(li) {
@@ -215,7 +216,7 @@
     function increaseUnseenRequests(childId) {
       var count = $firebaseObject(ref.child(childId).unseenRequests);
       count.$loaded().then(function(c) {
-        if(c) {
+        if (c) {
           c++;
 
         } else {
@@ -257,22 +258,41 @@
         var a = moment();
         var b = moment(birth.birthDateTime);
         deferred.resolve(a.diff(b, 'months'));
-      }, function(err){
-          deferred.reject(err);
+      }, function(err) {
+        deferred.reject(err);
       });
       return deferred.promise;
     }
 
-    function getFoodAllergics(childId) {
-
+    function bindFoodAllergics(childId) {
+      return $firebaseArray(ref.child(childId).child("health").child("foodAllergics"));
     }
 
-    function addFoodAllergic(childId) {
-
+    function addFoodAllergic(childId, all) {
+      return $firebaseArray(ref.child(childId).child("health").child("foodAllergics")).$add(all);
     }
 
-    function deleteFoodAllergic(childId) {
+    function deleteFoodAllergic(childId, allId) {
+      ref.child(childId).child("health").child("foodAllergics").child(allId).remove();
+    }
 
+
+    function saveFoodAllergics(childId, list) {
+      ref.once("value", function(snapshot) {
+        if (snapshot.child(childId).child("health").child("foodAllergics").exists()) {
+          ref.child(childId).child("health").child("foodAllergics").remove(function(err) {
+            if(!err) {
+              angular.forEach(list, function(ingr) {
+                $firebaseArray(ref.child(childId).child("health").child("foodAllergics")).$add(ingr);
+              });
+            }
+          });
+        } else {
+          angular.forEach(list, function(ingr) {
+            $firebaseArray(ref.child(childId).child("health").child("foodAllergics")).$add(ingr);
+          });
+        }
+      });
     }
 
     function addSleepSession(childId, sleep) {

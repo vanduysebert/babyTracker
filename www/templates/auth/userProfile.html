@@ -1,17 +1,21 @@
 <ion-view view-title="{{profile.fullName}}">
-  <ion-content>
-    <div class="button-bar">
-      <a class="button button-calm button-small" on-touch="profile.editForm(userForm)">
-        <i class="fa fa-edit"></i>
-        Aanpassen</a>
-      <a class="button button-calm button-small" on-touch="profile.choosePhotoInput(userForm)">
+  <ion-header-bar align-title="center" class="bar-subheader bar-calm">
+    <div class="buttons">
+
+      <a class="button button-clear icon" on-tap="profile.choosePhotoInput(userForm)">
         <i class="fa fa-camera"></i>
         Foto</a>
-      <a class="button button-calm button-small">
-        <i class="fa fa-child"></i>
-        Kinderen</a>
+        <a class="button icon button-clear" ui-sref="app.summaryStart">
+          <i class="fa fa-child"></i>
+          Kinderen</a>
     </div>
-
+    <h1 class="title"></h1>
+    <div class="buttons">
+      <a class="button button-clear" on-tap="profile.editForm('userForm')">
+        <span ng-if="profile.write">Annuleer</span><span ng-if="!profile.write">Wijzig</span></a>
+    </div>
+  </ion-header-bar>
+  <ion-content>
     <div class="list card">
 
       <div class="item">

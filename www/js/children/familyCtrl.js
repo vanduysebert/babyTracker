@@ -23,7 +23,10 @@
     activate();
 
     function activate() {
-      initMember()
+      initMember();
+      childFollowerSvc.getAllFollowers(Child.$id).then(function(data) {
+        console.log(data);
+      })
       roleSvc.getFamilyRoles().then(function(roleArr) {
         vm.allRoles = roleArr;
       }, function(err) {
@@ -41,7 +44,13 @@
     }
 
     function getUserName(uid) {
-      return userSvc.getFullName(uid);
+      if(uid != "requests"){
+        console.log(uid);
+        return userSvc.getFullName(uid);
+      } else {
+        return "";
+      }
+
     }
 
     function goBack() {
@@ -52,14 +61,16 @@
       $ionicLoading.show({
         template: '<ion-spinner icon="ripple"></ion-spinner>'
       });
+      if (form.$valid) {
       if (vm.fromFollower) {
+
         vm.member.follower = true;
-        vm.member.name = getUserName(userDataSvc.uid);
+        vm.member.name = getUserName(vm.member.userId);
       } else {
         vm.member.follower = false;
         vm.member.userId = false;
       }
-      if (form.$valid) {
+
         roleSvc.getRole(vm.member.role).then(function(r) {
           vm.member.roleName = r.nl;
 

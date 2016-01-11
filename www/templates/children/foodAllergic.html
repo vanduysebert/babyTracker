@@ -1,0 +1,25 @@
+<ion-view view-title="Voedselallergie toevoegen">
+  <ion-nav-buttons side="left">
+    <button class="button button-icon icon ion-navicon" menu-toggle="left"></button>
+  </ion-nav-buttons>
+
+  <ion-nav-buttons side="right">
+    <button on-tap="allergic.saveAllergics()" class="button button-clear">Gereed</button>
+  </ion-nav-buttons>
+
+  <ion-content has-header="true">
+    <div class="list card" ng-if="allergic.foodCategories.length > 0">
+      <div ng-repeat="m in allergic.foodCategories">
+        <div class="item item-divider item-icon-right" on-tap="ingredients[m.id].show = !ingredients[m.id].show">
+          {{m.nl}}
+          <i class="icon" ng-class="({'ion-ios-minus-outline': ingredients[m.id].show, 'ion-ios-plus-outline': !ingredients[m.id].show})"></i>
+        </div>
+        <ion-checkbox ng-change="allergic.setAllergics(ingr)" ng-if="ingredients[m.id].show" ng-model="ingr.checked" ng-repeat="ingr in allergic.ingredients[m.id]">
+          {{ingr.nl}}
+        </ion-checkbox>
+      </div>
+    </div>
+
+  </ion-content>
+
+</ion-view>

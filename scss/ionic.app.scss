@@ -1,104 +1,85 @@
-
-
 // The path for our ionicons font files, relative to the built CSS in www/css
 $ionicons-font-path: "../lib/ionic/fonts" !default;
 
-
 // Include all of Ionic
 @import "www/lib/ionic/scss/ionic";
-
 .error-message {
   border: 1px solid $error;
   padding: 3px 10px;
   margin: 3px;
   border-radius: 20px;
 }
-
 .error-icon {
   color: $error;
   font-weight: bold;
 }
-
 .errorForm {
   border-left: 3px solid $error;
 }
-
 .successForm {
   border-left: 3px solid $success;
 }
-
 .errorForm .input-label {
   color: $error;
 }
-
 .successForm .input-label {
   color: $success;
 }
-
-.successInput input{
+.successInput input {
   color: $balanced;
 }
-
 .error-container {
   background-color: lighten($error, 10%);
   color: white;
   padding: 10px;
 }
-
 .error-container a {
   color: white;
   text-decoration: none;
 }
-
 .error-container a:hover {
   color: darken($error, 30%);
 }
-
 .greyLabel {
-  padding: 7px 10px 7px 0px;
+  padding: 7px 10px 7px 0;
   max-width: 200px;
   width: 35%;
   color: lighten($dark, 40%);
   font-size: 14px;
 }
-
 .verticalAlign {
   vertical-align: bottom;
 }
 .image-list-thumb {
-    padding: 2px 2px 2px 2px;
-    height: 100px;
+  padding: 2px;
+  height: 100px;
 }
-
 .editForm input[disabled],
 .editForm select[disabled],
 .editForm textarea[disabled],
 .editForm input[readonly]:not(.cloned-text-input),
 .editForm textarea[readonly]:not(.cloned-text-input),
 .editForm select[readonly] {
-  background-color: #ffffff;
+  background-color: #fff;
   padding: 3px;
   text-decoration: none;
   color: lighten($dark, 40%);
   cursor: not-allowed;
 }
-
 .editForm input,
 .editForm select,
 .editForm textarea {
   text-decoration: underline;
   text-decoration-style: dashed;
   color: $calm;
-  cursor:text;
+  cursor: text;
 }
-
 .messageItemSent {
   width: 80%;
   background-color: lighten($balanced, 45%);
   border-radius: 20px;
   margin-bottom: 10px;
 }
-
 .messageItemReceived {
   left: 20%;
   width: 80%;
@@ -106,11 +87,9 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
   border-radius: 20px;
   margin-bottom: 10px;
 }
-
-.messageItemReceived p  {
+.messageItemReceived p {
   color: $dark;
 }
-
 .messageItemReceived p.dateMessage {
   border-top: 1px solid $energized;
   font-size: 75%;
@@ -120,7 +99,6 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
   margin-bottom: -10px;
   padding-bottom: 0;
 }
-
 .messageItemSent p.dateMessage {
   border-top: 1px $balanced;
   border-style: dotted;
@@ -131,56 +109,46 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
   margin-bottom: -10px;
   padding-bottom: 0;
 }
-
 .item-action {
   height: 14.6vh;
   line-height: 10.6vh;
 }
-
 .item-action img {
   margin-top: 2.5vh;
 }
-
 .item-food {
   border-left: 8px solid $energized;
 }
-
 .item-sleep {
   border-left: 8px solid $positive;
 }
-
 .item-entertainment {
   border-left: 8px solid $balanced;
 }
-
 .item-diaper {
   border-left: 8px solid $assertive;
 }
-
 .item-milestone {
   border-left: 8px solid $royal;
 }
-
+.item-photo {
+  border-left: 8px solid $brown;
+}
 .card div.item-photo {
   border-left: 8px solid $brown;
 }
-
 .card div.item-food {
   border-left: 8px solid $energized;
 }
-
 .card div.item-sleep {
   border-left: 8px solid $positive;
 }
-
 .card div.item-entertainment {
   border-left: 8px solid $balanced;
 }
-
 .card div.item-diaper {
   border-left: 8px solid $assertive;
 }
-
 .card div.item-milestone {
   border-top: 1px solid lighten($royal, 40%);
   border-bottom: 1px solid lighten($royal, 40%);
@@ -190,55 +158,80 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
   border-top: none;
   margin-top: -10px;
 }
-
 .card div.noBorderHeader {
   border-bottom: none;
   margin-bottom: -10px;
 }
-
 .mileStoneGrid img {
   width: 80%;
 }
-
 .mileStoneGrid a {
   text-decoration: none;
   color: $dark;
 }
-
 .white-text {
   color: white;
 }
-
 .lowerContent {
   height: 30px;
 }
-
 .rightAligned {
   text-align: right;
 }
-
 .slide-in-right {
   -webkit-transform: translateX(100%);
-    transform: translateX(100%); }
-
-.slide-in-right.ng-enter, .slide-in-right > .ng-enter {
+  transform: translateX(100%);
+}
+.slide-in-right.ng-enter,
+.slide-in-right > .ng-enter {
   -webkit-transition: all cubic-bezier(0.1, 0.7, 0.1, 1) 400ms;
-  transition: all cubic-bezier(0.1, 0.7, 0.1, 1) 400ms; }
-
-.slide-in-right.ng-enter-active, .slide-in-right > .ng-enter-active {
+  transition: all cubic-bezier(0.1, 0.7, 0.1, 1) 400ms;
+}
+.slide-in-right.ng-enter-active,
+.slide-in-right > .ng-enter-active {
   -webkit-transform: translateX(0);
-    transform: translateX(0); }
-
-.slide-in-right.ng-leave, .slide-in-right > .ng-leave {
+  transform: translateX(0);
+}
+.slide-in-right.ng-leave,
+.slide-in-right > .ng-leave {
   -webkit-transition: all ease-in-out 250ms;
-  transition: all ease-in-out 250ms; }
+  transition: all ease-in-out 250ms;
+}
+.absoluteHeart {
 
-  .absoluteHeart {
-    position: absolute;
-    left: 43%;
-    font-size: 50px;
-  }
+  position: absolute;
+  top: -24px;
+  left: 43%;
+  font-size: 40px;
+}
+.ion-social-euro-outline {
+  content: url('../img/unhappyEmo.png') !important;
+}
 
-  .ion-social-euro-outline {
-    content: url('../img/unhappyEmo.png') !important;
-  }
+.borderBottomImg {
+  border-bottom: 4px solid $energized;
+}
+
+.borderBottomImgSocial {
+  border-bottom: 4px solid $assertive;
+}
+
+.borderBottomImgFood {
+  border-bottom: 4px solid $balanced;
+}
+
+.whiteInput {
+  background: red;
+  border: 2px solid red;
+}
+
+input:disabled + .checkbox-icon:before {
+    border-color: $assertive;
+    background-color: #E3E3E3;
+
+    opacity: 0.8;
+}
+
+.text-disabled {
+  text-decoration: line-through;
+}

@@ -3,10 +3,14 @@
     <button class="button button-icon icon ion-navicon" menu-toggle="left"></button>
   </ion-nav-buttons>
 
+  <ion-nav-buttons side="right">
+    <button class="button-clear button right" ng-if="child.checkAdmin() && !child.write && child.hasFollower" on-tap="child.write = true">Wijzig</button>
+
+  </ion-nav-buttons>
   <ion-content has-header="true">
     <div class="button-bar" ng-if="child.hasFollower">
-      <a class="button button-positive button-small" ng-class="{'active': child.getSlideIndex() == 0}" on-touch="child.goToSlide(0)">Algemeen</a>
-      <a class="button button-positive button-small" ng-class="{'active': child.getSlideIndex() == 1}" on-touch="child.goToSlide(1)">Goed om weten</a>
+      <a class="button button-calm" ng-class="{'active': child.getSlideIndex() == 0}" on-tap="child.goToSlide(0)">Algemeen</a>
+      <a class="button button-calm" ng-class="{'active': child.getSlideIndex() == 1}" on-tap="child.goToSlide(1)">Goed om weten</a>
     </div>
     <ion-slide-box auto-play="false" does-continue="false" show-pager="false" slide-interval="0">
       <ion-slide>
@@ -30,7 +34,6 @@
               {{child.child.birthLength}}
               cm
             </p>
-            <button class="button icon ion-edit button-calm" ng-if="child.checkAdmin() && !child.write" on-touch="child.write = true"></button>
           </div>
           <div class="item item-body" ng-if="child.write">
             <form name="childForm" novalidate="true">
@@ -80,13 +83,16 @@
             <img class="full-image" ng-if="!child.child.photoInDatabase" ng-src="{{child.child.profileImage}}">
             <img class="full-image" ng-if="child.child.photoInDatabase" ng-src="data:image/jpeg;base64,{{child.child.profileImage}}">
           </div>
-
+          <div class="item item-icon-left" ng-if="!child.hasFollower">
+            <button ng-click="child.inviteChild()" ng-if="!child.requestSend" class="button button-block icon-left ion-ios-heart button-balanced">Verzoek om te volgen</button>
+            <button ng-click="child.unInviteChild()" ng-if="child.requestSend" class="button button-block icon-left ion-ios-heart button-outline button-balanced">Verzoek verstuurd</button>
+          </div>
           <div class="item tabs tabs-secondary tabs-icon-left" ng-if="child.hasFollower">
             <a class="tab-item" ng-click="child.choosePhotoInput()" ng-if="child.checkAdmin()">
               <i class="icon ion-camera"></i>
               Profielfoto wijzigen
             </a>
-            <a class="tab-item" ui-sref="child.photos({childId: child.child.$id})">
+            <a class="tab-item" ui-sref="child.photoAlbums">
               <i class="icon ion-images"></i>
               Alle foto's van
               {{child.child.firstName}}
@@ -96,19 +102,16 @@
             Meer
           </div>
           <div class="list" ng-if="child.hasFollower">
-            <a class="item item-icon-left" href ui-sref="child.followers">
+            <a class="item item-icon-left" ui-sref="child.followers">
               <i class="icon ion-ios-people"></i>
               Volgers</a>
-            <a class="item item-icon-left" href ui-sref="child.followers">
+            <a class="item item-icon-left" ui-sref="child.milestones">
               <i class="icon ion-ribbon-b"></i>
               Mijlpalen</a>
 
-            <a class="item item-icon-left assertive" href on-touch="child.goToEmergency()">
+            <a class="item item-icon-left assertive" ui-sref="child.emergencyNumbers">
               <i class="icon ion-ios-telephone"></i>
               Noodnummers</a>
-          </div>
-          <div class="item center" ng-if="!child.hasFollower && !child.checkAdmin()">
-            <button class="button ion-ios-personadd icon-left button-energized">Verzoek om te volgen</button>
           </div>
         </div>
 
@@ -204,7 +207,7 @@
               </ion-item>
             </ion-list>
             <div class="item tabs tabs-secondary tabs-icon-left animated" ng-class="{flipInX: child.showPets, flipOutX: !child.showPets}" ng-if="child.checkAdmin()" ng-show="child.showPets">
-              <a class="tab-item balanced" on-touch="child.newPet = true">
+              <a class="tab-item balanced" on-tap="child.newPet = true">
                 <i class="icon ion-ios-plus balanced"></i>
                 Huisdier toevoegen
               </a>
@@ -275,20 +278,46 @@
               Allergieën
             </div>
             <ion-list can-swipe="child.checkAdmin()" show-delete="false" show-reorder="false">
+              <ion-item class="animated" ng-class="{flipInX: child.showAllergic, flipOutX: !child.showAllergic}" ng-repeat="all in child.foodAllergics" ng-show="child.showAllergic">
+                <h2>{{all.nl}}</h2>
+                <ion-option-button class="button-assertive icon-left ion-minus-circled" ng-click="child.removeFoodAllergic(all.$id)">
+                  Verwijder
+                </ion-option-button>
+              </ion-item>
+              <div ng-if="child.foodAllergics.length > 0" class="divider">
+
+              </div>
+            </ion-list>
+            <ion-list can-swipe="child.checkAdmin()" show-delete="false" show-reorder="false">
               <ion-item class="animated" ng-class="{flipInX: child.showAllergic, flipOutX: !child.showAllergic}" ng-repeat="all in child.allergics" ng-show="child.showAllergic">
                 <h2>{{all.name}}</h2>
                 <ion-option-button class="button-assertive icon-left ion-minus-circled" ng-click="child.removeAllergic(all.$id)">
                   Verwijder
                 </ion-option-button>
               </ion-item>
+              <div ng-if="child.allergics.length > 0" class="divider">
+
+              </div>
             </ion-list>
+
+            <div class="row">
+              <div class="animated item tabs tabs-secondary tabs-icon-left" ng-class="{flipInX: child.showHealthIssue, flipOutX: !child.showHealthIssue}" ng-if="child.checkAdmin()">
+                <a class="tab-item balanced" ui-sref="child.foodAllergics">
+                  <i class="icon ion-ios-plus balanced"></i>
+                  Voedselallergie toevoegen
+                </a>
+              </div>
+            </div>
+
             <div class="animated item tabs tabs-secondary tabs-icon-left" ng-class="{flipInX: child.showAllergic, flipOutX: !child.showAllergic}" ng-if="child.checkAdmin()" ng-show="child.showAllergic">
               <a class="tab-item balanced" ng-click="child.newAllergic = true">
                 <i class="icon ion-ios-plus balanced"></i>
-                Allergie toevoegen
+                Andere allergie toevoegen
               </a>
             </div>
+
             <form class="animated" name="addAllergicForm" ng-class="{slideInDown: child.newAllergic, slideOutUp: !child.newAllergic}" ng-if="child.checkAdmin()" ng-show="child.newAllergic" novalidate="true">
+
               <label class="item item-input item-stacked-label" ng-class="{'successForm': addAllergicForm.name.$dirty}">
                 <span class="input-label">Naam</span>
                 <input name="name" ng-model="child.allergic.name" placeholder="{{child.allergic.name}}" type="text">
@@ -301,8 +330,8 @@
                   <button class="button button-balanced icon-left ion-ios-plus" ng-click="child.addAllergic(addAllergicForm)" ng-disabled="addAllergicForm.$invalid">Opslaan</button>
                 </div>
               </div>
-            </form>
 
+            </form>
             <div class="item item-divider" ng-if="child.checkAdmin()" on-double-tap="child.showHealthIssue = !child.showHealthIssue">
               Andere gezondheidsproblemen
             </div>
@@ -344,9 +373,12 @@
         </div>
       </ion-slide>
     </ion-slide-box>
+    <div class="lowerContent">
+
+    </div>
   </ion-content>
   <!-- TODO: set tabs -->
-  <ion-tabs class="tabs-positive tabs-icon-top">
+  <ion-tabs class="tabs-positive tabs-icon-top" ng-if="child.hasFollower">
     <ion-tab icon-off="ion-ios-list-outline" icon-on="ion-ios-list" title="Tijdlijn" ui-sref="child.posts"></ion-tab>
     <ion-tab icon-off="ion-ios-body-outline" icon-on="ion-ios-body" title="Profiel" ui-sref="child.profile"></ion-tab>
     <!-- TODO: add badge voor volgverzoeken (via ChirldCtrl) -->

@@ -1,0 +1,41 @@
+<div class="modal dark-bg">
+  <ion-header-bar align-title="left" class="bar-dark">
+    <div class="buttons">
+      <button class="button button-clear icon ion-ios-close" ng-click="closeModal()"></button>
+    </div>
+    <h1 class="title"></h1>
+    <div class="buttons">
+      <button on-tap="socialMediaShare()" class="button button-clear icon ion-android-share-alt"></button>
+    </div>
+  </ion-header-bar>
+  <ion-content has-footer="true" has-header="true">
+    <div class="row row-center">
+      <div class="col">
+        <ion-slide-box active-slide="idx" on-slide-changed="slideHasChanged($index)" show-pager="false">
+          <ion-slide ng-repeat="photo in photos">
+            <div class="box">
+              <img class="full-image" ng-src="{{photo.src}}">
+              <div class="list card">
+                <div class="item item-divider">
+                  Reacties
+                </div>
+              </div>
+
+            </div>
+
+          </ion-slide>
+        </ion-slide-box>
+      </div>
+
+    </div>
+
+  </ion-content>
+  <div class="bar bar-footer bar-dark">
+    <div class="bar bar-header item-input-inset">
+      <label class="item-input-wrapper">
+        <input dir="auto" ng-model="reac"  placeholder="Reactie toevoegen" type="text">
+      </label>
+      <button on-tap="addReaction(reac)" class="button button-clear button-dark icon ion-ios-paperplane"></button>
+    </div>
+  </div>
+</div>

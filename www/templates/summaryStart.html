@@ -1,8 +1,8 @@
-<ion-view view-title="Overzicht kinderen">
+<ion-view view-title="Overzicht kinderen" cache-view="false">
   <ion-content padding="true">
     <ion-refresher on-refresh="sum.doRefresh()" ></ion-refresher>
     <ion-list can-swipe="true">
-      <ion-item class="item item-thumbnail-left" ng-repeat="child in sum.children" ui-sref="child.profile({childId: child.$id})">
+      <ion-item class="item item-thumbnail-left" ng-repeat="child in sum.children" ui-sref="child.posts({childId: child.$id})">
         <img ng-if="!child.photoInDatabase" ng-src="{{child.profileImage}}">
         <img ng-if="child.photoInDatabase" ng-src="data:image/jpeg;base64,{{child.profileImage}}">
         <h2>{{child.firstName}}

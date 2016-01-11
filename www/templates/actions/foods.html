@@ -3,7 +3,7 @@
     <button class="button button-icon icon ion-navicon" menu-toggle="left"></button>
   </ion-nav-buttons>
 
-  <ion-content has-footer="true" has-header="true">
+  <ion-content has-footer="true" has-header="true" on-scroll="food.resizeWindow()">
     <div class="list">
       <label class="item item-input item-stacked-label item-icon-right">
         <span class="input-label">Voeding</span>
@@ -37,9 +37,11 @@
         <i class="icon ion-android-checkbox-outline balanced" ng-if="food.foodData.amount"></i>
         <i class="icon ion-android-checkbox-outline-blank " ng-if="!food.foodData.amount"></i>
       </label>
-      <button class="button-full button button-balanced" ng-if="food.foodData.amount" on-tap="food.showSummary('fadeInLeftBig')">Volgende</button>
+      <button class="button-full button button-balanced" ng-if="food.foodData.category.nl" on-tap="food.showSummary('fadeInLeftBig')">Volgende</button>
     </div>
+    <div class="lowerContent">
 
+    </div>
   </ion-content>
   <ion-tabs class="tabs-positive tabs-icon-top">
     <ion-tab icon-off="ion-ios-list-outline" icon-on="ion-ios-list" title="Tijdlijn" ui-sref="child.posts"></ion-tab>

@@ -17,6 +17,7 @@
       acceptRequest: acceptRequest,
       removeRequest: removeRequest,
       bindInvites: bindInvites,
+      isInvited: isInvited,
       unInviteChild: unInviteChild,
       addUserInvite: addUserInvite,
       getUnfollowedChildrenFullName: getUnfollowedChildrenFullName
@@ -101,6 +102,16 @@
         }
       });
 
+      return deferred.promise;
+    }
+
+    function isInvited(childId, uid) {
+      var deferred = $q.defer();
+      usersRef.child(uid).child("children").once('value', function(snap) {
+        deferred.resolve(snap.child("requests").child("sent").child(childId).exists());
+      }, function(err) {
+        deferred.reject(err);
+      });
       return deferred.promise;
     }
 
